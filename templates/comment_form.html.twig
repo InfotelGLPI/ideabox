@@ -1,0 +1,96 @@
+{% import "components/form/fields_macros.html.twig" as fields %}
+{% set field_options = {
+    'disabled': true
+} %}
+{% set bg = "" %}
+{% if item.isDeleted() %}
+    {% set bg = "asset-deleted" %}
+{% endif %}
+
+<div class="asset {{ bg }}">
+    {% include("components/form/header.html.twig") %}
+
+    {% set rand = random() %}
+    {% set params  = params ?? [] %}
+    {% set target       = params['target'] ?? item.getFormURL() %}
+    {% set withtemplate = params['withtemplate'] ?? "" %}
+    {% set item_type = item.getType() %}
+    <input type="hidden" name="users_id" value="{{ params['users_id'] }}" />
+    <input type="hidden" name="date_comment" value="{{ params['date_comment'] }}" />
+    <input type="hidden" name="plugin_ideabox_ideaboxes_id" value="{{ params['plugin_ideabox_ideaboxes_id'] }}" />
+    <div class="card-body d-flex">
+        <div class="col-9 flex-column">
+            <div class="d-flex flex-row flex-wrap flex-xl-nowrap">
+                <div class="row flex-row align-items-start flex-grow-1">
+                    <div class="row flex-row">
+
+                        {% if item.isField('name') %}
+                            {{ fields.autoNameField(
+                                "name",
+                                item,
+                                (item_type == 'Contact' ? __('Surname') : __('Name')),
+                            withtemplate
+                            ) }}
+                        {% endif %}
+
+                        {% if item.isField('users_id') %}
+                            {{ fields.dropdownField(
+                                "User",
+                                "users_id",
+                                params['users_id'],
+                                __('Author'),
+                                {
+                                    'entity': item.fields['entities_id'],
+                                    'right': 'all',
+                                    'disabled': true
+                                }
+                            ) }}
+                        {% endif %}
+
+                        {{ fields.datetimeField(
+                            'date_comment',
+                            params['date_comment'],
+                            __('Date of comment', 'ideabox'),
+                            field_options
+                        ) }}
+
+
+                        {% if item.isField('comment') %}
+
+                            {{ fields.textareaField(
+                                'comment',
+                                item.fields['comment'],
+                                __('Description', 'ideabox'),
+                                {
+                                    'full_width': true,
+                                    'enable_richtext': true,
+                                    'is_horizontal': false,
+                                    'enable_fileupload': false,
+                                    'enable_images': false,
+                                    'enable_mentions': false,
+                                    'rand': rand,
+                                }
+                            ) }}
+                        {% endif %}
+
+                    </div> {# .row #}
+                </div> {# .row #}
+            </div> {# .flex-row #}
+        </div>
+        <div class="col-3 flex-column">
+            <div class="flex-row asset-pictures">
+                {% include("components/form/pictures.html.twig") with {'gallery_type': ''} %}
+            </div>
+        </div>
+    </div> {# .card-body #}
+
+    {% include("components/form/buttons.html.twig") %}
+    {#    {% include("components/form/inventory_info.html.twig") %} #}
+
+
+    {% if params['formfooter'] == null %}
+        <div class="card-footer mx-n2 mb-n2 mt-4">
+            {% include("components/form/dates.html.twig") %}
+        </div>
+    {% endif %}
+</div>

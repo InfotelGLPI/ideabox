@@ -1,0 +1,331 @@
+<?php
+/*
+ * @version $Id: HEADER 15930 2011-10-30 15:47:55Z tsmr $
+ -------------------------------------------------------------------------
+ ideaxox plugin for GLPI
+ Copyright (C) 2022-2023 by the ideaxox Development Team.
+
+ https://github.com/InfotelGLPI/ideaxox
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of ideaxox.
+
+ ideaxox is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ ideaxox is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with ideaxox. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
+
+if (!defined('GLPI_ROOT')) {
+   die("Sorry. You can't access directly to this file");
+}
+
+use Glpi\Application\View\TemplateRenderer;
+
+class PluginIdeaboxComment extends CommonDBChild {
+
+   static $rightname = "plugin_ideabox";
+
+   static public $itemtype = 'PluginIdeaboxIdeabox';
+   static public $items_id = 'plugin_ideabox_ideaboxes_id';
+
+   static function getTypeName($nb = 0) {
+
+      return _n('Comment', 'Comments', $nb, 'ideabox');
+   }
+
+   /**
+    * @return string
+    */
+   static function getIcon() {
+      return "ti ti-message-circle-2";
+   }
+
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
+
+      if (!$withtemplate) {
+         if ($_SESSION['glpishow_count_on_tabs']) {
+            return self::createTabEntry(self::getTypeName(2), self::countForIdea($item));
+         }
+         return self::getTypeName(2);
+      }
+      return '';
+   }
+
+   static function countForIdea(PluginIdeaboxIdeabox $item) {
+
+      $dbu = new DbUtils();
+
+      $restrict = ['plugin_ideabox_ideaboxes_id' => $item->getID()];
+      return $dbu->countElementsInTable('glpi_plugin_ideabox_comments',
+                                         $restrict);
+   }
+
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
+      global $CFG_GLPI;
+
+      if ($item->getType() == 'PluginIdeaboxIdeabox') {
+         $self = new self();
+
+         $self->showComments($item);
+         $self->showForm(0, ['plugin_ideabox_ideaboxes_id' => $item->getField('id')]);
+      }
+      return true;
+   }
+
+   /**
+    * Clean object veryfing criteria (when a relation is deleted)
+    *
+    * @param $crit array of criteria (should be an index)
+    */
+   public function clean($crit) {
+      global $DB;
+
+      foreach ($DB->request($this->getTable(), $crit) as $data) {
+         $this->delete($data);
+      }
+   }
+
+   function prepareInputForAdd($input) {
+      // Not attached to reference -> not added
+      if (!isset($input['plugin_ideabox_ideaboxes_id'])
+          || $input['plugin_ideabox_ideaboxes_id'] <= 0) {
+         return false;
+      }
+      function prepareInputForAdd($input) {
+
+         $input['users_id'] = Session::getLoginUserID();
+         $input['date_comment'] = $_SESSION["glpi_currenttime"];
+
+         return $input;
+      }
+      return $input;
+   }
+
+   function post_addItem() {
+      global $CFG_GLPI;
+
+      $idea = new PluginIdeaboxIdeabox();
+      if ($CFG_GLPI["use_mailing"]) {
+         $options = ['comment_id' => $this->fields["id"]];
+         if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
+            NotificationEvent::raiseEvent("newcomment", $idea, $options);
+         }
+      }
+   }
+
+   function post_updateItem($history = 1) {
+      global $CFG_GLPI;
+
+      $idea = new PluginIdeaboxIdeabox();
+
+      if (count($this->updates)) {
+         $options = ['comment_id' => $this->fields["id"]];
+         if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
+            NotificationEvent::raiseEvent("updatecomment", $idea, $options);
+         }
+      }
+   }
+
+   function pre_deleteItem() {
+      global $CFG_GLPI;
+
+      $idea = new PluginIdeaboxIdeabox();
+      if ($CFG_GLPI["use_mailing"]) {
+         $options = ['comment_id' => $this->fields["id"]];
+         if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
+            NotificationEvent::raiseEvent("deletecomment", $idea, $options);
+         }
+      }
+      return true;
+   }
+
+   function showForm($ID, $options = []) {
+
+      $this->initForm($ID, $options);
+      $options['users_id'] = Session::getLoginUserID();
+      $options['date_comment'] = $_SESSION["glpi_currenttime"];
+      TemplateRenderer::getInstance()->display('@ideabox/comment_form.html.twig', [
+         'item'   => $this,
+         'params' => $options,
+      ]);
+
+      return true;
+
+   }
+
+
+   /**
+    * @return array
+    */
+   function rawSearchOptions() {
+
+      $tab = [];
+
+      $tab[] = [
+         'id'   => 'common',
+         'name' => self::getTypeName(2)
+      ];
+
+      $tab[] = [
+         'id'            => '1',
+         'table'         => $this->getTable(),
+         'field'         => 'name',
+         'name'          => __('Name'),
+         'datatype'      => 'itemlink',
+         'itemlink_type' => $this->getType(),
+      ];
+
+      $tab[] = [
+         'id'            => '7',
+         'table'         => $this->getTable(),
+         'field'         => 'date_comment',
+         'name'          => __('Date of comment', 'ideabox'),
+         'datatype'      => 'datetime',
+         'massiveaction' => false,
+      ];
+
+      $tab[] = [
+         'id'       => '10',
+         'table'    => 'glpi_users',
+         'field'    => 'name',
+         'name'     => __('Author'),
+         'datatype' => 'dropdown',
+         'right'    => 'all',
+      ];
+
+      $tab[] = [
+         'id'       => '8',
+         'table'    => $this->getTable(),
+         'field'    => 'comment',
+         'name'     => __('Description', 'ideabox'),
+         'datatype' => 'text',
+      ];
+
+
+      $tab[] = [
+         'id'       => '30',
+         'table'    => $this->getTable(),
+         'field'    => 'id',
+         'name'     => __('ID'),
+         'datatype' => 'number',
+      ];
+
+
+      return $tab;
+   }
+
+   /**
+    * @since version 0.84
+    **/
+   function getForbiddenStandardMassiveAction() {
+
+      $forbidden   = parent::getForbiddenStandardMassiveAction();
+      $forbidden[] = 'update';
+      return $forbidden;
+   }
+
+   function showComments(PluginIdeaboxIdeabox $ideabox) {
+      global $DB, $CFG_GLPI;
+
+      $instID = $ideabox->fields['id'];
+
+      if (!$ideabox->can($instID, READ)) {
+         return false;
+      }
+
+      $rand    = mt_rand();
+      $canedit = $ideabox->can($instID, UPDATE);
+
+      $query  = "SELECT `glpi_plugin_ideabox_comments`.`name` AS name,
+                        `glpi_plugin_ideabox_comments`.`id`,
+                        `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id`,
+                        `glpi_plugin_ideabox_comments`.`date_comment`,
+                        `glpi_plugin_ideabox_comments`.`comment`,
+                        `glpi_plugin_ideabox_comments`.`users_id` AS users_id
+               FROM `glpi_plugin_ideabox_comments` ";
+      $query  .= " LEFT JOIN `glpi_plugin_ideabox_ideaboxes`
+      ON (`glpi_plugin_ideabox_ideaboxes`.`id` = `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id`)";
+      $query  .= " WHERE `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id` = '$instID'
+          ORDER BY `glpi_plugin_ideabox_comments`.`name`";
+      $result = $DB->query($query);
+      $number = $DB->numrows($result);
+
+      echo "<div class='spaced'>";
+
+      if ($canedit && $number) {
+         Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
+         $massiveactionparams
+            = ['num_displayed'    => min($_SESSION['glpilist_limit'], $number),
+               'specific_actions' => ['purge' => _x('button', 'Delete permanently')],
+               'container'        => 'mass' . __CLASS__ . $rand];
+         Html::showMassiveActions($massiveactionparams);
+      }
+
+      if ($number != 0) {
+         echo "<table class='tab_cadre_fixe'>";
+         echo "<tr>";
+
+         if ($canedit && $number) {
+            echo "<th width='10'>" . Html::getCheckAllAsCheckbox('mass' . __CLASS__ . $rand) . "</th>";
+         }
+
+         echo "<th>" . __('Name') . "</th>";
+         echo "<th>" . __('Author') . "</th>";
+         echo "<th>" . __('Date') . "</th>";
+         echo "<th>" . __('Description', 'ideabox') . "</th>";
+
+         echo "</tr>";
+
+         Session::initNavigateListItems($this->getType(), PluginIdeaboxIdeabox::getTypeName(2) . " = " . $ideabox->fields["name"]);
+         $i       = 0;
+         $row_num = 1;
+
+         while ($data = $DB->fetchArray($result)) {
+
+            Session::addToNavigateListItems($this->getType(), $data['id']);
+
+            $i++;
+            $row_num++;
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<td width='10'>";
+            if ($canedit) {
+               Html::showMassiveActionCheckBox(__CLASS__, $data["id"]);
+            }
+            echo "</td>";
+
+            echo "<td class='left'>";
+            echo "<a href='" . $CFG_GLPI["root_doc"] . "/plugins/ideabox/front/comment.form.php?id=" . $data["id"] . "&amp;plugin_ideabox_ideaboxes_id=" . $data["plugin_ideabox_ideaboxes_id"] . "'>";
+            echo $data["name"];
+            if ($_SESSION["glpiis_ids_visible"] || empty($data["name"])) echo " (" . $data["id"] . ")";
+            echo "</a></td>";
+
+            echo "<td class='left'>" . getusername($data["users_id"]) . "</td>";
+            echo "<td class='left'>" . Html::convdatetime($data["date_comment"]) . "</td>";
+            echo "<td class='left'>" . Glpi\RichText\RichText::getTextFromHtml($data["comment"]) . "</td>";
+            echo "</tr>";
+         }
+         echo "</table>";
+      }
+
+      if ($canedit && $number) {
+         $massiveactionparams['ontop'] = false;
+         Html::showMassiveActions($massiveactionparams);
+         Html::closeForm();
+      }
+      echo "</div>";
+   }
+}
+
+?>

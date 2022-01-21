@@ -1,0 +1,49 @@
+DROP TABLE IF EXISTS `glpi_plugin_ideabox_ideaboxes`;
+CREATE TABLE `glpi_plugin_ideabox_ideaboxes` (
+	`id` int(11) NOT NULL auto_increment,
+	`entities_id` int(11) NOT NULL default '0',
+	`name` varchar(255) collate utf8_unicode_ci default NULL,
+	`comment` text collate utf8_unicode_ci,
+	`users_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_users (id)',
+	`date_idea` DATETIME default NULL,
+	`is_helpdesk_visible` int(11) NOT NULL default '1',
+	`is_deleted` tinyint(1) NOT NULL default '0',
+	PRIMARY KEY  (`id`),
+	KEY `name` (`name`),
+  	KEY `entities_id` (`entities_id`),
+  	KEY `users_id` (`users_id`),
+	KEY `is_deleted` (`is_deleted`),
+	KEY `is_helpdesk_visible` (`is_helpdesk_visible`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `glpi_plugin_ideabox_comments`;
+CREATE TABLE `glpi_plugin_ideabox_comments` (
+	`id` int(11) NOT NULL auto_increment,
+	`name` varchar(255) collate utf8_unicode_ci default NULL,
+	`date_comment` DATETIME default NULL,
+	`plugin_ideabox_ideaboxes_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_plugin_ideabox_ideaboxes (id)',
+	`users_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_users (id)',
+	`comment` text collate utf8_unicode_ci,
+	PRIMARY KEY  (`id`),
+	KEY `name` (`name`),
+	KEY `plugin_ideabox_ideaboxes_id` (`plugin_ideabox_ideaboxes_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `glpi_plugin_ideabox_profiles`;
+CREATE TABLE `glpi_plugin_ideabox_profiles` (
+	`id` int(11) NOT NULL auto_increment,
+	`profiles_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_profiles (id)',
+	`ideabox` char(1) collate utf8_unicode_ci default NULL,
+	`open_ticket` char(1) collate utf8_unicode_ci default NULL,
+	PRIMARY KEY  (`id`),
+	KEY `profiles_id` (`profiles_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `glpi_notificationtemplates` VALUES(NULL, 'Idea', 'PluginIdeaboxIdeabox', '2010-02-17 22:36:46','',NULL);
+
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','2','1','0');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','3','2','0');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','4','3','0');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxComment','2','1','0');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxComment','3','2','0');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxComment','4','3','0');
