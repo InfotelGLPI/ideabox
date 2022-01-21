@@ -224,12 +224,16 @@ class PluginIdeaboxIdeabox extends CommonDBTM {
 
    function showForm($ID, $options = []) {
 
-      if ($ID == 0){
+      $this->initForm($ID, $options);
+
+      if ($ID < 1){
          $options['users_id'] = Session::getLoginUserID();
          $options['date_idea'] = $_SESSION["glpi_currenttime"];
+      } else {
+         $options['users_id'] = $this->fields['users_id'];
+         $options['date_idea'] = $this->fields['date_idea'];
       }
 
-      $this->initForm($ID, $options);
       TemplateRenderer::getInstance()->display('@ideabox/ideabox_form.html.twig', [
          'item'   => $this,
          'params' => $options,

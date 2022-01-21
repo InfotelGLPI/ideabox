@@ -35,7 +35,7 @@
                             {{ fields.dropdownField(
                                 "User",
                                 "users_id",
-                                item.fields['users_id'],
+                                params['users_id'],
                                 __('Author'),
                                 {
                                     'entity': item.fields['entities_id'],
@@ -47,7 +47,7 @@
 
                         {{ fields.datetimeField(
                             'date_idea',
-                            item.fields['date_idea'],
+                            params['date_idea'],
                             __('Date of submission', 'ideabox'),
                             field_options
                         ) }}

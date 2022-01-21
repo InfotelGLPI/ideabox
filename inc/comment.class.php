@@ -69,7 +69,7 @@ class PluginIdeaboxComment extends CommonDBChild {
 
       $restrict = ['plugin_ideabox_ideaboxes_id' => $item->getID()];
       return $dbu->countElementsInTable('glpi_plugin_ideabox_comments',
-                                         $restrict);
+                                        $restrict);
    }
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
@@ -77,9 +77,8 @@ class PluginIdeaboxComment extends CommonDBChild {
 
       if ($item->getType() == 'PluginIdeaboxIdeabox') {
          $self = new self();
-
-         $self->showComments($item);
          $self->showForm(0, ['plugin_ideabox_ideaboxes_id' => $item->getField('id')]);
+         $self->showComments($item);
       }
       return true;
    }
@@ -105,11 +104,12 @@ class PluginIdeaboxComment extends CommonDBChild {
       }
       function prepareInputForAdd($input) {
 
-         $input['users_id'] = Session::getLoginUserID();
+         $input['users_id']     = Session::getLoginUserID();
          $input['date_comment'] = $_SESSION["glpi_currenttime"];
 
          return $input;
       }
+
       return $input;
    }
 
@@ -154,8 +154,13 @@ class PluginIdeaboxComment extends CommonDBChild {
    function showForm($ID, $options = []) {
 
       $this->initForm($ID, $options);
-      $options['users_id'] = Session::getLoginUserID();
-      $options['date_comment'] = $_SESSION["glpi_currenttime"];
+      if ($ID < 1) {
+         $options['users_id']     = Session::getLoginUserID();
+         $options['date_comment'] = $_SESSION["glpi_currenttime"];
+      } else {
+         $options['users_id']     = $this->fields['users_id'];
+         $options['date_comment'] = $this->fields['date_comment'];
+      }
       TemplateRenderer::getInstance()->display('@ideabox/comment_form.html.twig', [
          'item'   => $this,
          'params' => $options,

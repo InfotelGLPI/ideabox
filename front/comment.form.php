@@ -47,18 +47,11 @@ if (isset($_POST["add"])) {
    $comment->update($_POST);
    Html::back();
 
-} else if (isset($_POST["delete"])) {
+} else if (isset($_POST["purge"])) {
 
-   $comment->check($_POST['id'], DELETE);
+   $comment->check($_POST['id'], PURGE);
    $comment->delete($_POST, 1);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginIdeaboxIdeabox') . "?id=" . $_POST["plugin_ideabox_ideaboxes_id"]);
-
-} else if (isset($_POST["delete_comment"])) {
-   foreach ($_POST["check"] as $ID => $value) {
-      $comment->check($ID, DELETE);
-      $comment->delete(["id" => $ID], 1);
-   }
-   Html::back();
 
 } else {
    $plugin = new Plugin();

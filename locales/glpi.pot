@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Ideabox Development Team
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the GLPI - Ideabox plugin package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Ideabox plugin 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-19 11:54+0100\n"
+"POT-Creation-Date: 2022-01-21 17:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,41 +18,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: setup.php:81 inc/ideabox.class.php:38
+#: setup.php:97 inc/ideabox.class.php:44 inc/profile.class.php:162
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] ""
 msgstr[1] ""
 
-#: setup.php:94
-msgid "This plugin requires GLPI >= 0.84"
-msgstr ""
-
-#: front/ideabox.php:45
+#: front/ideabox.php:51
 msgid "Menu"
 msgstr ""
 
-#: front/ideabox.php:49
+#: front/ideabox.php:55
 msgid "Submit an idea"
 msgstr ""
 
-#: inc/comment.class.php:41
+#: inc/comment.class.php:45
 msgid "Comment"
 msgid_plural "Comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/comment.class.php:227
-msgid "Idea"
+#: inc/comment.class.php:199
+msgid "Date of comment"
 msgstr ""
 
-#: inc/comment.class.php:247 inc/notificationtargetideabox.class.php:142
-msgid "Associated comment"
-msgid_plural "Associated comments"
-msgstr[0] ""
-msgstr[1] ""
+#: inc/comment.class.php:217 inc/comment.class.php:292
+#: inc/ideabox.class.php:150
+msgid "Description"
+msgstr ""
 
-#: inc/ideabox.class.php:93 inc/ideabox.class.php:189
+#: inc/ideabox.class.php:132
 msgid "Date of submission"
 msgstr ""
 
@@ -90,6 +85,12 @@ msgstr ""
 msgid "Modified fields"
 msgstr ""
 
+#: inc/notificationtargetideabox.class.php:142
+msgid "Associated comment"
+msgid_plural "Associated comments"
+msgstr[0] ""
+msgstr[1] ""
+
 #: inc/notificationtargetideabox.class.php:175
 msgid "An addition/modification/deletion of comments"
 msgstr ""
@@ -98,10 +99,6 @@ msgstr ""
 msgid "An addition/modification/deletion of ideas"
 msgstr ""
 
-#: inc/profile.class.php:37 inc/profile.class.php:144
-msgid "Rights management"
-msgstr ""
-
-#: inc/profile.class.php:149
-msgid "Read - add ideas"
+#: inc/servicecatalog.class.php:81 inc/servicecatalog.class.php:88
+msgid "I have an idea"
 msgstr ""
