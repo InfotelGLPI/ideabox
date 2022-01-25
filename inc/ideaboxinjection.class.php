@@ -34,7 +34,7 @@ if (!defined('GLPI_ROOT')) {
 class PluginIdeaboxIdeaboxInjection extends PluginIdeaboxIdeabox
    implements PluginDatainjectionInjectionInterface {
 
-   static function getTable() {
+   static function getTable($classname = null) {
 
       $parenttype = get_parent_class();
       return $parenttype::getTable();

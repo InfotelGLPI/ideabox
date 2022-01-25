@@ -61,20 +61,20 @@ class PluginIdeaboxIdeabox extends CommonDBTM {
    /**
     * @return array
     */
-   static function getMenuContent() {
-
-      $menu                    = [];
-      $menu['title']           = self::getMenuName();
-      $menu['page']            = self::getSearchURL(false);
-      $menu['links']['search'] = self::getSearchURL(false);
-      if (self::canCreate()) {
-         $menu['links']['add'] = self::getFormURL(false);
-      }
-
-      $menu['icon']    = self::getIcon();
-
-      return $menu;
-   }
+//   static function getMenuContent() {
+//
+//      $menu                    = [];
+//      $menu['title']           = self::getMenuName();
+//      $menu['page']            = self::getSearchURL(false);
+//      $menu['links']['search'] = self::getSearchURL(false);
+//      if (self::canCreate()) {
+//         $menu['links']['add'] = self::getFormURL(false);
+//      }
+//
+//      $menu['icon']    = self::getIcon();
+//
+//      return $menu;
+//   }
 
    static function removeRightsFromSession() {
       if (isset($_SESSION['glpimenu']['tools']['types']['PluginIdeaboxIdeabox'])) {

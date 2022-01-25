@@ -64,10 +64,11 @@ function plugin_init_ideabox() {
       // Display a menu entry ?
       $plugin = new Plugin();
       if (Session::haveRight("plugin_ideabox", READ)) {
-         $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => 'PluginIdeaboxIdeabox'];
+         $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => PluginIdeaboxIdeabox::getType()];
 
          if (!$plugin->isActivated('servicecatalog')) {
             $PLUGIN_HOOKS['helpdesk_menu_entry']['ideabox'] = PLUGIN_IDEABOX_NOTFULL_DIR.'/front/ideabox.php';
+            $PLUGIN_HOOKS['helpdesk_menu_entry_icon']['ideabox'] = 'ti ti-bulb';
          }
 
          if ($plugin->isActivated('servicecatalog')) {

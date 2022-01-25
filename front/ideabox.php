@@ -32,7 +32,7 @@ include('../../../inc/includes.php');
 $plugin = new Plugin();
 
 if (Session::getCurrentInterface() == 'central') {
-   Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", "pluginideaboxideabox");
+   Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", PluginIdeaboxIdeabox::getType());
 } else {
    if ($plugin->isActivated('servicecatalog')) {
       PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginIdeaboxIdeabox::getTypeName(2));
@@ -51,7 +51,7 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
          echo "<tr><th>" . __('Menu', 'ideabox') . "</th></tr>";
 
          echo "<tr class='tab_bg_1'><td class='center'>";
-         echo "<a href=\"./ideabox.form.php\" class='btn btn-primary'>";
+         echo "<a href=\"./ideabox.form.php\" class='submit btn btn-primary'>";
          echo "<i class='".PluginIdeaboxIdeabox::getIcon()."'></i>&nbsp;".__('Submit an idea', 'ideabox');
          echo "</a>";
          echo "</td></tr>";

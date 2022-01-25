@@ -76,7 +76,7 @@ if (isset($_POST["add"])) {
    $idea->checkGlobal(READ);
 
    if (Session::getCurrentInterface() == 'central') {
-      Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", "pluginideaboxideabox");
+      Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", PluginIdeaboxIdeabox::getType());
    } else {
       if ($plugin->isActivated('servicecatalog')) {
          PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginIdeaboxIdeabox::getTypeName(2), true);
