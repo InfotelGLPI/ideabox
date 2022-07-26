@@ -54,13 +54,13 @@ if (isset($_POST["add"])) {
    Html::redirect(Toolbox::getItemTypeFormURL('PluginIdeaboxIdeabox') . "?id=" . $_POST["plugin_ideabox_ideaboxes_id"]);
 
 } else {
-   $plugin = new Plugin();
+
    $comment->checkGlobal(READ);
 
    if (Session::getCurrentInterface() == 'central') {
       Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", "pluginideaboxideabox");
    } else {
-      if ($plugin->isActivated('servicecatalog')) {
+      if (Plugin::isPluginActive('servicecatalog')) {
          PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginIdeaboxIdeabox::getTypeName(2), true);
       } else {
          Html::helpHeader(PluginIdeaboxIdeabox::getTypeName(2));
@@ -70,7 +70,7 @@ if (isset($_POST["add"])) {
    $comment->showForm($_GET["id"], ['plugin_ideabox_ideaboxes_id' => $_GET["plugin_ideabox_ideaboxes_id"]]);
 
    if (Session::getCurrentInterface() != 'central'
-       && $plugin->isActivated('servicecatalog')) {
+       && Plugin::isPluginActive('servicecatalog')) {
 
       PluginServicecatalogMain::showNavBarFooter('ideabox');
    }

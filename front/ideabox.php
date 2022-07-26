@@ -29,12 +29,10 @@
 
 include('../../../inc/includes.php');
 
-$plugin = new Plugin();
-
 if (Session::getCurrentInterface() == 'central') {
    Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", PluginIdeaboxIdeabox::getType());
 } else {
-   if ($plugin->isActivated('servicecatalog')) {
+   if (Plugin::isPluginActive('servicecatalog')) {
       PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginIdeaboxIdeabox::getTypeName(2));
    } else {
       Html::helpHeader(PluginIdeaboxIdeabox::getTypeName(2));
@@ -74,7 +72,7 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
 
 
 if (Session::getCurrentInterface() != 'central'
-    && $plugin->isActivated('servicecatalog')) {
+    && Plugin::isPluginActive('servicecatalog')) {
 
    PluginServicecatalogMain::showNavBarFooter('ideabox');
 }

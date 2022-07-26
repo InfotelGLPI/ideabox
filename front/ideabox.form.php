@@ -72,13 +72,12 @@ if (isset($_POST["add"])) {
 
 } else {
 
-   $plugin = new Plugin();
    $idea->checkGlobal(READ);
 
    if (Session::getCurrentInterface() == 'central') {
       Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", PluginIdeaboxIdeabox::getType());
    } else {
-      if ($plugin->isActivated('servicecatalog')) {
+      if (Plugin::isPluginActive('servicecatalog')) {
          PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginIdeaboxIdeabox::getTypeName(2), true);
       } else {
          Html::helpHeader(PluginIdeaboxIdeabox::getTypeName(2));
@@ -88,7 +87,7 @@ if (isset($_POST["add"])) {
    $idea->display($_GET);
 
    if (Session::getCurrentInterface() != 'central'
-       && $plugin->isActivated('servicecatalog')) {
+       && Plugin::isPluginActive('servicecatalog')) {
 
       PluginServicecatalogMain::showNavBarFooter('ideabox');
    }
