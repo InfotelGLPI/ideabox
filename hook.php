@@ -31,8 +31,6 @@ function plugin_ideabox_install() {
    global $DB;
 
    include_once(PLUGIN_IDEABOX_DIR . "/inc/profile.class.php");
-
-
    $DB->runFile(GLPI_ROOT . "/plugins/ideabox/sql/empty-3.0.0.sql");
 
    $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='PluginIdeaboxIdeabox' AND `name` = 'Idea'";
@@ -104,7 +102,8 @@ function plugin_ideabox_uninstall() {
 
    $tables = ["glpi_plugin_ideabox_ideaboxs",
               "glpi_plugin_ideabox_ideaboxes",
-              "glpi_plugin_ideabox_comments"];
+              "glpi_plugin_ideabox_comments",
+              "glpi_plugin_ideabox_configs"];
 
    foreach ($tables as $table)
       $DB->query("DROP TABLE IF EXISTS `$table`;");

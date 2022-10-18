@@ -52,15 +52,15 @@
                             field_options
                         ) }}
 
-
-                        {% if item.isField('is_helpdesk_visible') %}
-                            {{ fields.dropdownYesNo(
-                                'is_helpdesk_visible',
-                                item.fields['is_helpdesk_visible'],
-                                __('Associable to a ticket'))
-                            }}
+                        {% if get_current_interface() == 'central' %}
+                            {% if item.isField('is_helpdesk_visible') %}
+                                {{ fields.dropdownYesNo(
+                                    'is_helpdesk_visible',
+                                    item.fields['is_helpdesk_visible'],
+                                    __('Associable to a ticket'))
+                                }}
+                            {% endif %}
                         {% endif %}
-
                         {% if item.isField('comment') %}
 
                             {{ fields.textareaField(

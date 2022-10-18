@@ -30,57 +30,59 @@
 include('../../../inc/includes.php');
 
 if (Session::getCurrentInterface() == 'central') {
-   Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", PluginIdeaboxIdeabox::getType());
+    Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", PluginIdeaboxIdeabox::getType());
 } else {
-   if (Plugin::isPluginActive('servicecatalog')) {
-      PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginIdeaboxIdeabox::getTypeName(2));
-   } else {
-      Html::helpHeader(PluginIdeaboxIdeabox::getTypeName(2));
-   }
+    if (Plugin::isPluginActive('servicecatalog')) {
+        PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginIdeaboxIdeabox::getTypeName(2));
+    } else {
+        Html::helpHeader(PluginIdeaboxIdeabox::getTypeName(2));
+    }
 }
 
 $idea = new PluginIdeaboxIdeabox();
 if ($idea->canView() || Session::haveRight("config", UPDATE)) {
+    if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
+        if ($idea->canCreate()) {
+            echo "<div class='center'><table class='tab_cadre_fixe' cellpadding='5'>";
+            $config = new PluginIdeaboxConfig();
+            $config->getFromDB(1);
+            $title = $config->fields['title'] ?? __('Menu', 'ideabox');
+            echo "<tr><th class='center'>" . $title. "</th></tr>";
 
-   if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
+            $comment = $config->fields['comment'] ?? "";
+            if (!empty($comment)) {
+                echo "<tr class='tab_bg_1'><td class='center'>";
+                echo $comment;
+                echo "</td></tr>";
+            }
 
-      if ($idea->canCreate()) {
-         echo "<div align='center'><table class='tab_cadre_fixe' cellpadding='5'>";
-         echo "<tr><th>" . __('Menu', 'ideabox') . "</th></tr>";
+            echo "<tr class='tab_bg_1'><td class='center'>";
+            echo "<a href=\"./ideabox.form.php\" class='submit btn btn-primary'>";
+            echo "<i class='".PluginIdeaboxIdeabox::getIcon()."'></i>&nbsp;".__('Submit an idea', 'ideabox');
+            echo "</a>";
+            echo "</td></tr>";
+            echo " </table></div>";
+        }
 
-         echo "<tr class='tab_bg_1'><td class='center'>";
-         echo "<a href=\"./ideabox.form.php\" class='submit btn btn-primary'>";
-         echo "<i class='".PluginIdeaboxIdeabox::getIcon()."'></i>&nbsp;".__('Submit an idea', 'ideabox');
-         echo "</a>";
-         echo "</td></tr>";
-         echo " </table></div>";
-      }
+        $_GET["field"]    = [0 => "2"];
+        $_GET["contains"] = [0 => $_SESSION["glpiname"]];
 
-      $_GET["field"]    = [0 => "2"];
-      $_GET["contains"] = [0 => $_SESSION["glpiname"]];
-
-      Search::showList("PluginIdeaboxIdeabox", $_GET);
-
-   } else {
-
-      Search::show("PluginIdeaboxIdeabox");
-
-   }
+        Search::showList("PluginIdeaboxIdeabox", $_GET);
+    } else {
+        Search::show("PluginIdeaboxIdeabox");
+    }
 } else {
-   Html::displayRightError();
+    Html::displayRightError();
 }
 
 
 if (Session::getCurrentInterface() != 'central'
     && Plugin::isPluginActive('servicecatalog')) {
-
-   PluginServicecatalogMain::showNavBarFooter('ideabox');
+    PluginServicecatalogMain::showNavBarFooter('ideabox');
 }
 
 if (Session::getCurrentInterface() == 'central') {
-   Html::footer();
+    Html::footer();
 } else {
-   Html::helpFooter();
+    Html::helpFooter();
 }
-
-?>

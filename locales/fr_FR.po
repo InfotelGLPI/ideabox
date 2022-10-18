@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Project - ideabox plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-21 17:36+0100\n"
-"PO-Revision-Date: 2022-01-21 17:37+0100\n"
+"POT-Creation-Date: 2022-10-18 13:15+0200\n"
+"PO-Revision-Date: 2022-10-18 13:16+0200\n"
 "Last-Translator: The tsmr <tsmr@thetsmr.fr>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/"
 "GLPI_ideabox/language/fr_FR/)\n"
@@ -20,17 +20,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.0\n"
 
-#: setup.php:97 inc/ideabox.class.php:44 inc/profile.class.php:162
+#: setup.php:101 inc/profile.class.php:162
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] "Boite à idée"
 msgstr[1] "Boite à idées"
 
-#: front/ideabox.php:51
+#: front/config.form.php:54
+msgid "Please activate the plugin"
+msgstr "Merci d'activer le plugin"
+
+#: front/ideabox.php:49
 msgid "Menu"
 msgstr "Menu"
 
-#: front/ideabox.php:55
+#: front/ideabox.php:61
 msgid "Submit an idea"
 msgstr "Soumettre une idée"
 
@@ -40,16 +44,22 @@ msgid_plural "Comments"
 msgstr[0] "Commentaire"
 msgstr[1] "Commentaires"
 
-#: inc/comment.class.php:199
+#: inc/comment.class.php:229
 msgid "Date of comment"
 msgstr "Date du commentaire"
 
-#: inc/comment.class.php:217 inc/comment.class.php:292
-#: inc/ideabox.class.php:150
+#: inc/comment.class.php:247 inc/comment.class.php:323
+#: inc/ideabox.class.php:152
 msgid "Description"
 msgstr "Description"
 
-#: inc/ideabox.class.php:132
+#: inc/ideabox.class.php:44
+msgid "Idea"
+msgid_plural "Ideas"
+msgstr[0] "Idée"
+msgstr[1] "Idées"
+
+#: inc/ideabox.class.php:134
 msgid "Date of submission"
 msgstr "Date de soumission"
 
@@ -107,9 +117,6 @@ msgstr "J'ai une idée"
 
 #~ msgid "This plugin requires GLPI >= 0.84"
 #~ msgstr "Ce plugin nécessite GLPI >= 0.84"
-
-#~ msgid "Idea"
-#~ msgstr "Idée"
 
 #~ msgid "Rights management"
 #~ msgstr "Gestion des droits"

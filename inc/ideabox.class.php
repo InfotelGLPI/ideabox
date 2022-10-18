@@ -41,7 +41,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM {
 
    static function getTypeName($nb = 0) {
 
-      return _n('Idea box', 'Ideas box', $nb, 'ideabox');
+      return _n('Idea', 'Ideas', $nb, 'ideabox');
    }
 
    /**
@@ -95,11 +95,13 @@ class PluginIdeaboxIdeabox extends CommonDBTM {
       $ong = [];
       $this->addDefaultFormTab($ong);
       $this->addStandardTab('PluginIdeaboxComment', $ong, $options);
-      $this->addStandardTab('Ticket', $ong, $options);
-      $this->addStandardTab('Item_Problem', $ong, $options);
-      $this->addStandardTab('Document_Item', $ong, $options);
-      $this->addStandardTab('Note', $ong, $options);
-      $this->addStandardTab('Log', $ong, $options);
+      if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
+         $this->addStandardTab('Ticket', $ong, $options);
+         $this->addStandardTab('Item_Problem', $ong, $options);
+         $this->addStandardTab('Document_Item', $ong, $options);
+         $this->addStandardTab('Note', $ong, $options);
+         $this->addStandardTab('Log', $ong, $options);
+      }
 
       return $ong;
    }

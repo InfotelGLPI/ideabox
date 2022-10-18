@@ -61,6 +61,10 @@ function plugin_init_ideabox() {
       Plugin::registerClass('PluginIdeaboxProfile',
                             ['addtabon' => 'Profile']);
 
+      if (Session::haveRight("config", UPDATE)) {
+         $PLUGIN_HOOKS['config_page']['ideabox'] = 'front/config.form.php';
+      }
+
       // Display a menu entry ?
       if (Session::haveRight("plugin_ideabox", READ)) {
          $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => PluginIdeaboxIdeabox::getType()];

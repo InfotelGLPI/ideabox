@@ -29,6 +29,17 @@ CREATE TABLE `glpi_plugin_ideabox_comments` (
     KEY `plugin_ideabox_ideaboxes_id` (`plugin_ideabox_ideaboxes_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
+
+DROP TABLE IF EXISTS `glpi_plugin_ideabox_configs`;
+CREATE TABLE `glpi_plugin_ideabox_configs` (
+    `id` int unsigned NOT NULL auto_increment,
+    `title` varchar(255) collate utf8mb4_unicode_ci default '',
+    `comment` varchar(255) collate utf8mb4_unicode_ci default '',
+    PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+INSERT INTO `glpi_plugin_ideabox_configs` VALUES(1, '','');
+
 INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','2','1','0');
 INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','3','2','0');
 INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','4','3','0');
