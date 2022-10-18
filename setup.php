@@ -30,63 +30,65 @@
 define('PLUGIN_IDEABOX_VERSION', '3.0.0-beta');
 
 if (!defined("PLUGIN_IDEABOX_DIR")) {
-   define("PLUGIN_IDEABOX_DIR", Plugin::getPhpDir("ideabox"));
-   define("PLUGIN_IDEABOX_NOTFULL_DIR", Plugin::getPhpDir("ideabox", false));
-   define("PLUGIN_IDEABOX_WEBDIR", Plugin::getWebDir("ideabox"));
+    define("PLUGIN_IDEABOX_DIR", Plugin::getPhpDir("ideabox"));
+    define("PLUGIN_IDEABOX_NOTFULL_DIR", Plugin::getPhpDir("ideabox", false));
+    define("PLUGIN_IDEABOX_WEBDIR", Plugin::getWebDir("ideabox"));
 }
 
 // Init the hooks of the plugins -Needed
-function plugin_init_ideabox() {
-   global $PLUGIN_HOOKS, $CFG_GLPI;
+function plugin_init_ideabox()
+{
+    global $PLUGIN_HOOKS, $CFG_GLPI;
 
-   $PLUGIN_HOOKS['csrf_compliant']['ideabox'] = true;
-   $PLUGIN_HOOKS['change_profile']['ideabox']   = ['PluginIdeaboxProfile', 'initProfile'];
-   $PLUGIN_HOOKS['plugin_datainjection_populate']['ideabox'] = 'plugin_datainjection_populate_ideabox';
-   $PLUGIN_HOOKS['assign_to_ticket']['ideabox'] = true;
+    $PLUGIN_HOOKS['csrf_compliant']['ideabox'] = true;
+    $PLUGIN_HOOKS['change_profile']['ideabox']   = ['PluginIdeaboxProfile', 'initProfile'];
+    $PLUGIN_HOOKS['plugin_datainjection_populate']['ideabox'] = 'plugin_datainjection_populate_ideabox';
+    $PLUGIN_HOOKS['assign_to_ticket']['ideabox'] = true;
 
-   if (Session::getLoginUserID()) {
+    if (Session::getLoginUserID()) {
+        Plugin::registerClass('PluginIdeaboxIdeabox', [
+           'linkuser_types'              => true,
+           'document_types'              => true,
+           'helpdesk_visible_types'      => true,
+           'ticket_types'                => true,
+           'notificationtemplates_types' => true
+        ]);
 
-      Plugin::registerClass('PluginIdeaboxIdeabox', [
-         'linkuser_types'              => true,
-         'document_types'              => true,
-         'helpdesk_visible_types'      => true,
-         'ticket_types'                => true,
-         'notificationtemplates_types' => true
-      ]);
+        Plugin::registerClass('PluginIdeaboxComment', [
+           'notificationtemplates_types' => true
+        ]);
 
-      Plugin::registerClass('PluginIdeaboxComment', [
-         'notificationtemplates_types' => true
-      ]);
+        Plugin::registerClass(
+            'PluginIdeaboxProfile',
+            ['addtabon' => 'Profile']
+        );
 
-      Plugin::registerClass('PluginIdeaboxProfile',
-                            ['addtabon' => 'Profile']);
+        if (Session::haveRight("config", UPDATE)) {
+            $PLUGIN_HOOKS['config_page']['ideabox'] = 'front/config.form.php';
+        }
 
-      if (Session::haveRight("config", UPDATE)) {
-         $PLUGIN_HOOKS['config_page']['ideabox'] = 'front/config.form.php';
-      }
+        // Display a menu entry ?
+        if (Session::haveRight("plugin_ideabox", READ)) {
+            $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => PluginIdeaboxIdeabox::getType()];
 
-      // Display a menu entry ?
-      if (Session::haveRight("plugin_ideabox", READ)) {
-         $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => PluginIdeaboxIdeabox::getType()];
+            if (!Plugin::isPluginActive('servicecatalog')) {
+                $PLUGIN_HOOKS['helpdesk_menu_entry']['ideabox'] = PLUGIN_IDEABOX_NOTFULL_DIR.'/front/ideabox.php';
+                $PLUGIN_HOOKS['helpdesk_menu_entry_icon']['ideabox'] = 'ti ti-bulb';
+            }
 
-         if (!Plugin::isPluginActive('servicecatalog')) {
-            $PLUGIN_HOOKS['helpdesk_menu_entry']['ideabox'] = PLUGIN_IDEABOX_NOTFULL_DIR.'/front/ideabox.php';
-            $PLUGIN_HOOKS['helpdesk_menu_entry_icon']['ideabox'] = 'ti ti-bulb';
-         }
+            if (Plugin::isPluginActive('servicecatalog')) {
+                $PLUGIN_HOOKS['servicecatalog']['ideabox'] = ['PluginIdeaboxServicecatalog'];
+            }
 
-         if (Plugin::isPluginActive('servicecatalog')) {
-            $PLUGIN_HOOKS['servicecatalog']['ideabox'] = ['PluginIdeaboxServicecatalog'];
-         }
+            $PLUGIN_HOOKS['redirect_page']['ideabox']           = PLUGIN_IDEABOX_NOTFULL_DIR.'/front/ideabox.php';
+        }
 
-         $PLUGIN_HOOKS['redirect_page']['ideabox']           = PLUGIN_IDEABOX_NOTFULL_DIR.'/front/ideabox.php';
-      }
+        if (Session::haveRight("plugin_ideabox", UPDATE)) {
+            $PLUGIN_HOOKS['use_massive_action']['ideabox']   = 1;
+        }
 
-      if (Session::haveRight("plugin_ideabox", UPDATE)) {
-         $PLUGIN_HOOKS['use_massive_action']['ideabox']   = 1;
-      }
-
-      $PLUGIN_HOOKS['migratetypes']['ideabox'] = 'plugin_datainjection_migratetypes_ideabox';
-   }
+        $PLUGIN_HOOKS['migratetypes']['ideabox'] = 'plugin_datainjection_migratetypes_ideabox';
+    }
 }
 
 
@@ -95,27 +97,26 @@ function plugin_init_ideabox() {
 /**
  * @return array
  */
-function plugin_version_ideabox() {
-
-   return [
-      'name'         => _n('Idea box', 'Ideas box', 2, 'ideabox'),
-      'version'      => PLUGIN_IDEABOX_VERSION,
-      'author'       => "<a href='http://blogglpi.infotel.com'>Infotel</a>",
-      'license'      => 'GPLv2+',
-      'homepage'     => 'https://github.com/InfotelGLPI/ideabox',
-      'requirements' => [
-         'glpi' => [
-            'min' => '10.0',
-            'max' => '11.0',
-            'dev' => false
-         ]
-      ]
-   ];
+function plugin_version_ideabox()
+{
+    return [
+       'name'         => _n('Idea box', 'Ideas box', 2, 'ideabox'),
+       'version'      => PLUGIN_IDEABOX_VERSION,
+       'author'       => "<a href='http://blogglpi.infotel.com'>Infotel</a>",
+       'license'      => 'GPLv2+',
+       'homepage'     => 'https://github.com/InfotelGLPI/ideabox',
+       'requirements' => [
+          'glpi' => [
+             'min' => '10.0',
+             'max' => '11.0',
+             'dev' => false
+          ]
+       ]
+    ];
 }
 
-function plugin_datainjection_migratetypes_ideabox($types) {
-   $types[4900] = 'PluginIdeaboxIdeabox';
-   return $types;
+function plugin_datainjection_migratetypes_ideabox($types)
+{
+    $types[4900] = 'PluginIdeaboxIdeabox';
+    return $types;
 }
-
-?>

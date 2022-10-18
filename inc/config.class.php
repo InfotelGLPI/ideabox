@@ -37,6 +37,8 @@ if (!defined('GLPI_ROOT')) {
 class PluginIdeaboxConfig extends CommonDBTM
 {
     public static $rightname = 'plugin_ideabox';
+    public $can_be_translated = true;
+
     /**
      * functions mandatory
      * getTypeName(), canCreate(), canView()
@@ -57,6 +59,93 @@ class PluginIdeaboxConfig extends CommonDBTM
         if ($DB->tableExists($this->getTable())) {
             $this->getFromDB(1);
         }
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return array
+     * @see CommonGLPI::defineTabs()
+     */
+    public function defineTabs($options = [])
+    {
+        $ong = [];
+        //      $this->addDefaultFormTab($ong);
+        $this->addStandardTab(__CLASS__, $ong, $options);
+        $this->addStandardTab('PluginIdeaboxConfigTranslation', $ong, $options);
+        return $ong;
+    }
+
+
+    /**
+     * @param CommonGLPI $item
+     * @param int        $withtemplate
+     *
+     * @return string
+     */
+    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
+        if (!$withtemplate) {
+            $ong[1] = __('Setup');
+            return $ong;
+        }
+        return '';
+    }
+
+    /**
+     * @param CommonGLPI $item
+     * @param int        $tabnum
+     * @param int        $withtemplate
+     *
+     * @return bool
+     */
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    {
+        if ($item->getType() == __CLASS__) {
+            switch ($tabnum) {
+                case 1:
+                    $item->showConfigForm($item->getID());
+                    break;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get the Search options for the given Type
+     *
+     * This should be overloaded in Class
+     *
+     * @return array an *indexed* array of search options
+     *
+     * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+     **/
+    function rawSearchOptions() {
+
+        $tab = [];
+
+        $tab[] = [
+            'id'   => 'common',
+            'name' => self::getTypeName(2)
+        ];
+
+        $tab[] = [
+            'id'         => '1',
+            'table'      => $this->getTable(),
+            'field'      => 'title',
+            'name'       => __('Title'),
+            'searchtype' => 'equals',
+            'datatype'   => 'text'
+        ];
+
+        $tab[] = [
+            'id'         => '2',
+            'table'      => $this->getTable(),
+            'field'      => 'comment',
+            'name'       => __('Comments'),
+            'searchtype' => 'equals',
+            'datatype'   => 'text'
+        ];
+        return $tab;
     }
 
     /**
@@ -92,7 +181,7 @@ class PluginIdeaboxConfig extends CommonDBTM
             echo "</td>";
 
             echo "<td>";
-            echo __('Comment');
+            echo __('Comments');
             echo "</td>";
             echo "<td>";
             echo Html::input('comment', ['value' => $this->fields['comment'], 'size' => 40]);
@@ -107,6 +196,46 @@ class PluginIdeaboxConfig extends CommonDBTM
             echo "</tr>";
             echo "</table></div>";
             Html::closeForm();
+        }
+    }
+
+    /**
+     * Returns the translation of the field
+     *
+     * @param type  $item
+     * @param type  $field
+     *
+     * @return type
+     * @global type $DB
+     *
+     */
+    public static function displayField($item, $field, $withclean = true)
+    {
+        global $DB;
+
+        // Make new database object and fill variables
+        $iterator = $DB->request([
+                                     'FROM'  => 'glpi_plugin_ideabox_configtranslations',
+                                     'WHERE' => [
+                                         'itemtype' => 'PluginIdeaboxConfig',
+                                         'items_id' => '1',
+                                         'field'    => $field,
+                                         'language' => $_SESSION['glpilanguage']
+                                     ]]);
+
+        if (count($iterator)) {
+            foreach ($iterator as $data) {
+                //            if ($withclean == true) {
+                return Glpi\RichText\RichText::getTextFromHtml($data['value']);
+                //            } else {
+                //               return $data['value'];
+                //            }
+            }
+        }
+        if ($withclean == true && isset($item->fields[$field])) {
+            return Glpi\RichText\RichText::getTextFromHtml($item->fields[$field]);
+        } elseif (isset($item->fields[$field])) {
+            return $item->fields[$field];
         }
     }
 }

@@ -27,31 +27,20 @@
  --------------------------------------------------------------------------
  */
 
-include ('../../../inc/includes.php');
-Session::checkLoginUser();
+
+include('../../../inc/includes.php');
+
+global $CFG_GLPI;
 
 if (Plugin::isPluginActive("ideabox")) {
-
-   Session::checkRight("config", UPDATE);
-
-   $config = new PluginIdeaboxConfig();
-
-   if (isset($_POST["update_setup"])) {
-         $_POST['id'] = 1;
-         $config->update($_POST);
-
-      Html::back();
-
-   } else {
-      Html::header(__('Setup'), '', "helpdesk", "pluginideabox", "config");
-       $_GET['id'] = 1;
-       $config->display($_GET);
-      Html::footer();
-   }
-
+    if (Session::haveRight("plugin_ideabox", UPDATE)) {
+        Html::redirect(PLUGIN_IDEABOX_WEBDIR . "/front/config.form.php");
+    } else {
+        Html::displayRightError();
+    }
 } else {
-   Html::header(__('Setup'), '', "config", "plugins");
-   echo "<div class='alert alert-important alert-warning d-flex'>";
-   echo "<b>".__('Please activate the plugin', 'ideabox')."</b></div>";
-   Html::footer();
+    Html::header(__('Setup'), '', "config", "plugins");
+    echo "<div class='alert alert-important alert-warning d-flex'>";
+    echo "<b>" . __('Please activate the plugin', 'ideabox') . "</b></div>";
+    Html::footer();
 }

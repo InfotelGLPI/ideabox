@@ -1,0 +1,2 @@
+Add vote
+Display comment as discussion
