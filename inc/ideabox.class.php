@@ -184,7 +184,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM {
    function post_addItem() {
       global $CFG_GLPI;
 
-      if ($CFG_GLPI["use_mailing"]) {
+      if ($CFG_GLPI["notifications_mailing"]) {
          NotificationEvent::raiseEvent("new", $this);
       }
    }
@@ -208,7 +208,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM {
       global $CFG_GLPI;
 
       if (count($this->updates)) {
-         if ($CFG_GLPI["use_mailing"]) {
+         if ($CFG_GLPI["notifications_mailing"]) {
             NotificationEvent::raiseEvent('update', $this);
          }
       }
@@ -217,7 +217,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM {
    function pre_deleteItem() {
       global $CFG_GLPI;
 
-      if ($CFG_GLPI["use_mailing"]) {
+      if ($CFG_GLPI["notifications_mailing"]) {
          NotificationEvent::raiseEvent("delete", $this);
       }
 

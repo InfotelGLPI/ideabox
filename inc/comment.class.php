@@ -146,7 +146,7 @@ class PluginIdeaboxComment extends CommonDBChild
         global $CFG_GLPI;
 
         $idea = new PluginIdeaboxIdeabox();
-        if ($CFG_GLPI["use_mailing"]) {
+        if ($CFG_GLPI["notifications_mailing"]) {
             $options = ['comment_id' => $this->fields["id"]];
             if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
                 NotificationEvent::raiseEvent("newcomment", $idea, $options);
@@ -159,11 +159,12 @@ class PluginIdeaboxComment extends CommonDBChild
         global $CFG_GLPI;
 
         $idea = new PluginIdeaboxIdeabox();
-
-        if (count($this->updates)) {
-            $options = ['comment_id' => $this->fields["id"]];
-            if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
-                NotificationEvent::raiseEvent("updatecomment", $idea, $options);
+        if ($CFG_GLPI["notifications_mailing"]) {
+            if (count($this->updates)) {
+                $options = ['comment_id' => $this->fields["id"]];
+                if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
+                    NotificationEvent::raiseEvent("updatecomment", $idea, $options);
+                }
             }
         }
     }
@@ -173,7 +174,7 @@ class PluginIdeaboxComment extends CommonDBChild
         global $CFG_GLPI;
 
         $idea = new PluginIdeaboxIdeabox();
-        if ($CFG_GLPI["use_mailing"]) {
+        if ($CFG_GLPI["notifications_mailing"]) {
             $options = ['comment_id' => $this->fields["id"]];
             if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
                 NotificationEvent::raiseEvent("deletecomment", $idea, $options);

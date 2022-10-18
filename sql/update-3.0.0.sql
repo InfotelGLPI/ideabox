@@ -17,3 +17,5 @@ CREATE TABLE `glpi_plugin_ideabox_configtranslations`
     `value`    text COLLATE utf8mb4_unicode_ci         DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+ALTER TABLE `glpi_plugin_ideabox_ideaboxes` ADD `is_recursive` tinyint NOT NULL default '0';

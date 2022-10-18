@@ -28,162 +28,167 @@
  */
 
 if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
+    die("Sorry. You can't access directly to this file");
 }
 
-// Class NotificationTarget
-class PluginIdeaboxNotificationTargetIdeabox extends NotificationTarget {
+// Class NotificationTargetIdeabox
+class PluginIdeaboxNotificationTargetIdeabox extends NotificationTarget
+{
+    const IDEABOX_USER         = 4900;
+    const IDEABOX_COMMENT_USER = 4901;
 
-   const IDEABOX_USER         = 4900;
-   const IDEABOX_COMMENT_USER = 4901;
+    public function getEvents() {
+        return ['new'           => __('A new idea has been submitted', 'ideabox'),
+                'update'        => __('An idea has been modified', 'ideabox'),
+                'delete'        => __('An idea has been deleted', 'ideabox'),
+                'newcomment'    => __('A comment has been added', 'ideabox'),
+                'updatecomment' => __('A comment has been modified', 'ideabox'),
+                'deletecomment' => __('A comment has been deleted', 'ideabox')];
+    }
 
-   function getEvents() {
-      return ['new'           => __('A new idea has been submitted', 'ideabox'),
-                   'update'        => __('An idea has been modified', 'ideabox'),
-                   'delete'        => __('An idea has been deleted', 'ideabox'),
-                   'newcomment'    => __('A comment has been added', 'ideabox'),
-                   'updatecomment' => __('A comment has been modified', 'ideabox'),
-                   'deletecomment' => __('A comment has been deleted', 'ideabox')];
-   }
+    /**
+     * Get additionnals targets for Tickets
+     */
+    public function addAdditionalTargets($event = '') {
+        $this->addTarget(PluginIdeaboxNotificationTargetIdeabox::IDEABOX_USER, __('Author'));
+        $this->addTarget(PluginIdeaboxNotificationTargetIdeabox::IDEABOX_COMMENT_USER, __('Comment author', 'ideabox'));
+    }
 
-   /**
-    * Get additionnals targets for Tickets
-    */
-   function getAdditionalTargets($event = '') {
-      $this->addTarget(PluginIdeaboxNotificationTargetIdeabox::IDEABOX_USER, __('Author'));
-      $this->addTarget(PluginIdeaboxNotificationTargetIdeabox::IDEABOX_COMMENT_USER, __('Comment author', 'ideabox'));
-   }
+    public function addSpecificTargets($data, $options) {
+        //Look for all targets whose type is Notification::ITEM_USER
+        switch ($data['items_id']) {
+            case PluginIdeaboxNotificationTargetIdeabox::IDEABOX_USER:
+                $this->getUserAddress();
+                break;
+            case PluginIdeaboxNotificationTargetIdeabox::IDEABOX_COMMENT_USER:
+                $this->getUserCommentAddress();
+                break;
+        }
+    }
 
-   function getSpecificTargets($data, $options) {
+    //Get recipient
+    public function getUserAddress() {
+        return $this->getUserByField("users_id");
+    }
 
-      //Look for all targets whose type is Notification::ITEM_USER
-      switch ($data['items_id']) {
+    public function getUserCommentAddress() {
+        global $DB;
 
-         case PluginIdeaboxNotificationTargetIdeabox::IDEABOX_USER :
-            $this->getUserAddress();
-            break;
-         case PluginIdeaboxNotificationTargetIdeabox::IDEABOX_COMMENT_USER :
-            $this->getUserCommentAddress();
-            break;
-      }
-   }
-
-   //Get recipient
-   function getUserAddress() {
-      return $this->getUserByField("users_id");
-   }
-
-   function getUserCommentAddress() {
-      global $DB;
-
-      $query = "SELECT DISTINCT `glpi_users`.`id` AS id
+        $query = "SELECT DISTINCT `glpi_users`.`id` AS id
                 FROM `glpi_plugin_ideabox_comments`
                 LEFT JOIN `glpi_users` ON (`glpi_users`.`id` = `glpi_plugin_ideabox_comments`.`users_id`)
                 WHERE `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id` = '" . $this->obj->fields["id"] . "'";
 
-      foreach ($DB->request($query) as $data) {
-         $data['email'] = UserEmail::getDefaultForUser($data['id']);
-         $this->addToAddressesList($data);
-      }
-   }
+        foreach ($DB->request($query) as $data) {
+            $data['email'] = UserEmail::getDefaultForUser($data['id']);
+            $this->addToAddressesList($data);
+        }
+    }
 
-   function getDatasForTemplate($event, $options = []) {
-      global $CFG_GLPI;
+    public function addDataForTemplate($event, $options = []) {
+        global $CFG_GLPI;
 
-      $events = $this->getAllEvents();
+        $events = $this->getAllEvents();
+        $ideabox = $this->obj;
 
-      $this->datas['##lang.ideabox.title##'] = $events[$event];
+        if (!isset($options['ideabox'])) {
+            $options['ideabox'] = [];
+            if (!$ideabox->isNewItem()) {
+                $options['ideabox'][] = $ideabox->fields;// Compatibility with old behaviour
+            }
+        }
+        
+        $this->data['##lang.ideabox.title##'] = $events[$event];
 
-      $this->datas['##lang.ideabox.entity##'] = __('Entity');
-      $this->datas['##ideabox.entity##']      =
-         Dropdown::getDropdownName('glpi_entities',
-                                   $this->obj->getField('entities_id'));
-      $this->datas['##ideabox.id##']          = sprintf("%07d", $this->obj->getField("id"));
+        $this->data['##lang.ideabox.entity##'] = __('Entity');
+        $this->data['##ideabox.entity##']      =
+            Dropdown::getDropdownName(
+                'glpi_entities',
+                $ideabox->fields['entities_id']
+            );
+        $this->data['##ideabox.id##']          = sprintf("%07d", $ideabox->fields['id']);
 
-      $this->datas['##lang.ideabox.name##'] = __('Title');
-      $this->datas['##ideabox.name##']      = $this->obj->getField("name");
+        $this->data['##lang.ideabox.name##'] = __('Title');
+        $this->data['##ideabox.name##']      = $ideabox->fields['name'];
 
-      $this->datas['##lang.ideabox.comment##'] = __('Description');
-      $comment                                 = stripslashes(str_replace(['\r\n', '\n', '\r'], "<br/>", $this->obj->getField("comment")));
-      $this->datas['##ideabox.comment##']      = nl2br($comment);
+        $this->data['##lang.ideabox.comment##'] = __('Description');
+        $comment                                 = stripslashes(str_replace(['\r\n', '\n', '\r'], "<br/>", $ideabox->fields['comment']));
+        $this->data['##ideabox.comment##']      = nl2br($comment);
 
-      $this->datas['##lang.ideabox.url##'] = "URL";
-      $this->datas['##ideabox.url##']      = urldecode($CFG_GLPI["url_base"] . "/index.php?redirect=plugin_ideabox_" .
-                                                       $this->obj->getField("id"));
+        $this->data['##lang.ideabox.url##'] = "URL";
+        $this->data['##ideabox.url##']      = urldecode($CFG_GLPI["url_base"] . "/index.php?redirect=plugin_ideabox_" .
+                                                         $ideabox->fields['id']);
 
-      //old values infos
-      if (isset($this->target_object->oldvalues) && !empty($this->target_object->oldvalues) && $event == 'update') {
+        //old values infos
+        if (isset($this->target_object->oldvalues)
+            && !empty($this->target_object->oldvalues) && $event == 'update') {
+            $this->data['##lang.update.title##'] = __('Modified fields', 'ideabox');
 
-         $this->datas['##lang.update.title##'] = __('Modified fields', 'ideabox');
+            $tmp = [];
 
-         $tmp = [];
+            if (isset($this->target_object->oldvalues['name'])
+                && !empty($this->target_object->oldvalues['name'])) {
+                $tmp['##update.name##'] = $this->target_object->oldvalues['name'];
+            }
+            if (isset($this->target_object->oldvalues['comment'])
+                && !empty($this->target_object->oldvalues['comment'])) {
+                $tmp['##update.comment##'] = nl2br($this->target_object->oldvalues['comment']);
+            }
 
-         if (isset($this->target_object->oldvalues['name'])
-             && !empty($this->target_object->oldvalues['name'])) {
-            $tmp['##update.name##'] = $this->target_object->oldvalues['name'];
-         }
-         if (isset($this->target_object->oldvalues['comment'])
-             && !empty($this->target_object->oldvalues['comment'])) {
-            $tmp['##update.comment##'] = nl2br($this->target_object->oldvalues['comment']);
-         }
+            $this->data['updates'][] = $tmp;
+        }
 
-         $this->datas['updates'][] = $tmp;
-      }
+        //comment infos
+        $restrict = "`plugin_ideabox_ideaboxes_id`='" . $ideabox->fields['id'] . "'";
 
-      //comment infos
-      $restrict = "`plugin_ideabox_ideaboxes_id`='" . $this->obj->getField('id') . "'";
+        if (isset($options['comment_id']) && $options['comment_id']) {
+            $restrict .= " AND `glpi_plugin_ideabox_comments`.`id` = '" . $options['comment_id'] . "'";
+        }
 
-      if (isset($options['comment_id']) && $options['comment_id']) {
-         $restrict .= " AND `glpi_plugin_ideabox_comments`.`id` = '" . $options['comment_id'] . "'";
-      }
-      $restrict .= " ORDER BY `date_comment` DESC";
-      $comments = getAllDataFromTable('glpi_plugin_ideabox_comments', $restrict);
+        $comments = getAllDataFromTable('glpi_plugin_ideabox_comments', ['ORDER' => 'date_comment DESC']);
 
-      $this->datas['##lang.comment.title##'] = _n('Associated comment', 'Associated comments', 2, 'ideabox');
+        $this->data['##lang.comment.title##'] = _n('Associated comment', 'Associated comments', 2, 'ideabox');
 
-      $this->datas['##lang.comment.name##']        = __('Name');
-      $this->datas['##lang.comment.author##']      = __('Comment author', 'ideabox');
-      $this->datas['##lang.comment.datecomment##'] = __('Date');
-      $this->datas['##lang.comment.comment##']     = __('Content');
+        $this->data['##lang.comment.name##']        = __('Name');
+        $this->data['##lang.comment.author##']      = __('Comment author', 'ideabox');
+        $this->data['##lang.comment.datecomment##'] = __('Date');
+        $this->data['##lang.comment.comment##']     = __('Content');
 
-      foreach ($comments as $comment) {
-         $tmp = [];
+        foreach ($comments as $comment) {
+            $tmp = [];
 
-         $tmp['##comment.name##']        = $comment['name'];
-         $tmp['##comment.author##']      = getUserName($comment['users_id']);
-         $tmp['##comment.datecomment##'] = Html::convDateTime($comment['date_comment']);
-         $tmp['##comment.comment##']     = nl2br($comment['comment']);
+            $tmp['##comment.name##']        = $comment['name'];
+            $tmp['##comment.author##']      = getUserName($comment['users_id']);
+            $tmp['##comment.datecomment##'] = Html::convDateTime($comment['date_comment']);
+            $tmp['##comment.comment##']     = nl2br($comment['comment']);
 
-         $this->datas['comments'][] = $tmp;
-      }
-   }
+            $this->data['comments'][] = $tmp;
+        }
+    }
 
-   function getTags() {
+    public function getTags() {
+        $tags = ['ideabox.name'        => __('Title'),
+                 'ideabox.comment'     => __('Description'),
+                 'comment.name'        => __('Name'),
+                 'comment.author'      => __('Comment author', 'ideabox'),
+                 'comment.datecomment' => __('Date'),
+                 'comment.comment'     => __('Content')];
+        foreach ($tags as $tag => $label) {
+            $this->addTagToList(['tag'   => $tag, 'label' => $label,
+                                 'value' => true]);
+        }
 
-      $tags = ['ideabox.name'        => __('Title'),
-                    'ideabox.comment'     => __('Description'),
-                    'comment.name'        => __('Name'),
-                    'comment.author'      => __('Comment author', 'ideabox'),
-                    'comment.datecomment' => __('Date'),
-                    'comment.comment'     => __('Content')];
-      foreach ($tags as $tag => $label) {
-         $this->addTagToList(['tag'   => $tag, 'label' => $label,
-                                   'value' => true]);
-      }
+        $this->addTagToList(['tag'     => 'ideabox',
+                             'label'   => __('An addition/modification/deletion of ideas', 'ideabox'),
+                             'value'   => false,
+                             'foreach' => true,
+                             'events'  => ['new', 'update', 'delete']]);
+        $this->addTagToList(['tag'     => 'comments',
+                             'label'   => __('An addition/modification/deletion of comments', 'ideabox'),
+                             'value'   => false,
+                             'foreach' => true,
+                             'events'  => ['newcomment', 'updatecomment', 'deletecomment']]);
 
-      $this->addTagToList(['tag'     => 'ideabox',
-                                'label'   => __('An addition/modification/deletion of comments', 'ideabox'),
-                                'value'   => false,
-                                'foreach' => true,
-                                'events'  => ['new', 'update', 'delete']]);
-      $this->addTagToList(['tag'     => 'comments',
-                                'label'   => __('An addition/modification/deletion of ideas', 'ideabox'),
-                                'value'   => false,
-                                'foreach' => true,
-                                'events'  => ['newcomment', 'updatecomment', 'deletecomment']]);
-
-      asort($this->tag_descriptions);
-   }
+        asort($this->tag_descriptions);
+    }
 }
-
-?>

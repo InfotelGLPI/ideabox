@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS `glpi_plugin_ideabox_ideaboxes`;
 CREATE TABLE `glpi_plugin_ideabox_ideaboxes` (
     `id` int unsigned NOT NULL auto_increment,
     `entities_id` int unsigned NOT NULL default '0',
+    `is_recursive` tinyint NOT NULL default '0',
     `name` varchar(255) collate utf8mb4_unicode_ci default NULL,
     `comment` text collate utf8mb4_unicode_ci,
     `users_id` int unsigned NOT NULL default '0' COMMENT 'RELATION to glpi_users (id)',
