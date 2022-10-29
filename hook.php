@@ -209,6 +209,22 @@ function plugin_ideabox_getDatabaseRelations() {
     }
 }
 
+/**
+ * @param $type
+ *
+ * @return string
+ */
+function plugin_ideabox_addDefaultWhere($type)
+{
+    switch ($type) {
+        case "PluginIdeaboxIdeabox":
+            $who = Session::getLoginUserID();
+            if (Session::getCurrentInterface() != 'central') {
+                return " `glpi_plugin_ideabox_ideaboxes`.`users_id` = '$who' ";
+            }
+    }
+    return "";
+}
 
 function plugin_datainjection_populate_ideabox() {
     global $INJECTABLE_TYPES;

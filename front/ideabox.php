@@ -64,8 +64,8 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
             echo " </table></div>";
         }
 
-        $_GET["field"]    = [0 => "2"];
-        $_GET["contains"] = [0 => $_SESSION["glpiname"]];
+        $_GET["field"]    = [0 => "10"];
+        $_GET["contains"] = [0 => Session::getLoginUserID()];
 
         Search::showList("PluginIdeaboxIdeabox", $_GET);
     } else {
