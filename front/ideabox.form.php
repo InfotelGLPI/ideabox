@@ -70,10 +70,30 @@ if (isset($_POST["add"])) {
    $idea->update($_POST);
    Html::back();
 
+} else if (isset($_POST["vote"])) {
+
+   $idea->check($_POST['id'], UPDATE);
+   $vote = new PluginIdeaboxVote();
+   $vote->add(['users_id' => Session::getLoginUserID(),
+       'date_vote' =>$_SESSION["glpi_currenttime"],
+       'plugin_ideabox_ideaboxes_id' => $_POST['id']]);
+   Html::back();
+
+} else if (isset($_POST["cancelvote"])) {
+
+   $idea->check($_POST['id'], UPDATE);
+   $vote = new PluginIdeaboxVote();
+   $vote->deleteByCriteria(['users_id' => Session::getLoginUserID(),
+       'plugin_ideabox_ideaboxes_id' => $_POST['id']]);
+   Html::back();
+
 } else {
 
    $idea->checkGlobal(READ);
 
+   if (isset($_POST["addcomment"])) {
+      $_GET['id'] = $_POST["plugin_ideabox_ideaboxes_id"];
+   }
    if (Session::getCurrentInterface() == 'central') {
       Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", PluginIdeaboxIdeabox::getType());
    } else {

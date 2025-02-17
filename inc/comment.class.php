@@ -53,29 +53,6 @@ class PluginIdeaboxComment extends CommonDBChild
         return "ti ti-message-circle-2";
     }
 
-   /**
-    * @return bool|int
-    */
-   public static function canView()
-   {
-      return Session::haveRight(self::$rightname, READ);
-   }
-
-   /**
-    * @return bool
-    */
-   public static function canCreate()
-   {
-      return Session::haveRight(self::$rightname, CREATE);
-   }
-
-    /**
-     * @return bool
-     */
-    public static function canUpdate()
-    {
-        return Session::haveRight(self::$rightname, UPDATE);
-    }
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
@@ -130,12 +107,29 @@ class PluginIdeaboxComment extends CommonDBChild
             || $input['plugin_ideabox_ideaboxes_id'] <= 0) {
             return false;
         }
-        function prepareInputForAdd($input)
-        {
-            $input['users_id']     = Session::getLoginUserID();
-            $input['date_comment'] = $_SESSION["glpi_currenttime"];
 
-            return $input;
+        $input['users_id']     = Session::getLoginUserID();
+        $input['date_comment'] = $_SESSION["glpi_currenttime"];
+
+        if (empty($input['name'])) {
+            Session::addMessageAfterRedirect(__("The name is mandatory", "ideabox"), false, ERROR);
+            return false;
+        }
+
+        if (empty($input['comment'])) {
+            Session::addMessageAfterRedirect(__("The description is mandatory", "ideabox"), false, ERROR);
+            return false;
+        }
+
+        return $input;
+    }
+
+    public function prepareInputForUpdate($input)
+    {
+        if (Session::getCurrentInterface() != 'central'
+            && $input['users_id'] != Session::getLoginUserID()) {
+            Session::addMessageAfterRedirect(__("Only original author can modify it", "ideabox"), false, ERROR);
+            return false;
         }
 
         return $input;
@@ -173,6 +167,12 @@ class PluginIdeaboxComment extends CommonDBChild
     {
         global $CFG_GLPI;
 
+        if (Session::getCurrentInterface() != 'central'
+            && $this->fields['users_id'] != Session::getLoginUserID()) {
+            Session::addMessageAfterRedirect(__("Only original author can modify it", "ideabox"), false, ERROR);
+            return false;
+        }
+
         $idea = new PluginIdeaboxIdeabox();
         if ($CFG_GLPI["notifications_mailing"]) {
             $options = ['comment_id' => $this->fields["id"]];
@@ -199,6 +199,83 @@ class PluginIdeaboxComment extends CommonDBChild
         ]);
 
         return true;
+    }
+
+    public function seeComments($ID)
+    {
+        global $DB;
+
+        $criteriac = [
+            'SELECT' => '*',
+            'FROM' => 'glpi_plugin_ideabox_comments',
+            'WHERE' => [
+                'plugin_ideabox_ideaboxes_id' => $ID
+            ]
+        ];
+        $iteratorc = $DB->request($criteriac);
+
+        if (count($iteratorc) > 0) {
+            echo '<div class="module module-comments">';
+            echo '<div class="module-body">';
+            echo '<ul class="nav nav-pills" style="margin-bottom: 10px;">';
+            echo '<li>';
+            echo '<div class="text-21">';
+            echo _n('Comment', 'Comments', count($iteratorc), 'ideabox').'&nbsp;<span class="badge">'.count($iteratorc).'</span>';
+            echo '</div>';
+            echo '</li>';
+            echo '</ul>';
+            echo '<div class="comments-list" data-comments-order="up" data-topic-id="2049">';
+
+            foreach ($iteratorc as $array2) {
+                echo '<div class="comment-item co0 ">';
+                echo '<div class="topic-avatar">';
+                $user = new User();
+                $user->getFromDB($array2['users_id']);
+                $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
+                $style = !empty($thumbnail_url) ? "background-image: url('$thumbnail_url')" : ("background-color: " . $user->getUserInitialsBgColor(
+                    ));
+                $user_name = formatUserName(
+                    $user->getID(),
+                    $user->fields['name'],
+                    $user->fields['realname'],
+                    $user->fields['firstname']
+                );
+                echo '<span class="avatar avatar-md rounded" style="' . $style . '" title="' . $user_name . '">';
+                if (empty($thumbnail_url)) {
+                    echo $user->getUserInitials();
+                }
+                echo "</span>";
+                echo "</div>";
+
+                echo '<div class="comment-details">';
+                echo '<i class="fa-fw fas fa-comments"></i>&nbsp;';
+
+                echo getUserName($array2['users_id'], 0, true);
+                echo ' - <span class="date-created">';
+                echo Html::timestampToRelativeStr($array2['date_comment']);
+                echo "</span>";
+                echo "</div>";
+
+                echo '<div class="comment-text ue-content">';
+                echo Glpi\RichText\RichText::getEnhancedHtml($array2['comment']);
+                echo "</div>";
+                $idea = new PluginIdeaboxIdeabox();
+                $target = $idea->getFormURL();
+                $target .= "?forcetab=PluginIdeaboxComment$1&id=".$ID;
+                Html::showSimpleForm(
+                    $target,
+                    'addcomment',
+                    _sx('button', 'Post a comment', 'ideabox'),
+                    ['plugin_ideabox_ideaboxes_id' => $ID],
+                    '',
+                    "class='btn btn-default'"
+                );
+
+                echo "</div>";
+            }
+            echo "</div>";
+        }
+
     }
 
 

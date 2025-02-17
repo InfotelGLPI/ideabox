@@ -40,14 +40,16 @@ if (Session::getCurrentInterface() == 'central') {
 }
 
 $idea = new PluginIdeaboxIdeabox();
+
 if ($idea->canView() || Session::haveRight("config", UPDATE)) {
+
     if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
         if ($idea->canCreate()) {
             echo "<div class='center'><table class='tab_cadre_fixe' cellpadding='5'>";
             $config = new PluginIdeaboxConfig();
             $config->getFromDB(1);
             $title = PluginServicecatalogConfig::displayField($config, 'title');
-            echo "<tr><th class='center'>" . $title. "</th></tr>";
+            echo "<tr><th class='center'>" . $title . "</th></tr>";
 
             $comment = PluginServicecatalogConfig::displayField($config, 'comment');
             if (!empty($comment)) {
@@ -58,16 +60,16 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
 
             echo "<tr class='tab_bg_1'><td class='center'>";
             echo "<a href=\"./ideabox.form.php\" class='submit btn btn-primary'>";
-            echo "<i class='".PluginIdeaboxIdeabox::getIcon()."'></i>&nbsp;".__('Submit an idea', 'ideabox');
+            echo "<i class='" . PluginIdeaboxIdeabox::getIcon() . "'></i>&nbsp;" . __('Submit an idea', 'ideabox');
             echo "</a>";
             echo "</td></tr>";
             echo " </table></div>";
         }
 
-        $_GET["field"]    = [0 => "10"];
-        $_GET["contains"] = [0 => Session::getLoginUserID()];
+        PluginIdeaboxIdeabox::showSearchForm();
 
-        Search::showList("PluginIdeaboxIdeabox", $_GET);
+        PluginIdeaboxIdeabox::showList($_GET);
+
     } else {
         Search::show("PluginIdeaboxIdeabox");
     }

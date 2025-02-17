@@ -29,7 +29,11 @@
                                 "name",
                                 item,
                                 (item_type == 'Contact' ? __('Surname') : __('Name')),
-                            withtemplate
+                            withtemplate,
+                            {
+                                'required': true
+
+                            }
                             ) }}
                         {% endif %}
 
@@ -69,6 +73,8 @@
                                     'enable_images': false,
                                     'enable_mentions': false,
                                     'rand': rand,
+                                    'required': true
+
                                 }
                             ) }}
                         {% endif %}

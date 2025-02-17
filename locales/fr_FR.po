@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Project - ideabox plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-18 13:15+0200\n"
-"PO-Revision-Date: 2022-10-18 13:16+0200\n"
+"POT-Creation-Date: 2025-02-17 13:15+0100\n"
+"PO-Revision-Date: 2025-02-17 13:17+0100\n"
 "Last-Translator: The tsmr <tsmr@thetsmr.fr>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/"
 "GLPI_ideabox/language/fr_FR/)\n"
@@ -20,100 +20,190 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.0\n"
 
-#: setup.php:101 inc/profile.class.php:162
-msgid "Idea box"
-msgid_plural "Ideas box"
-msgstr[0] "Boite à idée"
-msgstr[1] "Boite à idées"
-
-#: front/config.form.php:54
-msgid "Please activate the plugin"
-msgstr "Merci d'activer le plugin"
-
-#: front/ideabox.php:49
-msgid "Menu"
-msgstr "Menu"
-
-#: front/ideabox.php:61
-msgid "Submit an idea"
-msgstr "Soumettre une idée"
-
-#: inc/comment.class.php:45
-msgid "Comment"
-msgid_plural "Comments"
-msgstr[0] "Commentaire"
-msgstr[1] "Commentaires"
-
-#: inc/comment.class.php:229
-msgid "Date of comment"
-msgstr "Date du commentaire"
-
-#: inc/comment.class.php:247 inc/comment.class.php:323
-#: inc/ideabox.class.php:152
-msgid "Description"
-msgstr "Description"
-
-#: inc/ideabox.class.php:44
-msgid "Idea"
-msgid_plural "Ideas"
-msgstr[0] "Idée"
-msgstr[1] "Idées"
-
-#: inc/ideabox.class.php:134
-msgid "Date of submission"
-msgstr "Date de soumission"
-
-#: inc/notificationtargetideabox.class.php:41
-msgid "A new idea has been submitted"
-msgstr "Une nouvelle idée a été soumise"
-
-#: inc/notificationtargetideabox.class.php:42
-msgid "An idea has been modified"
-msgstr "Une idée a été modifiée"
-
-#: inc/notificationtargetideabox.class.php:43
-msgid "An idea has been deleted"
-msgstr "Une idée a été supprimée"
-
 #: inc/notificationtargetideabox.class.php:44
 msgid "A comment has been added"
 msgstr "Un commentaire a été ajouté"
-
-#: inc/notificationtargetideabox.class.php:45
-msgid "A comment has been modified"
-msgstr "Un commentaire a été modifié"
 
 #: inc/notificationtargetideabox.class.php:46
 msgid "A comment has been deleted"
 msgstr "Un commentaire a été supprimé"
 
-#: inc/notificationtargetideabox.class.php:54
-#: inc/notificationtargetideabox.class.php:145
-#: inc/notificationtargetideabox.class.php:166
-msgid "Comment author"
-msgstr "Auteur du commentaire"
+#: inc/notificationtargetideabox.class.php:45
+msgid "A comment has been modified"
+msgstr "Un commentaire a été modifié"
 
-#: inc/notificationtargetideabox.class.php:117
-msgid "Modified fields"
-msgstr "Champs modifiés"
+#: inc/notificationtargetideabox.class.php:41
+msgid "A new idea has been submitted"
+msgstr "Une nouvelle idée a été soumise"
 
-#: inc/notificationtargetideabox.class.php:142
+#: inc/ideabox.class.php:522
+msgid "Add your vote"
+msgstr "Voter"
+
+#: inc/notificationtargetideabox.class.php:187
+msgid "An addition/modification/deletion of comments"
+msgstr "A l'ajout/modification/suppression de commentaires"
+
+#: inc/notificationtargetideabox.class.php:182
+msgid "An addition/modification/deletion of ideas"
+msgstr "A l'ajout/modification/suppression d'idées"
+
+#: inc/notificationtargetideabox.class.php:43
+msgid "An idea has been deleted"
+msgstr "Une idée a été supprimée"
+
+#: inc/notificationtargetideabox.class.php:42
+msgid "An idea has been modified"
+msgstr "Une idée a été modifiée"
+
+#: templates/ideabox_form.html.twig:76
+msgid "Associable to a ticket"
+msgstr "Associable à un ticket"
+
+#: inc/notificationtargetideabox.class.php:150
 msgid "Associated comment"
 msgid_plural "Associated comments"
 msgstr[0] "Commentaire associé"
 msgstr[1] "Commentaires associés"
 
-#: inc/notificationtargetideabox.class.php:175
-msgid "An addition/modification/deletion of comments"
-msgstr "A l'ajout/modification/suppression de commentaires"
+#: templates/comment_form.html.twig:45 templates/ideabox_form.html.twig:43
+msgid "Author"
+msgstr "Auteur"
 
-#: inc/notificationtargetideabox.class.php:180
-msgid "An addition/modification/deletion of ideas"
-msgstr "A l'ajout/modification/suppression d'idées"
+#: inc/ideabox.class.php:544
+msgctxt "button"
+msgid "Cancel"
+msgstr "Annuler"
+
+#: inc/ideabox.class.php:322 templates/ideabox_form.html.twig:63
+msgid "Closed"
+msgstr "Terminé"
+
+#: inc/comment.class.php:45 inc/comment.class.php:223
+msgid "Comment"
+msgid_plural "Comments"
+msgstr[0] "Commentaire"
+msgstr[1] "Commentaires"
+
+#: inc/notificationtargetideabox.class.php:54
+#: inc/notificationtargetideabox.class.php:153
+#: inc/notificationtargetideabox.class.php:173
+msgid "Comment author"
+msgstr "Auteur du commentaire"
+
+#: inc/ideabox.class.php:462
+msgid "Commented by"
+msgstr "Commenté par"
+
+#: inc/comment.class.php:307 templates/comment_form.html.twig:57
+msgid "Date of comment"
+msgstr "Date du commentaire"
+
+#: inc/ideabox.class.php:174 templates/ideabox_form.html.twig:55
+msgid "Date of submission"
+msgstr "Date de soumission"
+
+#: inc/comment.class.php:325 inc/comment.class.php:403
+#: inc/ideabox.class.php:192 templates/comment_form.html.twig:67
+#: templates/ideabox_form.html.twig:85
+msgid "Description"
+msgstr "Description"
 
 #: inc/servicecatalog.class.php:81 inc/servicecatalog.class.php:88
 msgid "I have an idea"
 msgstr "J'ai une idée"
+
+#: inc/ideabox.class.php:49
+msgid "Idea"
+msgid_plural "Ideas"
+msgstr[0] "Idée"
+msgstr[1] "Idées"
+
+#: setup.php:106 inc/profile.class.php:162
+msgid "Idea box"
+msgid_plural "Ideas box"
+msgstr[0] "Boite à idée"
+msgstr[1] "Boite à idées"
+
+#: inc/ideabox.class.php:320 templates/ideabox_form.html.twig:63
+msgid "In progress"
+msgstr "Commencé"
+
+#: inc/ideabox.class.php:318 templates/ideabox_form.html.twig:63
+msgid "In study"
+msgstr "A l'étude"
+
+#: templates/ideabox_form.html.twig:64
+msgid "Internal state"
+msgstr "Statut interne"
+
+#: inc/notificationtargetideabox.class.php:125
+msgid "Modified fields"
+msgstr "Champs modifiés"
+
+#: templates/comment_form.html.twig:31 templates/ideabox_form.html.twig:29
+msgid "Name"
+msgstr "Nom"
+
+#: inc/ideabox.class.php:324 templates/ideabox_form.html.twig:63
+msgid "New"
+msgstr "Nouveau"
+
+#: inc/comment.class.php:131 inc/comment.class.php:172
+#: inc/ideabox.class.php:255
+msgid "Only original author can modify it"
+msgstr "Seul l'auteur peut le modifier"
+
+#: front/config.form.php:55 front/config.php:44
+msgid "Please activate the plugin"
+msgstr "Merci d'activer le plugin"
+
+#: inc/comment.class.php:268
+msgctxt "button"
+msgid "Post a comment"
+msgstr "Poster un commentaire"
+
+#: inc/ideabox.class.php:507
+msgid "Read description"
+msgstr "Lire la description"
+
+#: inc/ideabox.class.php:477
+msgid "See comments"
+msgstr "Voir les commentaires"
+
+#: inc/ideabox.class.php:590 inc/ideabox.class.php:631
+msgid "Start typing to find a idea"
+msgstr "Commencer à écrire pour trouver une idée"
+
+#: front/ideabox.php:63
+msgid "Submit an idea"
+msgstr "Soumettre une idée"
+
+#: templates/comment_form.html.twig:31 templates/ideabox_form.html.twig:29
+msgid "Surname"
+msgstr "Surnom"
+
+#: inc/ideabox.class.php:557
+msgctxt "button"
+msgid "Suscribe"
+msgstr "S'abonner"
+
+#: inc/comment.class.php:120 inc/ideabox.class.php:244
+msgid "The description is mandatory"
+msgstr "La description est obligatoire"
+
+#: inc/comment.class.php:115 inc/ideabox.class.php:239
+msgid "The name is mandatory"
+msgstr "Le nom est obligatoire"
+
+#: inc/vote.class.php:43
+msgid "Vote"
+msgid_plural "Votes"
+msgstr[0] "Vote"
+msgstr[1] "Votes"
+
+#~ msgid "Menu"
+#~ msgstr "Menu"
 
 #~ msgid "This plugin requires GLPI >= 0.84"
 #~ msgstr "Ce plugin nécessite GLPI >= 0.84"

@@ -31,68 +31,72 @@ function plugin_ideabox_install() {
     global $DB;
 
     include_once(PLUGIN_IDEABOX_DIR . "/inc/profile.class.php");
-    $DB->runFile(GLPI_ROOT . "/plugins/ideabox/sql/empty-3.0.0.sql");
 
-    $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='PluginIdeaboxIdeabox' AND `name` = 'Idea'";
-    $result = $DB->query($query_id) or die($DB->error());
-    $itemtype = $DB->result($result, 0, 'id');
-    if (empty($itemtype)) {
-        $query_id = "INSERT INTO `glpi_notificationtemplates`(`name`, `itemtype`, `date_mod`, `comment`, `css`) VALUES ('Idea','PluginIdeaboxIdeabox', NOW(),'','');";
-        $result = $DB->query($query_id) or die($DB->error());
+    if (!$DB->tableExists("glpi_plugin_ideabox_ideaboxes")) {
+        $DB->runFile(GLPI_ROOT . "/plugins/ideabox/sql/empty-3.0.0.sql");
+
         $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='PluginIdeaboxIdeabox' AND `name` = 'Idea'";
         $result = $DB->query($query_id) or die($DB->error());
         $itemtype = $DB->result($result, 0, 'id');
-    }
+        if (empty($itemtype)) {
+            $query_id = "INSERT INTO `glpi_notificationtemplates`(`name`, `itemtype`, `date_mod`, `comment`, `css`) VALUES ('Idea','PluginIdeaboxIdeabox', NOW(),'','');";
+            $result = $DB->query($query_id) or die($DB->error());
+            $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='PluginIdeaboxIdeabox' AND `name` = 'Idea'";
+            $result = $DB->query($query_id) or die($DB->error());
+            $itemtype = $DB->result($result, 0, 'id');
+        }
 
-    $query = "INSERT INTO `glpi_notificationtemplatetranslations`
+        $query = "INSERT INTO `glpi_notificationtemplatetranslations`
                               VALUES(NULL, '" . $itemtype . "', '','##lang.ideabox.title##',
                      '##lang.ideabox.url## : ##ideabox.url##
-   ##lang.ideabox.entity## : ##ideabox.entity##
-   ##IFideabox.name####lang.ideabox.name## : ##ideabox.name##
-   ##ENDIFideabox.name##
-   ##IFideabox.comment####lang.ideabox.comment## : ##ideabox.comment##
-   ##ENDIFideabox.comment##
-
-   ##FOREACHupdates##----------
-   ##lang.update.title##:
-   ##IFupdate.name####lang.ideabox.name## : ##update.name####ENDIFupdate.name##
-   ##IFupdate.comment##
-   ##lang.ideabox.comment## : ##update.comment##
-   ##ENDIFupdate.comment##
-   ----------##ENDFOREACHupdates##
-
-   ##lang.comment.title##
-   ----------
-   ##FOREACHcomments##
-   ##IFcomment.name####lang.comment.name## : ##comment.name####ENDIFcomment.name##
-   ##IFcomment.author####lang.comment.author## : ##comment.author####ENDIFcomment.author##
-   ##IFcomment.datecomment####lang.comment.datecomment## : ##comment.datecomment####ENDIFcomment.datecomment##
-   ##IFcomment.comment####lang.comment.comment## : ##comment.comment####ENDIFcomment.comment##
-   -------
-   ##ENDFOREACHcomments##',
+                       ##lang.ideabox.entity## : ##ideabox.entity##
+                       ##IFideabox.name####lang.ideabox.name## : ##ideabox.name##
+                       ##ENDIFideabox.name##
+                       ##IFideabox.comment####lang.ideabox.comment## : ##ideabox.comment##
+                       ##ENDIFideabox.comment##
+                    
+                       ##FOREACHupdates##----------
+                       ##lang.update.title##:
+                       ##IFupdate.name####lang.ideabox.name## : ##update.name####ENDIFupdate.name##
+                       ##IFupdate.comment##
+                       ##lang.ideabox.comment## : ##update.comment##
+                       ##ENDIFupdate.comment##
+                       ----------##ENDFOREACHupdates##
+                    
+                       ##lang.comment.title##
+                       ----------
+                       ##FOREACHcomments##
+                       ##IFcomment.name####lang.comment.name## : ##comment.name####ENDIFcomment.name##
+                       ##IFcomment.author####lang.comment.author## : ##comment.author####ENDIFcomment.author##
+                       ##IFcomment.datecomment####lang.comment.datecomment## : ##comment.datecomment####ENDIFcomment.datecomment##
+                       ##IFcomment.comment####lang.comment.comment## : ##comment.comment####ENDIFcomment.comment##
+                       -------
+                       ##ENDFOREACHcomments##',
                      '&lt;p&gt;&lt;strong&gt;##lang.ideabox.url##&lt;/strong&gt; : &lt;a href=\"##ideabox.url##\"&gt;##ideabox.url##&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;##lang.ideabox.entity##&lt;/strong&gt; : ##ideabox.entity##&lt;br /&gt; ##IFideabox.name##&lt;strong&gt;##lang.ideabox.name##&lt;/strong&gt; : ##ideabox.name####ENDIFideabox.name##&lt;br /&gt;&lt;br /&gt; ##IFideabox.comment##&lt;strong&gt;##lang.ideabox.comment##&lt;/strong&gt; : ##ideabox.comment####ENDIFideabox.comment##&lt;br /&gt;&lt;br /&gt;##FOREACHupdates##----------&lt;br /&gt;&lt;strong&gt;##lang.update.title## :&lt;/strong&gt;&lt;br /&gt;##IFupdate.name##&lt;strong&gt;##lang.ideabox.name##&lt;/strong&gt; : ##update.name####ENDIFupdate.name##&lt;br /&gt;##IFupdate.comment##&lt;br /&gt;&lt;strong&gt;##lang.ideabox.comment##&lt;/strong&gt; : ##update.comment##&lt;br /&gt;##ENDIFupdate.comment##&lt;br /&gt;----------##ENDFOREACHupdates##&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;##lang.comment.title## :&lt;/strong&gt;&lt;br /&gt;----------&lt;br /&gt;##FOREACHcomments####IFcomment.name##&lt;strong&gt;##lang.comment.name##&lt;/strong&gt; : ##comment.name####ENDIFcomment.name##&lt;br /&gt;##IFcomment.author##&lt;strong&gt;##lang.comment.author##&lt;/strong&gt; : ##comment.author####ENDIFcomment.author##&lt;br /&gt;##IFcomment.datecomment##&lt;strong&gt;##lang.comment.datecomment##&lt;/strong&gt; : ##comment.datecomment####ENDIFcomment.datecomment##&lt;br /&gt;##IFcomment.comment##&lt;strong&gt;##lang.comment.comment##&lt;/strong&gt; : ##comment.comment####ENDIFcomment.comment##&lt;br /&gt;----------&lt;br /&gt;##ENDFOREACHcomments##&lt;/p&gt;');";
 
-    $DB->query($query);
+        $DB->query($query);
 
-    $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
+        $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
                 VALUES ('New Idea', 0, 'PluginIdeaboxIdeabox', 'new', 1, 1);";
-    $DB->query($query);
-    $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
+        $DB->query($query);
+        $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
                 VALUES ('Update Idea', 0, 'PluginIdeaboxIdeabox', 'update', 1, 1);";
-    $DB->query($query);
-    $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
+        $DB->query($query);
+        $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
                 VALUES ('Delete Idea', 0, 'PluginIdeaboxIdeabox', 'delete', 1, 1);";
-    $DB->query($query);
-    $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
+        $DB->query($query);
+        $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
                 VALUES ('New comment of idea', 0, 'PluginIdeaboxIdeabox', 'newcomment', 1, 1);";
-    $DB->query($query);
-    $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
+        $DB->query($query);
+        $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
                 VALUES ('Update comment of idea', 0, 'PluginIdeaboxIdeabox', 'updatecomment', 1, 1);";
-    $DB->query($query);
-    $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
+        $DB->query($query);
+        $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
                 VALUES ('Delete comment of idea', 0, 'PluginIdeaboxIdeabox', 'deletecomment', 1, 1);";
-    $DB->query($query);
-
+        $DB->query($query);
+    } else if (!$DB->tableExists("glpi_plugin_ideabox_votes")) {
+        $DB->runFile(GLPI_ROOT . "/plugins/ideabox/sql/update-3.0.0.sql");
+    }
     PluginIdeaboxProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
     return true;
 }
@@ -103,6 +107,7 @@ function plugin_ideabox_uninstall() {
     $tables = ["glpi_plugin_ideabox_ideaboxs",
                "glpi_plugin_ideabox_ideaboxes",
                "glpi_plugin_ideabox_comments",
+               "glpi_plugin_ideabox_votes",
                "glpi_plugin_ideabox_configs",
                "glpi_plugin_ideabox_configtranslations"];
 
@@ -203,7 +208,8 @@ function plugin_ideabox_getDatabaseRelations() {
         return ["glpi_entities"                 => ["glpi_plugin_ideabox_ideaboxes" => "entities_id"],
                 "glpi_users"                    => ["glpi_plugin_ideabox_ideaboxes" => "users_id",
                                                     "glpi_plugin_ideabox_comments"  => "users_id"],
-                "glpi_plugin_ideabox_ideaboxes" => ["glpi_plugin_ideabox_comments" => "plugin_ideabox_ideaboxes_id"]];
+//                "glpi_plugin_ideabox_ideaboxes" => ["glpi_plugin_ideabox_comments" => "plugin_ideabox_ideaboxes_id"]
+];
     } else {
         return [];
     }

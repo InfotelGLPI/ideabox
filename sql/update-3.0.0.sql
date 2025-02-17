@@ -1,3 +1,14 @@
+ALTER TABLE `glpi_plugin_ideabox_ideaboxes` ADD `state` tinyint NOT NULL default '1';
+
+CREATE TABLE `glpi_plugin_ideabox_votes` (
+    `id` int unsigned NOT NULL auto_increment,
+    `date_vote` timestamp default NULL,
+    `plugin_ideabox_ideaboxes_id` int unsigned NOT NULL default '0' COMMENT 'RELATION to glpi_plugin_ideabox_ideaboxes (id)',
+    `users_id` int unsigned NOT NULL default '0' COMMENT 'RELATION to glpi_users (id)',
+    PRIMARY KEY  (`id`),
+    KEY `plugin_ideabox_ideaboxes_id` (`plugin_ideabox_ideaboxes_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
 CREATE TABLE `glpi_plugin_ideabox_configs` (
     `id` int unsigned NOT NULL auto_increment,
     `title` varchar(255) collate utf8mb4_unicode_ci default '',
@@ -19,3 +30,4 @@ CREATE TABLE `glpi_plugin_ideabox_configtranslations`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 ALTER TABLE `glpi_plugin_ideabox_ideaboxes` ADD `is_recursive` tinyint NOT NULL default '0';
+

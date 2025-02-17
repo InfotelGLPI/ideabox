@@ -27,7 +27,11 @@
                                 "name",
                                 item,
                                 (item_type == 'Contact' ? __('Surname') : __('Name')),
-                            withtemplate
+                            withtemplate,
+                            {
+                                'required': true
+
+                            }
                             ) }}
                         {% endif %}
 
@@ -53,6 +57,18 @@
                         ) }}
 
                         {% if get_current_interface() == 'central' %}
+                            {{ fields.dropdownArrayField(
+                                'state',
+                                item.fields['state'],
+                                {0: '-----', 1: __('New', 'ideabox'), 2: __('In study', 'ideabox'), 3: __('In progress', 'ideabox'), 4: __('Closed', 'ideabox')},
+                                __('Internal state', 'ideabox'),
+                                {
+                                    required: true
+                                }
+                            ) }}
+                        {% endif %}
+
+                        {% if get_current_interface() == 'central' %}
                             {% if item.isField('is_helpdesk_visible') %}
                                 {{ fields.dropdownYesNo(
                                     'is_helpdesk_visible',
@@ -75,6 +91,7 @@
                                     'enable_images': false,
                                     'enable_mentions': false,
                                     'rand': rand,
+                                    'required': true
                                 }
                             ) }}
                         {% endif %}

@@ -7,6 +7,7 @@ CREATE TABLE `glpi_plugin_ideabox_ideaboxes` (
     `comment` text collate utf8mb4_unicode_ci,
     `users_id` int unsigned NOT NULL default '0' COMMENT 'RELATION to glpi_users (id)',
     `date_idea` timestamp default NULL,
+    `state` int unsigned NOT NULL default '1',
     `is_helpdesk_visible` int unsigned NOT NULL default '1',
     `is_deleted` tinyint(1) NOT NULL default '0',
     PRIMARY KEY  (`id`),
@@ -30,6 +31,15 @@ CREATE TABLE `glpi_plugin_ideabox_comments` (
     KEY `plugin_ideabox_ideaboxes_id` (`plugin_ideabox_ideaboxes_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
+DROP TABLE IF EXISTS `glpi_plugin_ideabox_votes`;
+CREATE TABLE `glpi_plugin_ideabox_votes` (
+    `id` int unsigned NOT NULL auto_increment,
+    `date_vote` timestamp default NULL,
+    `plugin_ideabox_ideaboxes_id` int unsigned NOT NULL default '0' COMMENT 'RELATION to glpi_plugin_ideabox_ideaboxes (id)',
+    `users_id` int unsigned NOT NULL default '0' COMMENT 'RELATION to glpi_users (id)',
+    PRIMARY KEY  (`id`),
+    KEY `plugin_ideabox_ideaboxes_id` (`plugin_ideabox_ideaboxes_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `glpi_plugin_ideabox_configs`;
 CREATE TABLE `glpi_plugin_ideabox_configs` (

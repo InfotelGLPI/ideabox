@@ -39,6 +39,11 @@ class PluginIdeaboxIdeabox extends CommonDBTM
     public static $rightname  = "plugin_ideabox";
     protected $usenotepad = true;
 
+    const NEW = 1;
+    const STUDY = 2;
+    const IN_PROGRESS = 3;
+    const CLOSED = 4;
+
     public static function getTypeName($nb = 0)
     {
         return _n('Idea', 'Ideas', $nb, 'ideabox');
@@ -52,10 +57,42 @@ class PluginIdeaboxIdeabox extends CommonDBTM
         return "ti ti-bulb";
     }
 
+    /**
+     * @return bool|int
+     */
+    public static function canView()
+    {
+        return Session::haveRight(self::$rightname, READ);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function canCreate()
+    {
+        return Session::haveRight(self::$rightname, CREATE);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function canUpdate()
+    {
+        return Session::haveRight(self::$rightname, UPDATE);
+    }
+
+    public function canUpdateItem()
+    {
+        return Session::haveRight(self::$rightname, UPDATE);
+    }
+
     //clean if ideabox are deleted
     public function cleanDBonPurge()
     {
         $temp = new PluginIdeaboxComment();
+        $temp->deleteByCriteria(['plugin_ideabox_ideaboxes_id' => $this->fields['id']]);
+
+        $temp = new PluginIdeaboxVote();
         $temp->deleteByCriteria(['plugin_ideabox_ideaboxes_id' => $this->fields['id']]);
     }
 
@@ -76,6 +113,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
 //
 //      return $menu;
 //   }
+
 
     public static function removeRightsFromSession()
     {
@@ -197,13 +235,25 @@ class PluginIdeaboxIdeabox extends CommonDBTM
         $input['users_id'] = Session::getLoginUserID();
         $input['date_idea'] = $_SESSION["glpi_currenttime"];
 
+        if (empty($input['name'])) {
+            Session::addMessageAfterRedirect(__("The name is mandatory", "ideabox"), false, ERROR);
+            return false;
+        }
+
+        if (empty($input['comment'])) {
+            Session::addMessageAfterRedirect(__("The description is mandatory", "ideabox"), false, ERROR);
+            return false;
+        }
+
         return $input;
     }
 
     public function prepareInputForUpdate($input)
     {
-        if (isset($input['users_id'])) {
-            unset($input['users_id']);
+        if (Session::getCurrentInterface() != 'central'
+            && $input['users_id'] != Session::getLoginUserID()) {
+            Session::addMessageAfterRedirect(__("Only original author can modify it", "ideabox"), false, ERROR);
+            return false;
         }
 
         return $input;
@@ -242,6 +292,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
             $options['users_id'] = $this->fields['users_id'];
             $options['date_idea'] = $this->fields['date_idea'];
         }
+        Html::requireJs("tinymce");
 
         TemplateRenderer::getInstance()->display('@ideabox/ideabox_form.html.twig', [
            'item'   => $this,
@@ -249,5 +300,403 @@ class PluginIdeaboxIdeabox extends CommonDBTM
         ]);
 
         return true;
+    }
+
+
+    /**
+     * Returns the status-related title
+     *
+     * @param $state
+     *
+     * @return \translated
+     */
+    public static function getStateName($state)
+    {
+        switch ($state) {
+
+            case self::STUDY:
+                return __('In study', 'ideabox');
+            case self::IN_PROGRESS:
+                return __('In progress', 'ideabox');
+            case self::CLOSED:
+                return __('Closed', 'ideabox');
+            default:
+                return __('New', 'ideabox');
+        }
+    }
+
+    public static function getStateColor($state)
+    {
+        switch ($state) {
+
+            case self::STUDY:
+                return "#D1A712";
+            case self::IN_PROGRESS:
+                return "#4DAA77";
+            case self::CLOSED:
+                return "#d5703b";
+            default:
+                return "#2d98b1";
+        }
+    }
+
+    public static function showList($params)
+    {
+        global $DB;
+
+
+        $criteria = [
+            'SELECT' => 'id',
+            'FROM' => 'glpi_plugin_ideabox_ideaboxes',
+            'WHERE' => [
+                'is_deleted' => 0
+            ],
+            'ORDERBY' => 'date_idea DESC',
+        ];
+
+        if (isset($params['id'])) {
+            $criteria['WHERE'] = $criteria['WHERE'] + ['id' => $params['id']];
+        }
+
+        $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
+                'glpi_plugin_ideabox_ideaboxes'
+            );
+
+        $iterator = $DB->request($criteria);
+
+        if (count($iterator) > 0) {
+            echo "<div class='topiclist-topics' style='display: flex;flex-wrap: wrap;'>";
+            foreach ($iterator as $array) {
+                $idea = new self();
+                $idea->getFromDB($array['id']);
+
+                $comments = [];
+
+                $criteriac = [
+                    'SELECT' => '*',
+                    'FROM' => 'glpi_plugin_ideabox_comments',
+                    'WHERE' => [
+                        'plugin_ideabox_ideaboxes_id' => $idea->getID()
+                    ]
+                ];
+                $iteratorc = $DB->request($criteriac);
+
+                if (count($iteratorc) > 0) {
+                    foreach ($iteratorc as $array2) {
+                        $comments[$array2['id']]['users_id'] = $array2['users_id'];
+                        $comments[$array2['id']]['name'] = $array2['name'];
+                        $comments[$array2['id']]['comment'] = $array2['comment'];
+                        $comments[$array2['id']]['date_comment'] = $array2['date_comment'];
+                    }
+                }
+
+                $votes = [];
+
+                $criteriav = [
+                    'SELECT' => '*',
+                    'FROM' => 'glpi_plugin_ideabox_votes',
+                    'WHERE' => [
+                        'plugin_ideabox_ideaboxes_id' => $idea->getID()
+                    ]
+                ];
+                $iteratorv = $DB->request($criteriav);
+
+                if (count($iteratorv) > 0) {
+                    foreach ($iteratorv as $array3) {
+                        $votes[$array3['id']]['users_id'] = $array3['users_id'];
+                        $votes[$array3['id']]['date_comment'] = $array3['date_vote'];
+                    }
+                }
+
+                echo "<div class='topic-item topic-item-medium-list' style='flex: 1 0 45%;position: relative;'>";
+
+                echo "<div class='topic-avatar'>";
+                $user = new User();
+                $user->getFromDB($idea->fields['users_id']);
+                $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
+                $style = !empty($thumbnail_url) ? "background-image: url('$thumbnail_url')" : ("background-color: " . $user->getUserInitialsBgColor(
+                    ));
+                $user_name = formatUserName(
+                    $user->getID(),
+                    $user->fields['name'],
+                    $user->fields['realname'],
+                    $user->fields['firstname']
+                );
+                echo '<span class="avatar avatar-md rounded" style="' . $style . '" title="' . $user_name . '">';
+                if (empty($thumbnail_url)) {
+                    echo $user->getUserInitials();
+                }
+                echo "</span>";
+                echo "</div>";
+
+                echo '<div class="topic-votes pull-right">';
+                echo '<span title="" class="topic-label topic-label-success" >';
+                echo '+' . count($votes);
+                echo "</span>";
+                echo "</div>";
+
+                echo "<div class='topic-status'>";
+                $color = self::getStateColor($idea->fields['state']);
+                echo "<span class='topic-label topic-label-sm' style='background-color:".$color."'>";
+                echo self::getStateName($idea->fields['state']);
+                echo "</div>";
+
+
+                echo "<h3 class='topic-header'>";
+                echo $idea->getLink();
+                echo "</h3>";
+
+                echo '<div class="topic-details">';
+                echo '<i class="ti ti-bulb icon-source"></i>';
+
+                echo getUserName($idea->fields['users_id'], 0, true);
+                echo ' - <span class="date-created">';
+                echo Html::timestampToRelativeStr($idea->fields['date_idea']);
+
+                if (count($comments) > 0) {
+                    $last_comment = end($comments);
+
+                    echo "</span>";
+                    echo ' - <span class="topic-updated-info">';
+
+                    echo __('Commented by', 'ideabox');
+                    echo "&nbsp;" . getUserName($last_comment['users_id'], 0, true);
+                    echo ' - <span class="date-updated">';
+
+                    echo Html::timestampToRelativeStr($last_comment['date_comment']);
+                    echo "</span>";
+                    echo ' - <span class="topic-comment-count">';
+
+                    $id = $idea->getID();
+                    echo "<button class='submit btn btn-default mb-2' data-bs-toggle='modal' data-bs-target='#seecomments$id'>"
+                        . "<i class='far fa-comments'></i><span>" . count($comments). "</span></button>";
+
+                    echo Ajax::createIframeModalWindow(
+                        'seecomments'.$id,
+                        PLUGIN_IDEABOX_WEBDIR . '/front/comment.php?plugin_ideabox_ideaboxes_id=' . $idea->getID(),
+                        ['title'         => __("See comments", 'ideabox'),
+                            'display'       => false,
+//                            'width'         => 550,
+//                            'height'        => 850,
+                            'reloadonclose' => true]
+                    );
+
+                    echo "</span>";
+                } else {
+                    echo "&nbsp;";
+                    $target = $idea->getFormURL();
+                    $target .= "?forcetab=PluginIdeaboxComment$1&id=".$idea->getID();
+                    Html::showSimpleForm(
+                        $target,
+                        'addcomment',
+                        '+ <i class="far fa-comments"></i>',
+                        ['plugin_ideabox_ideaboxes_id' => $idea->getID()],
+                        '',
+                        "class='btn btn-default'"
+                    );
+                }
+
+                echo "</div>";
+
+                echo '<div class="topic-text ue-content">';
+
+                $description = $idea->fields['comment'];
+                $id = $idea->getID();
+                if (strlen($idea->fields['comment']) > 10) {
+                    echo "<a href=\"#\" onclick=\"$(this).hide();$('#$id').show();\">" . __(
+                            'Read description',
+                            'ideabox'
+                        ) . "</a>";
+                    echo '<div style="display:none;" id="' . $id . '">' . Glpi\RichText\RichText::getEnhancedHtml(
+                            $description
+                        ) . '</div>';
+                } else {
+                    echo Glpi\RichText\RichText::getEnhancedHtml($description);
+                }
+
+                echo '</div>';
+
+                echo '<div class="actions-bar">';
+                echo '<div style="bottom: 5px;position: absolute">';
+                echo '<span class="vote-text hidden-xs">';
+                echo __('Add your vote', 'ideabox');
+                echo '&nbsp;</span>';
+                $already_voted = 0;
+                $target = $idea->getFormURL();
+                $vote = new PluginIdeaboxVote();
+                if ($vote->getFromDBByCrit(['users_id' => Session::getLoginUserID(),'plugin_ideabox_ideaboxes_id' =>  $idea->getID()])) {
+                    $already_voted = 1;
+                }
+                if ($already_voted == 0) {
+
+                    Html::showSimpleForm(
+                        $target,
+                        'vote',
+                        "<i class='fas fa-thumbs-up'></i>&nbsp;<span class='b'>".count($votes)."</span>",
+                        ['id' => $idea->getID()],
+                        '',
+                        "class='btn btn-default'"
+                    );
+                } else {
+                    Html::showSimpleForm(
+                        $target,
+                        'cancelvote',
+                        "<i class='fas fa-times-circle'></i>&nbsp;"._x('button', 'Cancel', 'ideabox'),
+                        ['id' => $idea->getID()],
+                        '',
+                        "class='btn btn-default'"
+                    );
+                }
+                echo "</div>";
+
+
+                $target = "";
+                Html::showSimpleForm(
+                    $target,
+                    'suscribe',
+                    "<i class='fas fa-envelope'></i>&nbsp;"._x('button', 'Suscribe', 'ideabox'),
+                    ['id' => $idea->getID()],
+                    '',
+                    "style='float: right;position: absolute;bottom: 5px;right: 5px;color: #CCC;' class='btn btn-default'"
+                );
+
+                echo "</div>";
+                echo "</div>";
+            }
+            echo "</div>";
+        }
+    }
+
+
+    public static function showSearchForm()
+    {
+
+        echo "<div id='searchidea'>";
+        echo "</div>";
+
+        echo self::fuzzySearchForm('id-home-trigger-fuzzy');
+
+    }
+
+
+    /**
+     * @param $name
+     * @param $type
+     * @return void
+     */
+    public static function fuzzySearchForm($name)
+    {
+
+        $title = __("Start typing to find a idea", "ideabox");
+        $strict_search = 1;
+
+
+        $style = "style='display:none;margin-right: auto;margin-top: 20px;'";
+        echo "<div tabindex='-1' id='fuzzysearch' $style>";
+
+        $position = "";
+
+        echo "<div class='modal-content' style='background-color: transparent!important;'>";
+        echo "<div class='modal-body' style='padding: unset;background-color: transparent!important;".$position."width: 100%;'>";
+        echo "<div class='input-group'>";
+
+        echo "<input type='text' class='$name form-control' placeholder=\"" . $title . "\">";
+        echo "<input type='hidden' name='fuzzy-strict' id='fuzzy-strict' value='" . $strict_search . "'/>";
+        echo "<div class='input-group-prepend'>";
+        echo "<span class='input-group-text input-group-text-search' style='padding: 10px;'><i class='fas fa-search'></i></span>";
+        echo "</div>";
+        echo "</div>";
+        echo "<ul class='results list-group mb-2' style='background-color: transparent;'></ul>";
+        echo "</div>";
+        echo "</div>";
+        echo "</div>";
+        echo Html::scriptBlock("$(document).ready(function() {
+                                        $('#fuzzysearch').show();
+                                    });");
+    }
+
+    /**
+     * Manage events from js/fuzzysearch.js
+     *
+     * @param string $action action to switch (should be actually 'getHtml' or 'getList')
+     *
+     * @return string
+     * @since 9.2
+     *
+     */
+    public static function fuzzySearch($action = '')
+    {
+        global $DB;
+
+        $title = __("Start typing to find a idea", "ideabox");
+        $strict_search = 1;
+        switch ($action) {
+            case 'getModalHtml':
+                $modal_header = __('Search');
+                $placeholder = $title;
+                $html = <<<HTML
+               <div class="modal" tabindex="-1" id="fuzzysearch">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                        <div class="modal-header">
+                           <h5 class="modal-title">
+                              <i class="fas fa-arrow-right me-2"></i>
+                              {$modal_header}
+                           </h5>
+                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                           <input type="text" class="form-control" placeholder="{$placeholder}">
+                           <input type="hidden" id="fuzzy-strict" value="{$strict_search}">
+                           <ul class="results list-group mt-2"></ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+HTML;
+
+                return $html;
+                break;
+
+            default:
+                $fuzzy_entries = [];
+
+                $criteria = [
+                    'SELECT' => '*',
+                    'FROM' => 'glpi_plugin_ideabox_ideaboxes',
+                    'WHERE' => [
+                        'is_deleted' => 0
+                    ],
+                    'ORDERBY' => 'date_idea DESC',
+                ];
+                $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
+                        'glpi_plugin_ideabox_ideaboxes'
+                    );
+
+                $iterator = $DB->request($criteria);
+
+                if (count($iterator) > 0) {
+                    foreach ($iterator as $idea) {
+                        $identity = __('Idea');
+                        $fuzzy_entries[] = [
+                            'url' => PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php?id=" . $idea['id'],
+                            'title' => $idea['name'],
+                            'comment' => ($idea['comment'] != null) ? Html::resume_text(
+                                Glpi\RichText\RichText::getTextFromHtml($idea['comment']),
+                                "200"
+                            ) : "",
+                            'icon' => 'ti ti-bulb',
+                            'background' => '',
+                            'order' => "2",
+                            'target' => ''
+                        ];
+                    }
+                }
+
+                // return the entries to ajax call
+                return json_encode($fuzzy_entries);
+                break;
+        }
     }
 }

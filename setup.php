@@ -27,7 +27,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_IDEABOX_VERSION', '3.0.0-beta');
+define('PLUGIN_IDEABOX_VERSION', '3.0.0');
 
 if (!defined("PLUGIN_IDEABOX_DIR")) {
     define("PLUGIN_IDEABOX_DIR", Plugin::getPhpDir("ideabox"));
@@ -44,6 +44,9 @@ function plugin_init_ideabox()
     $PLUGIN_HOOKS['change_profile']['ideabox']   = ['PluginIdeaboxProfile', 'initProfile'];
     $PLUGIN_HOOKS['plugin_datainjection_populate']['ideabox'] = 'plugin_datainjection_populate_ideabox';
     $PLUGIN_HOOKS['assign_to_ticket']['ideabox'] = true;
+    $PLUGIN_HOOKS['add_css']['ideabox'] = "ideabox.css";
+    $PLUGIN_HOOKS["add_javascript"]['ideabox'][] = 'lib/fuse.js';
+    $PLUGIN_HOOKS["add_javascript"]['ideabox'][] = 'lib/fuzzysearch.js.php';
 
     if (Session::getLoginUserID()) {
         Plugin::registerClass('PluginIdeaboxIdeabox', [
