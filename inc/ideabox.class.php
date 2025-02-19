@@ -407,8 +407,8 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                         $votes[$array3['id']]['date_comment'] = $array3['date_vote'];
                     }
                 }
-
-                echo "<div class='topic-item topic-item-medium-list' style='flex: 1 0 45%;position: relative;'>";
+                $id = $idea->getID();
+                echo "<div id='anchor$id'  class='topic-item topic-item-medium-list' style='flex: 1 0 45%;position: relative;'>";
 
                 echo "<div class='topic-avatar'>";
                 $user = new User();
@@ -446,7 +446,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                 echo $idea->getLink();
                 echo "</h3>";
 
-                echo '<div class="topic-details">';
+                echo "<div class='topic-details'>";
                 echo '<i class="ti ti-bulb icon-source"></i>';
 
                 echo getUserName($idea->fields['users_id'], 0, true);
@@ -501,13 +501,13 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                 echo '<div class="topic-text ue-content">';
 
                 $description = $idea->fields['comment'];
-                $id = $idea->getID();
+
                 if (strlen($idea->fields['comment']) > 10) {
-                    echo "<a href=\"#\" onclick=\"$(this).hide();$('#$id').show();\">" . __(
+                    echo "<a href=\"#anchor$id\" onclick=\"$(this).hide();$('#$id').show();\">" . __(
                             'Read description',
                             'ideabox'
                         ) . "</a>";
-                    echo '<div style="display:none;" id="' . $id . '">' . Glpi\RichText\RichText::getEnhancedHtml(
+                    echo '<div style="display:none;padding-bottom: 10px;" id="' . $id . '">' . Glpi\RichText\RichText::getEnhancedHtml(
                             $description
                         ) . '</div>';
                 } else {

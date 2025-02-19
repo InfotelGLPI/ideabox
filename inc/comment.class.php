@@ -81,7 +81,13 @@ class PluginIdeaboxComment extends CommonDBChild
         if ($item->getType() == 'PluginIdeaboxIdeabox') {
             $self = new self();
             $self->showForm(0, ['plugin_ideabox_ideaboxes_id' => $item->getField('id')]);
-            $self->showComments($item);
+
+
+            if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
+                $self->seeComments($item->getField('id'), true);
+            } else {
+                $self->showComments($item);
+            }
         }
         return true;
     }
@@ -201,7 +207,7 @@ class PluginIdeaboxComment extends CommonDBChild
         return true;
     }
 
-    public function seeComments($ID)
+    public function seeComments($ID, $fromidea)
     {
         global $DB;
 
@@ -210,7 +216,8 @@ class PluginIdeaboxComment extends CommonDBChild
             'FROM' => 'glpi_plugin_ideabox_comments',
             'WHERE' => [
                 'plugin_ideabox_ideaboxes_id' => $ID
-            ]
+            ],
+            'ORDERBY' => 'date_comment DESC'
         ];
         $iteratorc = $DB->request($criteriac);
 
@@ -259,17 +266,35 @@ class PluginIdeaboxComment extends CommonDBChild
                 echo '<div class="comment-text ue-content">';
                 echo Glpi\RichText\RichText::getEnhancedHtml($array2['comment']);
                 echo "</div>";
-                $idea = new PluginIdeaboxIdeabox();
-                $target = $idea->getFormURL();
-                $target .= "?forcetab=PluginIdeaboxComment$1&id=".$ID;
-                Html::showSimpleForm(
-                    $target,
-                    'addcomment',
-                    _sx('button', 'Post a comment', 'ideabox'),
-                    ['plugin_ideabox_ideaboxes_id' => $ID],
-                    '',
-                    "class='btn btn-default'"
-                );
+
+                if ($fromidea == false) {
+                    $idea = new PluginIdeaboxIdeabox();
+                    $target = $idea->getFormURL();
+                    $target .= "?forcetab=PluginIdeaboxComment$1&id=".$ID;
+                    Html::showSimpleForm(
+                        $target,
+                        'addcomment',
+                        _sx('button', 'Post a comment', 'ideabox'),
+                        ['plugin_ideabox_ideaboxes_id' => $ID],
+                        '',
+                        "class='btn btn-default'"
+                    );
+                }
+
+                if ($array2['users_id']== Session::getLoginUserID()) {
+                    echo "&nbsp;";
+                    $self = new self();
+                    $target = $self->getFormURL();
+                    Html::showSimpleForm(
+                        $target,
+                        'purge',
+                        _sx('button', 'Delete', 'ideabox'),
+                        ['id' => $array2['id']],
+                        '',
+                        "class='btn btn-danger'"
+                    );
+                }
+
 
                 echo "</div>";
             }

@@ -35,5 +35,5 @@ $comment = new PluginIdeaboxComment();
 
 Html::popHeader(PluginIdeaboxIdeabox::getTypeName(2));
 
-$comment->seeComments($_GET["plugin_ideabox_ideaboxes_id"]);
+$comment->seeComments($_GET["plugin_ideabox_ideaboxes_id"], false);
 
