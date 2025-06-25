@@ -29,6 +29,8 @@
 
 include('../../../inc/includes.php');
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
+
 if (Session::getCurrentInterface() == 'central') {
     Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", PluginIdeaboxIdeabox::getType());
 } else {
@@ -74,7 +76,7 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
         Search::show("PluginIdeaboxIdeabox");
     }
 } else {
-    Html::displayRightError();
+    throw new AccessDeniedHttpException();
 }
 
 

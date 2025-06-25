@@ -35,14 +35,17 @@ class PluginIdeaboxProfile extends CommonDBTM {
 
    static $rightname = "profile";
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
-
+   public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+   {
       if ($item->getType() == 'Profile') {
-         return PluginIdeaboxIdeabox::getTypeName(2);
+         return self::createTabEntry(PluginIdeaboxIdeabox::getTypeName(2));
       }
       return '';
    }
 
+   static function getIcon() {
+      return "ti ti-bulb";
+   }
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       global $CFG_GLPI;
@@ -213,18 +216,20 @@ class PluginIdeaboxProfile extends CommonDBTM {
          return true;
       }
 
-      foreach ($DB->request('glpi_plugin_ideabox_profiles',
-                            "`profiles_id`='$profiles_id'") as $profile_data) {
-
+      $it = $DB->request([
+          'FROM' => 'glpi_plugin_ideabox_profiles',
+          'WHERE' => ['profiles_id' => $profiles_id]
+      ]);
+      foreach ($it as $profile_data) {
          $matching       = ['ideabox'     => 'plugin_ideabox',
-                      'open_ticket' => 'plugin_ideabox_open_ticket'];
+             'open_ticket' => 'plugin_ideabox_open_ticket'];
          $current_rights = ProfileRight::getProfileRights($profiles_id, array_values($matching));
          foreach ($matching as $old => $new) {
             if (!isset($current_rights[$old])) {
-               $query = "UPDATE `glpi_profilerights` 
-                         SET `rights`='" . self::translateARight($profile_data[$old]) . "' 
-                         WHERE `name`='$new' AND `profiles_id`='$profiles_id'";
-               $DB->query($query);
+               $DB->update('glpi_profilerights', ['rights' => self::translateARight($profile_data[$old])], [
+                   'name'        => $new,
+                   'profiles_id' => $profiles_id
+               ]);
             }
          }
       }
@@ -247,14 +252,24 @@ class PluginIdeaboxProfile extends CommonDBTM {
       }
 
       //Migration old rights in new ones
-      foreach ($DB->request("SELECT `id` FROM `glpi_profiles`") as $prof) {
+      $it = $DB->request([
+          'SELECT' => ['id'],
+          'FROM' => 'glpi_profiles'
+      ]);
+      foreach ($it as $prof) {
          self::migrateOneProfile($prof['id']);
       }
-      foreach ($DB->request("SELECT *
-                           FROM `glpi_profilerights` 
-                           WHERE `profiles_id`='" . $_SESSION['glpiactiveprofile']['id'] . "' 
-                              AND `name` LIKE '%plugin_ideabox%'") as $prof) {
-         $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
+      $it = $DB->request([
+          'FROM' => 'glpi_profilerights',
+          'WHERE' => [
+              'profiles_id' => $_SESSION['glpiactiveprofile']['id'],
+              'name' => ['LIKE', '%plugin_ideabox%']
+          ]
+      ]);
+      foreach ($it as $prof) {
+         if (isset($_SESSION['glpiactiveprofile'])) {
+            $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
+         }
       }
    }
 

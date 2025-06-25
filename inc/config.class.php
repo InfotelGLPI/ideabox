@@ -85,10 +85,14 @@ class PluginIdeaboxConfig extends CommonDBTM
      */
     function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
         if (!$withtemplate) {
-            $ong[1] = __('Setup');
+            $ong[1] =  self::createTabEntry(__('Setup'));
             return $ong;
         }
         return '';
+    }
+
+    static function getIcon() {
+        return "ti ti-settings";
     }
 
     /**

@@ -92,6 +92,12 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
         return self::createTabEntry(self::getTypeName(Session::getPluralNumber()), $nb);
     }
 
+
+    public static function getIcon()
+    {
+        return "ti ti-language";
+    }
+
    /**
     * @param $item            CommonGLPI object
     * @param $tabnum (default 1)

@@ -27,12 +27,17 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_IDEABOX_VERSION', '3.0.0');
+define('PLUGIN_IDEABOX_VERSION', '4.0.0');
+
+global $CFG_GLPI;
+
+use Glpi\Plugin\Hooks;
 
 if (!defined("PLUGIN_IDEABOX_DIR")) {
     define("PLUGIN_IDEABOX_DIR", Plugin::getPhpDir("ideabox"));
     define("PLUGIN_IDEABOX_NOTFULL_DIR", Plugin::getPhpDir("ideabox", false));
-    define("PLUGIN_IDEABOX_WEBDIR", Plugin::getWebDir("ideabox"));
+    $root = $CFG_GLPI['root_doc'] . '/plugins/ideabox';
+    define("PLUGIN_IDEABOX_WEBDIR", $root);
 }
 
 // Init the hooks of the plugins -Needed
@@ -44,13 +49,13 @@ function plugin_init_ideabox()
     $PLUGIN_HOOKS['change_profile']['ideabox']   = ['PluginIdeaboxProfile', 'initProfile'];
     $PLUGIN_HOOKS['plugin_datainjection_populate']['ideabox'] = 'plugin_datainjection_populate_ideabox';
     $PLUGIN_HOOKS['assign_to_ticket']['ideabox'] = true;
-    $PLUGIN_HOOKS['add_css']['ideabox'] = "ideabox.css";
-    $PLUGIN_HOOKS["add_javascript"]['ideabox'][] = 'lib/fuse.js';
-    $PLUGIN_HOOKS["add_javascript"]['ideabox'][] = 'lib/fuzzysearch.js.php';
+    $PLUGIN_HOOKS[Hooks::ADD_CSS]['ideabox'] = "css/ideabox.css";
+    $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuse.js';
+    $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuzzysearch.js.php';
 
     if (Session::getLoginUserID()) {
         Plugin::registerClass('PluginIdeaboxIdeabox', [
-           'linkuser_types'              => true,
+           'assignable_types'              => true,
            'document_types'              => true,
            'helpdesk_visible_types'      => true,
            'ticket_types'                => true,
@@ -110,8 +115,8 @@ function plugin_version_ideabox()
        'homepage'     => 'https://github.com/InfotelGLPI/ideabox',
        'requirements' => [
           'glpi' => [
-             'min' => '10.0',
-             'max' => '11.0',
+             'min' => '11.0',
+             'max' => '12.0',
              'dev' => false
           ]
        ]

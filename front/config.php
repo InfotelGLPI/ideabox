@@ -30,16 +30,18 @@
 
 include('../../../inc/includes.php');
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
+
 global $CFG_GLPI;
 
 if (Plugin::isPluginActive("ideabox")) {
     if (Session::haveRight("plugin_ideabox", UPDATE)) {
         Html::redirect(PLUGIN_IDEABOX_WEBDIR . "/front/config.form.php");
     } else {
-        Html::displayRightError();
+        throw new AccessDeniedHttpException();
     }
 } else {
-    Html::header(__('Setup'), '', "config", "plugins");
+    Html::header(__('Setup'), '', "config", "plugin");
     echo "<div class='alert alert-important alert-warning d-flex'>";
     echo "<b>" . __('Please activate the plugin', 'ideabox') . "</b></div>";
     Html::footer();

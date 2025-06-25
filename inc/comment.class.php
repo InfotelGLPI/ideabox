@@ -255,7 +255,7 @@ class PluginIdeaboxComment extends CommonDBChild
                 echo "</div>";
 
                 echo '<div class="comment-details">';
-                echo '<i class="fa-fw fas fa-comments"></i>&nbsp;';
+                echo '<i class="fa-fw ti ti-message"></i>&nbsp;';
 
                 echo getUserName($array2['users_id'], 0, true);
                 echo ' - <span class="date-created">';
@@ -398,7 +398,7 @@ class PluginIdeaboxComment extends CommonDBChild
       ON (`glpi_plugin_ideabox_ideaboxes`.`id` = `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id`)";
         $query  .= " WHERE `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id` = '$instID'
           ORDER BY `glpi_plugin_ideabox_comments`.`name`";
-        $result = $DB->query($query);
+        $result = $DB->doQuery($query);
         $number = $DB->numrows($result);
 
         echo "<div class='spaced'>";

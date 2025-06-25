@@ -60,7 +60,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
     /**
      * @return bool|int
      */
-    public static function canView()
+    public static function canView(): bool
     {
         return Session::haveRight(self::$rightname, READ);
     }
@@ -68,7 +68,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
     /**
      * @return bool
      */
-    public static function canCreate()
+    public static function canCreate(): bool
     {
         return Session::haveRight(self::$rightname, CREATE);
     }
@@ -76,12 +76,12 @@ class PluginIdeaboxIdeabox extends CommonDBTM
     /**
      * @return bool
      */
-    public static function canUpdate()
+    public static function canUpdate(): bool
     {
         return Session::haveRight(self::$rightname, UPDATE);
     }
 
-    public function canUpdateItem()
+    public function canUpdateItem(): bool
     {
         return Session::haveRight(self::$rightname, UPDATE);
     }
@@ -469,7 +469,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
 
                     $id = $idea->getID();
                     echo "<button class='submit btn btn-default mb-2' data-bs-toggle='modal' data-bs-target='#seecomments$id'>"
-                        . "<i class='far fa-comments'></i><span>" . count($comments). "</span></button>";
+                        . "<i class='ti ti-message'></i><span>" . count($comments). "</span></button>";
 
                     echo Ajax::createIframeModalWindow(
                         'seecomments'.$id,
@@ -489,9 +489,9 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                     Html::showSimpleForm(
                         $target,
                         'addcomment',
-                        '+ <i class="far fa-comments"></i>',
-                        ['plugin_ideabox_ideaboxes_id' => $idea->getID()],
                         '',
+                        ['plugin_ideabox_ideaboxes_id' => $idea->getID()],
+                        'ti-message-plus',
                         "class='btn btn-default'"
                     );
                 }
@@ -532,18 +532,18 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                     Html::showSimpleForm(
                         $target,
                         'vote',
-                        "<i class='fas fa-thumbs-up'></i>&nbsp;<span class='b'>".count($votes)."</span>",
+                        count($votes),
                         ['id' => $idea->getID()],
-                        '',
+                        'ti-thumb-up',
                         "class='btn btn-default'"
                     );
                 } else {
                     Html::showSimpleForm(
                         $target,
                         'cancelvote',
-                        "<i class='fas fa-times-circle'></i>&nbsp;"._x('button', 'Cancel', 'ideabox'),
+                        _x('button', 'Cancel', 'ideabox'),
                         ['id' => $idea->getID()],
-                        '',
+                        'ti-circle-x',
                         "class='btn btn-default'"
                     );
                 }
@@ -554,9 +554,9 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                 Html::showSimpleForm(
                     $target,
                     'suscribe',
-                    "<i class='fas fa-envelope'></i>&nbsp;"._x('button', 'Suscribe', 'ideabox'),
+                    _x('button', 'Suscribe', 'ideabox'),
                     ['id' => $idea->getID()],
-                    '',
+                    'ti-mail',
                     "style='float: right;position: absolute;bottom: 5px;right: 5px;color: #CCC;' class='btn btn-default'"
                 );
 
@@ -603,7 +603,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
         echo "<input type='text' class='$name form-control' placeholder=\"" . $title . "\">";
         echo "<input type='hidden' name='fuzzy-strict' id='fuzzy-strict' value='" . $strict_search . "'/>";
         echo "<div class='input-group-prepend'>";
-        echo "<span class='input-group-text input-group-text-search' style='padding: 10px;'><i class='fas fa-search'></i></span>";
+        echo "<span class='input-group-text input-group-text-search' style='padding: 10px;'><i class='ti ti-search'></i></span>";
         echo "</div>";
         echo "</div>";
         echo "<ul class='results list-group mb-2' style='background-color: transparent;'></ul>";
@@ -640,7 +640,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                      <div class="modal-content">
                         <div class="modal-header">
                            <h5 class="modal-title">
-                              <i class="fas fa-arrow-right me-2"></i>
+                              <i class="ti ti-arrow-right me-2"></i>
                               {$modal_header}
                            </h5>
                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
