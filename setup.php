@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @version $Id: HEADER 15930 2011-10-30 15:47:55Z tsmr $
  -------------------------------------------------------------------------
@@ -55,15 +56,15 @@ function plugin_init_ideabox()
 
     if (Session::getLoginUserID()) {
         Plugin::registerClass('PluginIdeaboxIdeabox', [
-           'assignable_types'              => true,
-           'document_types'              => true,
-           'helpdesk_visible_types'      => true,
-           'ticket_types'                => true,
-           'notificationtemplates_types' => true
+            'assignable_types'              => true,
+            'document_types'              => true,
+            'helpdesk_visible_types'      => true,
+            'ticket_types'                => true,
+            'notificationtemplates_types' => true,
         ]);
 
         Plugin::registerClass('PluginIdeaboxComment', [
-           'notificationtemplates_types' => true
+            'notificationtemplates_types' => true,
         ]);
 
         Plugin::registerClass(
@@ -80,7 +81,7 @@ function plugin_init_ideabox()
             $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => PluginIdeaboxIdeabox::getType()];
 
             if (!Plugin::isPluginActive('servicecatalog')) {
-                $PLUGIN_HOOKS['helpdesk_menu_entry']['ideabox'] = PLUGIN_IDEABOX_NOTFULL_DIR.'/front/ideabox.php';
+                $PLUGIN_HOOKS['helpdesk_menu_entry']['ideabox'] = PLUGIN_IDEABOX_WEBDIR . '/front/ideabox.php';
                 $PLUGIN_HOOKS['helpdesk_menu_entry_icon']['ideabox'] = 'ti ti-bulb';
             }
 
@@ -88,7 +89,7 @@ function plugin_init_ideabox()
                 $PLUGIN_HOOKS['servicecatalog']['ideabox'] = ['PluginIdeaboxServicecatalog'];
             }
 
-            $PLUGIN_HOOKS['redirect_page']['ideabox']           = PLUGIN_IDEABOX_NOTFULL_DIR.'/front/ideabox.php';
+            $PLUGIN_HOOKS['redirect_page']['ideabox']           = PLUGIN_IDEABOX_WEBDIR . '/front/ideabox.php';
         }
 
         if (Session::haveRight("plugin_ideabox", UPDATE)) {
@@ -108,18 +109,18 @@ function plugin_init_ideabox()
 function plugin_version_ideabox()
 {
     return [
-       'name'         => _n('Idea box', 'Ideas box', 2, 'ideabox'),
-       'version'      => PLUGIN_IDEABOX_VERSION,
-       'author'       => "<a href='http://blogglpi.infotel.com'>Infotel</a>",
-       'license'      => 'GPLv2+',
-       'homepage'     => 'https://github.com/InfotelGLPI/ideabox',
-       'requirements' => [
-          'glpi' => [
-             'min' => '11.0',
-             'max' => '12.0',
-             'dev' => false
-          ]
-       ]
+        'name'         => _n('Idea box', 'Ideas box', 2, 'ideabox'),
+        'version'      => PLUGIN_IDEABOX_VERSION,
+        'author'       => "<a href='http://blogglpi.infotel.com'>Infotel</a>",
+        'license'      => 'GPLv2+',
+        'homepage'     => 'https://github.com/InfotelGLPI/ideabox',
+        'requirements' => [
+            'glpi' => [
+                'min' => '11.0',
+                'max' => '12.0',
+                'dev' => false,
+            ],
+        ],
     ];
 }
 

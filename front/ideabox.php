@@ -50,10 +50,10 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
             echo "<div class='center'><table class='tab_cadre_fixe' cellpadding='5'>";
             $config = new PluginIdeaboxConfig();
             $config->getFromDB(1);
-            $title = PluginServicecatalogConfig::displayField($config, 'title');
+            $title = PluginIdeaboxConfig::displayField($config, 'title');
             echo "<tr><th class='center'>" . $title . "</th></tr>";
 
-            $comment = PluginServicecatalogConfig::displayField($config, 'comment');
+            $comment = PluginIdeaboxConfig::displayField($config, 'comment');
             if (!empty($comment)) {
                 echo "<tr class='tab_bg_1'><td class='center'>";
                 echo $comment;

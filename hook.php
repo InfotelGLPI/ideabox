@@ -33,7 +33,7 @@ function plugin_ideabox_install() {
     include_once(PLUGIN_IDEABOX_DIR . "/inc/profile.class.php");
 
     if (!$DB->tableExists("glpi_plugin_ideabox_ideaboxes")) {
-        $DB->runFile(GLPI_ROOT . "/plugins/ideabox/sql/empty-3.0.0.sql");
+        $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/empty-3.0.0.sql");
 
         $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='PluginIdeaboxIdeabox' AND `name` = 'Idea'";
         $result = $DB->doQuery($query_id) or die($DB->error());
@@ -54,7 +54,7 @@ function plugin_ideabox_install() {
                        ##ENDIFideabox.name##
                        ##IFideabox.comment####lang.ideabox.comment## : ##ideabox.comment##
                        ##ENDIFideabox.comment##
-                    
+
                        ##FOREACHupdates##----------
                        ##lang.update.title##:
                        ##IFupdate.name####lang.ideabox.name## : ##update.name####ENDIFupdate.name##
@@ -62,7 +62,7 @@ function plugin_ideabox_install() {
                        ##lang.ideabox.comment## : ##update.comment##
                        ##ENDIFupdate.comment##
                        ----------##ENDFOREACHupdates##
-                    
+
                        ##lang.comment.title##
                        ----------
                        ##FOREACHcomments##
@@ -95,7 +95,7 @@ function plugin_ideabox_install() {
                 VALUES ('Delete comment of idea', 0, 'PluginIdeaboxIdeabox', 'deletecomment', 1, 1);";
         $DB->doQuery($query);
     } else if (!$DB->tableExists("glpi_plugin_ideabox_votes")) {
-        $DB->runFile(GLPI_ROOT . "/plugins/ideabox/sql/update-3.0.0.sql");
+        $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/update-3.0.0.sql");
     }
     PluginIdeaboxProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
     return true;
@@ -202,7 +202,7 @@ function plugin_ideabox_uninstall() {
                                    "glpi_items_tickets",
                                    "glpi_notepads",
                                    "glpi_dropdowntranslations"];
-    
+
     foreach ($tables_glpi as $table_glpi) {
         $DB->delete($table_glpi, ['itemtype' => ['LIKE' => 'PluginIdeaboxIdeabox%']]);
     }

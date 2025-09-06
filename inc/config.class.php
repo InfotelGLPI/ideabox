@@ -206,9 +206,6 @@ class PluginIdeaboxConfig extends CommonDBTM
     /**
      * Returns the translation of the field
      *
-     * @param type  $item
-     * @param type  $field
-     *
      * @return type
      * @global type $DB
      *

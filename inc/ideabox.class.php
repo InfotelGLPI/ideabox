@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @version $Id: HEADER 15930 2011-10-30 15:47:55Z tsmr $
  -------------------------------------------------------------------------
@@ -39,10 +40,10 @@ class PluginIdeaboxIdeabox extends CommonDBTM
     public static $rightname  = "plugin_ideabox";
     protected $usenotepad = true;
 
-    const NEW = 1;
-    const STUDY = 2;
-    const IN_PROGRESS = 3;
-    const CLOSED = 4;
+    public const NEW = 1;
+    public const STUDY = 2;
+    public const IN_PROGRESS = 3;
+    public const CLOSED = 4;
 
     public static function getTypeName($nb = 0)
     {
@@ -99,20 +100,22 @@ class PluginIdeaboxIdeabox extends CommonDBTM
     /**
      * @return array
      */
-//   static function getMenuContent() {
-//
-//      $menu                    = [];
-//      $menu['title']           = self::getMenuName();
-//      $menu['page']            = self::getSearchURL(false);
-//      $menu['links']['search'] = self::getSearchURL(false);
-//      if (self::canCreate()) {
-//         $menu['links']['add'] = self::getFormURL(false);
-//      }
-//
-//      $menu['icon']    = self::getIcon();
-//
-//      return $menu;
-//   }
+       static function getMenuContent() {
+
+          $menu                    = [];
+          $menu['title']           = self::getMenuName();
+          $menu['page']            = self::getSearchURL(false);
+          $menu['links']['search'] = self::getSearchURL(false);
+           if (Session::haveRight(static::$rightname, UPDATE)
+               || Session::haveRight("config", UPDATE)) {
+             $menu['links']['add'] = self::getFormURL(false);
+               $menu['links']['config'] = PluginIdeaboxConfig::getFormURL(false);
+          }
+
+          $menu['icon']    = self::getIcon();
+
+          return $menu;
+       }
 
 
     public static function removeRightsFromSession()
@@ -146,81 +149,84 @@ class PluginIdeaboxIdeabox extends CommonDBTM
         return $ong;
     }
 
-     /**
-     * @return array
-     */
+    /**
+    * @return array
+    */
     public function rawSearchOptions()
     {
         $tab = [];
 
         $tab[] = [
-           'id'   => 'common',
-           'name' => self::getTypeName(2)
+            'id'   => 'common',
+            'name' => self::getTypeName(2),
         ];
 
         $tab[] = [
-           'id'            => '1',
-           'table'         => $this->getTable(),
-           'field'         => 'name',
-           'name'          => __('Name'),
-           'datatype'      => 'itemlink',
-           'itemlink_type' => $this->getType(),
+            'id'            => '1',
+            'table'         => $this->getTable(),
+            'field'         => 'name',
+            'name'          => __('Name'),
+            'datatype'      => 'itemlink',
+            'itemlink_type' => $this->getType(),
         ];
 
         $tab[] = [
-           'id'            => '7',
-           'table'         => $this->getTable(),
-           'field'         => 'date_idea',
-           'name'          => __('Date of submission', 'ideabox'),
-           'datatype'      => 'datetime',
-           'massiveaction' => false,
+            'id'            => '7',
+            'table'         => $this->getTable(),
+            'field'         => 'date_idea',
+            'name'          => __('Date of submission', 'ideabox'),
+            'datatype'      => 'datetime',
+            'massiveaction' => false,
         ];
 
         $tab[] = [
-           'id'       => '10',
-           'table'    => 'glpi_users',
-           'field'    => 'name',
-           'name'     => __('Author'),
-           'datatype' => 'dropdown',
-           'right'    => 'all',
+            'id'       => '10',
+            'table'    => 'glpi_users',
+            'field'    => 'name',
+            'name'     => __('Author'),
+            'datatype' => 'dropdown',
+            'right'    => 'all',
         ];
 
         $tab[] = [
-           'id'       => '8',
-           'table'    => $this->getTable(),
-           'field'    => 'comment',
-           'name'     => __('Description', 'ideabox'),
-           'datatype' => 'text',
+            'id'       => '8',
+            'table'    => $this->getTable(),
+            'field'    => 'comment',
+            'name'     => __('Description', 'ideabox'),
+            'datatype' => 'text',
         ];
 
         $tab[] = [
-           'id'       => '9',
-           'table'    => $this->getTable(),
-           'field'    => 'is_helpdesk_visible',
-           'name'     => __('Associable to a ticket'),
-           'datatype' => 'bool',
+            'id'       => '9',
+            'table'    => $this->getTable(),
+            'field'    => 'is_helpdesk_visible',
+            'name'     => __('Associable to a ticket'),
+            'datatype' => 'bool',
         ];
 
         $tab[] = [
-           'id'       => '30',
-           'table'    => $this->getTable(),
-           'field'    => 'id',
-           'name'     => __('ID'),
-           'datatype' => 'number',
+            'id'       => '30',
+            'table'    => $this->getTable(),
+            'field'    => 'id',
+            'name'     => __('ID'),
+            'datatype' => 'number',
         ];
 
         $tab[] = [
-           'id'       => '80',
-           'table'    => 'glpi_entities',
-           'field'    => 'completename',
-           'name'     => __('Entity'),
-           'datatype' => 'dropdown',
+            'id'       => '80',
+            'table'    => 'glpi_entities',
+            'field'    => 'completename',
+            'name'     => __('Entity'),
+            'datatype' => 'dropdown',
         ];
 
         return $tab;
     }
 
 
+    /**
+     * @return void
+     */
     public function post_addItem()
     {
         global $CFG_GLPI;
@@ -295,8 +301,8 @@ class PluginIdeaboxIdeabox extends CommonDBTM
         Html::requireJs("tinymce");
 
         TemplateRenderer::getInstance()->display('@ideabox/ideabox_form.html.twig', [
-           'item'   => $this,
-           'params' => $options,
+            'item'   => $this,
+            'params' => $options,
         ]);
 
         return true;
@@ -349,7 +355,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
             'SELECT' => 'id',
             'FROM' => 'glpi_plugin_ideabox_ideaboxes',
             'WHERE' => [
-                'is_deleted' => 0
+                'is_deleted' => 0,
             ],
             'ORDERBY' => 'date_idea DESC',
         ];
@@ -359,8 +365,8 @@ class PluginIdeaboxIdeabox extends CommonDBTM
         }
 
         $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
-                'glpi_plugin_ideabox_ideaboxes'
-            );
+            'glpi_plugin_ideabox_ideaboxes'
+        );
 
         $iterator = $DB->request($criteria);
 
@@ -376,8 +382,8 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                     'SELECT' => '*',
                     'FROM' => 'glpi_plugin_ideabox_comments',
                     'WHERE' => [
-                        'plugin_ideabox_ideaboxes_id' => $idea->getID()
-                    ]
+                        'plugin_ideabox_ideaboxes_id' => $idea->getID(),
+                    ],
                 ];
                 $iteratorc = $DB->request($criteriac);
 
@@ -396,8 +402,8 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                     'SELECT' => '*',
                     'FROM' => 'glpi_plugin_ideabox_votes',
                     'WHERE' => [
-                        'plugin_ideabox_ideaboxes_id' => $idea->getID()
-                    ]
+                        'plugin_ideabox_ideaboxes_id' => $idea->getID(),
+                    ],
                 ];
                 $iteratorv = $DB->request($criteriav);
 
@@ -408,14 +414,14 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                     }
                 }
                 $id = $idea->getID();
-                echo "<div id='anchor$id'  class='topic-item topic-item-medium-list' style='flex: 1 0 45%;position: relative;'>";
+                echo "<div id='anchor$id' class='topic-item topic-item-medium-list' style='flex: 1 0 45%;position: relative;'>";
 
                 echo "<div class='topic-avatar'>";
                 $user = new User();
                 $user->getFromDB($idea->fields['users_id']);
                 $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
                 $style = !empty($thumbnail_url) ? "background-image: url('$thumbnail_url')" : ("background-color: " . $user->getUserInitialsBgColor(
-                    ));
+                ));
                 $user_name = formatUserName(
                     $user->getID(),
                     $user->fields['name'],
@@ -437,7 +443,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
 
                 echo "<div class='topic-status'>";
                 $color = self::getStateColor($idea->fields['state']);
-                echo "<span class='topic-label topic-label-sm' style='background-color:".$color."'>";
+                echo "<span class='topic-label topic-label-sm' style='background-color:" . $color . "'>";
                 echo self::getStateName($idea->fields['state']);
                 echo "</div>";
 
@@ -469,15 +475,15 @@ class PluginIdeaboxIdeabox extends CommonDBTM
 
                     $id = $idea->getID();
                     echo "<button class='submit btn btn-default mb-2' data-bs-toggle='modal' data-bs-target='#seecomments$id'>"
-                        . "<i class='ti ti-message'></i><span>" . count($comments). "</span></button>";
+                        . "<i class='ti ti-message'></i><span>" . count($comments) . "</span></button>";
 
                     echo Ajax::createIframeModalWindow(
-                        'seecomments'.$id,
+                        'seecomments' . $id,
                         PLUGIN_IDEABOX_WEBDIR . '/front/comment.php?plugin_ideabox_ideaboxes_id=' . $idea->getID(),
                         ['title'         => __("See comments", 'ideabox'),
                             'display'       => false,
-//                            'width'         => 550,
-//                            'height'        => 850,
+                            //                            'width'         => 550,
+                            //                            'height'        => 850,
                             'reloadonclose' => true]
                     );
 
@@ -485,7 +491,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                 } else {
                     echo "&nbsp;";
                     $target = $idea->getFormURL();
-                    $target .= "?forcetab=PluginIdeaboxComment$1&id=".$idea->getID();
+                    $target .= "?forcetab=PluginIdeaboxComment$1&id=" . $idea->getID();
                     Html::showSimpleForm(
                         $target,
                         'addcomment',
@@ -504,12 +510,12 @@ class PluginIdeaboxIdeabox extends CommonDBTM
 
                 if (strlen($idea->fields['comment']) > 10) {
                     echo "<a href=\"#anchor$id\" onclick=\"$(this).hide();$('#$id').show();\">" . __(
-                            'Read description',
-                            'ideabox'
-                        ) . "</a>";
+                        'Read description',
+                        'ideabox'
+                    ) . "</a>";
                     echo '<div style="display:none;padding-bottom: 10px;" id="' . $id . '">' . Glpi\RichText\RichText::getEnhancedHtml(
-                            $description
-                        ) . '</div>';
+                        $description
+                    ) . '</div>';
                 } else {
                     echo Glpi\RichText\RichText::getEnhancedHtml($description);
                 }
@@ -597,7 +603,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
         $position = "";
 
         echo "<div class='modal-content' style='background-color: transparent!important;'>";
-        echo "<div class='modal-body' style='padding: unset;background-color: transparent!important;".$position."width: 100%;'>";
+        echo "<div class='modal-body' style='padding: unset;background-color: transparent!important;" . $position . "width: 100%;'>";
         echo "<div class='input-group'>";
 
         echo "<input type='text' class='$name form-control' placeholder=\"" . $title . "\">";
@@ -666,13 +672,13 @@ HTML;
                     'SELECT' => '*',
                     'FROM' => 'glpi_plugin_ideabox_ideaboxes',
                     'WHERE' => [
-                        'is_deleted' => 0
+                        'is_deleted' => 0,
                     ],
                     'ORDERBY' => 'date_idea DESC',
                 ];
                 $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
-                        'glpi_plugin_ideabox_ideaboxes'
-                    );
+                    'glpi_plugin_ideabox_ideaboxes'
+                );
 
                 $iterator = $DB->request($criteria);
 
@@ -689,7 +695,7 @@ HTML;
                             'icon' => 'ti ti-bulb',
                             'background' => '',
                             'order' => "2",
-                            'target' => ''
+                            'target' => '',
                         ];
                     }
                 }
