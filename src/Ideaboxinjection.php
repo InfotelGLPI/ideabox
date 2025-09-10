@@ -27,19 +27,20 @@
  --------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
-}
+namespace GlpiPlugin\Ideabox;
 
-class PluginIdeaboxIdeaboxInjection extends PluginIdeaboxIdeabox
+use PluginDatainjectionCommonInjectionLib;
+use PluginDatainjectionInjectionInterface;
+use Search;
+
+#[AllowDynamicProperties]
+class IdeaboxInjection extends Ideabox
    implements PluginDatainjectionInjectionInterface {
 
-   static function getTable($classname = null) {
-
-      $parenttype = get_parent_class();
-      return $parenttype::getTable();
-
-   }
+    static function getTable($classname = null)
+    {
+        return Ideabox::getTable();
+    }
 
    function isPrimaryType() {
       return true;
@@ -98,5 +99,3 @@ class PluginIdeaboxIdeaboxInjection extends PluginIdeaboxIdeabox
    }
 
 }
-
-?>

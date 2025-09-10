@@ -27,9 +27,6 @@
  --------------------------------------------------------------------------
  */
 
-
-include('../../../inc/includes.php');
-
 use Glpi\Exception\Http\AccessDeniedHttpException;
 
 global $CFG_GLPI;

@@ -27,59 +27,57 @@
  --------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
 
-if (!isset($_GET["id"])) $_GET["id"] = "";
-if (!isset($_GET["withtemplate"])) $_GET["withtemplate"] = "";
-if (!isset($_GET["plugin_ideabox_ideaboxes_id"])) $_GET["plugin_ideabox_ideaboxes_id"] = "";
+use GlpiPlugin\Ideabox\Ideabox;
+use GlpiPlugin\Ideabox\Comment;
 
-$comment = new PluginIdeaboxComment();
-
-if (isset($_POST["add"])) {
-
-   $comment->check(-1, CREATE, $_POST);
-   $comment->add($_POST);
-   Html::back();
-
-} else if (isset($_POST["update"])) {
-
-   $comment->check($_POST['id'], UPDATE);
-   $comment->update($_POST);
-   Html::back();
-
-} else if (isset($_POST["purge"])) {
-
-   $comment->check($_POST['id'], PURGE);
-   $comment->delete($_POST, 1);
-   Html::redirect(Toolbox::getItemTypeFormURL('PluginIdeaboxIdeabox') . "?id=" . $_POST["plugin_ideabox_ideaboxes_id"]);
-
-} else {
-
-   $comment->checkGlobal(READ);
-
-   if (Session::getCurrentInterface() == 'central') {
-      Html::header(PluginIdeaboxIdeabox::getTypeName(2), '', "tools", "pluginideaboxideabox");
-   } else {
-      if (Plugin::isPluginActive('servicecatalog')) {
-         PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginIdeaboxIdeabox::getTypeName(2), true);
-      } else {
-         Html::helpHeader(PluginIdeaboxIdeabox::getTypeName(2));
-      }
-   }
-
-   $comment->showForm($_GET["id"], ['plugin_ideabox_ideaboxes_id' => $_GET["plugin_ideabox_ideaboxes_id"]]);
-
-   if (Session::getCurrentInterface() != 'central'
-       && Plugin::isPluginActive('servicecatalog')) {
-
-      PluginServicecatalogMain::showNavBarFooter('ideabox');
-   }
-
-   if (Session::getCurrentInterface() == 'central') {
-      Html::footer();
-   } else {
-      Html::helpFooter();
-   }
+if (!isset($_GET["id"])) {
+    $_GET["id"] = "";
+}
+if (!isset($_GET["withtemplate"])) {
+    $_GET["withtemplate"] = "";
+}
+if (!isset($_GET["plugin_ideabox_ideaboxes_id"])) {
+    $_GET["plugin_ideabox_ideaboxes_id"] = "";
 }
 
-?>
+$comment = new Comment();
+
+if (isset($_POST["add"])) {
+    $comment->check(-1, CREATE, $_POST);
+    $comment->add($_POST);
+    Html::back();
+} elseif (isset($_POST["update"])) {
+    $comment->check($_POST['id'], UPDATE);
+    $comment->update($_POST);
+    Html::back();
+} elseif (isset($_POST["purge"])) {
+    $comment->check($_POST['id'], PURGE);
+    $comment->delete($_POST, 1);
+    Html::redirect(Toolbox::getItemTypeFormURL(Ideabox::class) . "?id=" . $_POST["plugin_ideabox_ideaboxes_id"]);
+} else {
+    $comment->checkGlobal(READ);
+
+    if (Session::getCurrentInterface() == 'central') {
+        Html::header(Ideabox::getTypeName(2), '', "tools", Ideabox::class);
+    } else {
+        if (Plugin::isPluginActive('servicecatalog')) {
+            PluginServicecatalogMain::showDefaultHeaderHelpdesk(Ideabox::getTypeName(2), true);
+        } else {
+            Html::helpHeader(Ideabox::getTypeName(2));
+        }
+    }
+
+    $comment->showForm($_GET["id"], ['plugin_ideabox_ideaboxes_id' => $_GET["plugin_ideabox_ideaboxes_id"]]);
+
+    if (Session::getCurrentInterface() != 'central'
+       && Plugin::isPluginActive('servicecatalog')) {
+        PluginServicecatalogMain::showNavBarFooter('ideabox');
+    }
+
+    if (Session::getCurrentInterface() == 'central') {
+        Html::footer();
+    } else {
+        Html::helpFooter();
+    }
+}

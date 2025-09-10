@@ -28,13 +28,18 @@
  --------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
+namespace GlpiPlugin\Ideabox;
 
+use Ajax;
+use CommonDBTM;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\RichText\RichText;
+use Html;
+use NotificationEvent;
+use Session;
+use User;
 
-class PluginIdeaboxIdeabox extends CommonDBTM
+class Ideabox extends CommonDBTM
 {
     public $dohistory  = true;
     public static $rightname  = "plugin_ideabox";
@@ -90,41 +95,42 @@ class PluginIdeaboxIdeabox extends CommonDBTM
     //clean if ideabox are deleted
     public function cleanDBonPurge()
     {
-        $temp = new PluginIdeaboxComment();
+        $temp = new Comment();
         $temp->deleteByCriteria(['plugin_ideabox_ideaboxes_id' => $this->fields['id']]);
 
-        $temp = new PluginIdeaboxVote();
+        $temp = new Vote();
         $temp->deleteByCriteria(['plugin_ideabox_ideaboxes_id' => $this->fields['id']]);
     }
 
     /**
      * @return array
      */
-       static function getMenuContent() {
+    public static function getMenuContent()
+    {
 
-          $menu                    = [];
-          $menu['title']           = self::getMenuName();
-          $menu['page']            = self::getSearchURL(false);
-          $menu['links']['search'] = self::getSearchURL(false);
-           if (Session::haveRight(static::$rightname, UPDATE)
-               || Session::haveRight("config", UPDATE)) {
-             $menu['links']['add'] = self::getFormURL(false);
-               $menu['links']['config'] = PluginIdeaboxConfig::getFormURL(false);
-          }
+        $menu                    = [];
+        $menu['title']           = self::getMenuName();
+        $menu['page']            = self::getSearchURL(false);
+        $menu['links']['search'] = self::getSearchURL(false);
+        if (Session::haveRight(static::$rightname, UPDATE)
+            || Session::haveRight("config", UPDATE)) {
+            $menu['links']['add'] = self::getFormURL(false);
+            $menu['links']['config'] = Config::getFormURL(false);
+        }
 
-          $menu['icon']    = self::getIcon();
+        $menu['icon']    = self::getIcon();
 
-          return $menu;
-       }
+        return $menu;
+    }
 
 
     public static function removeRightsFromSession()
     {
-        if (isset($_SESSION['glpimenu']['tools']['types']['PluginIdeaboxIdeabox'])) {
-            unset($_SESSION['glpimenu']['tools']['types']['PluginIdeaboxIdeabox']);
+        if (isset($_SESSION['glpimenu']['tools']['types'][Ideabox::class])) {
+            unset($_SESSION['glpimenu']['tools']['types'][Ideabox::class]);
         }
-        if (isset($_SESSION['glpimenu']['tools']['content']['pluginideaboxideabox'])) {
-            unset($_SESSION['glpimenu']['tools']['content']['pluginideaboxideabox']);
+        if (isset($_SESSION['glpimenu']['tools']['content'][Ideabox::class])) {
+            unset($_SESSION['glpimenu']['tools']['content'][Ideabox::class]);
         }
     }
 
@@ -137,9 +143,9 @@ class PluginIdeaboxIdeabox extends CommonDBTM
     {
         $ong = [];
         $this->addDefaultFormTab($ong);
-        $this->addStandardTab('PluginIdeaboxComment', $ong, $options);
+        $this->addStandardTab(Comment::class, $ong, $options);
         if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
-            $this->addStandardTab('Ticket', $ong, $options);
+            $this->addStandardTab('Item_Ticket', $ong, $options);
             $this->addStandardTab('Item_Problem', $ong, $options);
             $this->addStandardTab('Document_Item', $ong, $options);
             $this->addStandardTab('Note', $ong, $options);
@@ -314,7 +320,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
      *
      * @param $state
      *
-     * @return \translated
+     * @return string
      */
     public static function getStateName($state)
     {
@@ -513,11 +519,11 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                         'Read description',
                         'ideabox'
                     ) . "</a>";
-                    echo '<div style="display:none;padding-bottom: 10px;" id="' . $id . '">' . Glpi\RichText\RichText::getEnhancedHtml(
+                    echo '<div style="display:none;padding-bottom: 10px;" id="' . $id . '">' . RichText::getEnhancedHtml(
                         $description
                     ) . '</div>';
                 } else {
-                    echo Glpi\RichText\RichText::getEnhancedHtml($description);
+                    echo RichText::getEnhancedHtml($description);
                 }
 
                 echo '</div>';
@@ -529,7 +535,7 @@ class PluginIdeaboxIdeabox extends CommonDBTM
                 echo '&nbsp;</span>';
                 $already_voted = 0;
                 $target = $idea->getFormURL();
-                $vote = new PluginIdeaboxVote();
+                $vote = new Vote();
                 if ($vote->getFromDBByCrit(['users_id' => Session::getLoginUserID(),'plugin_ideabox_ideaboxes_id' =>  $idea->getID()])) {
                     $already_voted = 1;
                 }
@@ -689,7 +695,7 @@ HTML;
                             'url' => PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php?id=" . $idea['id'],
                             'title' => $idea['name'],
                             'comment' => ($idea['comment'] != null) ? Html::resume_text(
-                                Glpi\RichText\RichText::getTextFromHtml($idea['comment']),
+                                RichText::getTextFromHtml($idea['comment']),
                                 "200"
                             ) : "",
                             'icon' => 'ti ti-bulb',

@@ -27,12 +27,13 @@
  --------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
+namespace GlpiPlugin\Ideabox;
 
-// Class NotificationTargetIdeabox
-class PluginIdeaboxNotificationTargetIdeabox extends NotificationTarget
+use Dropdown;
+use NotificationTarget;
+use UserEmail;
+
+class NotificationTargetIdeabox extends NotificationTarget
 {
     const IDEABOX_USER         = 4900;
     const IDEABOX_COMMENT_USER = 4901;
@@ -50,17 +51,17 @@ class PluginIdeaboxNotificationTargetIdeabox extends NotificationTarget
      * Get additionnals targets for Tickets
      */
     public function addAdditionalTargets($event = '') {
-        $this->addTarget(PluginIdeaboxNotificationTargetIdeabox::IDEABOX_USER, __('Author'));
-        $this->addTarget(PluginIdeaboxNotificationTargetIdeabox::IDEABOX_COMMENT_USER, __('Comment author', 'ideabox'));
+        $this->addTarget(NotificationTargetIdeabox::IDEABOX_USER, __('Author'));
+        $this->addTarget(NotificationTargetIdeabox::IDEABOX_COMMENT_USER, __('Comment author', 'ideabox'));
     }
 
     public function addSpecificTargets($data, $options) {
         //Look for all targets whose type is Notification::ITEM_USER
         switch ($data['items_id']) {
-            case PluginIdeaboxNotificationTargetIdeabox::IDEABOX_USER:
+            case NotificationTargetIdeabox::IDEABOX_USER:
                 $this->getUserAddress();
                 break;
-            case PluginIdeaboxNotificationTargetIdeabox::IDEABOX_COMMENT_USER:
+            case NotificationTargetIdeabox::IDEABOX_COMMENT_USER:
                 $this->getUserCommentAddress();
                 break;
         }
@@ -97,7 +98,7 @@ class PluginIdeaboxNotificationTargetIdeabox extends NotificationTarget
                 $options['ideabox'][] = $ideabox->fields;// Compatibility with old behaviour
             }
         }
-        
+
         $this->data['##lang.ideabox.title##'] = $events[$event];
 
         $this->data['##lang.ideabox.entity##'] = __('Entity');

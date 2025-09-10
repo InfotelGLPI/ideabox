@@ -27,9 +27,9 @@
  --------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
+use GlpiPlugin\Ideabox\ConfigTranslation;
 
-$translation = new PluginIdeaboxConfigTranslation();
+$translation = new ConfigTranslation();
 if (isset($_POST['add'])) {
     $translation->add($_POST);
 } elseif (isset($_POST['update'])) {

@@ -27,14 +27,17 @@
  --------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
+namespace GlpiPlugin\Ideabox;
+
+use CommonDBTM;
+use CommonGLPI;
+use Glpi\RichText\RichText;
+use Html;
 
 /**
- * Class PluginIdeaboxConfig
+ * Class Config
  */
-class PluginIdeaboxConfig extends CommonDBTM
+class Config extends CommonDBTM
 {
     public static $rightname = 'plugin_ideabox';
     public $can_be_translated = true;
@@ -48,10 +51,6 @@ class PluginIdeaboxConfig extends CommonDBTM
         return __('Setup');
     }
 
-
-    /**
-     * PluginIdeaboxConfig constructor.
-     */
     public function __construct()
     {
         global $DB;
@@ -72,7 +71,7 @@ class PluginIdeaboxConfig extends CommonDBTM
         $ong = [];
         //      $this->addDefaultFormTab($ong);
         $this->addStandardTab(__CLASS__, $ong, $options);
-        $this->addStandardTab('PluginIdeaboxConfigTranslation', $ong, $options);
+        $this->addStandardTab(ConfigTranslation::class, $ong, $options);
         return $ong;
     }
 
@@ -206,8 +205,8 @@ class PluginIdeaboxConfig extends CommonDBTM
     /**
      * Returns the translation of the field
      *
-     * @return type
-     * @global type $DB
+     * @return string
+     * @global $DB
      *
      */
     public static function displayField($item, $field, $withclean = true)
@@ -218,7 +217,7 @@ class PluginIdeaboxConfig extends CommonDBTM
         $iterator = $DB->request([
                                      'FROM'  => 'glpi_plugin_ideabox_configtranslations',
                                      'WHERE' => [
-                                         'itemtype' => 'PluginIdeaboxConfig',
+                                         'itemtype' => Config::class,
                                          'items_id' => '1',
                                          'field'    => $field,
                                          'language' => $_SESSION['glpilanguage']
@@ -227,14 +226,14 @@ class PluginIdeaboxConfig extends CommonDBTM
         if (count($iterator)) {
             foreach ($iterator as $data) {
                 //            if ($withclean == true) {
-                return Glpi\RichText\RichText::getTextFromHtml($data['value']);
+                return RichText::getTextFromHtml($data['value']);
                 //            } else {
                 //               return $data['value'];
                 //            }
             }
         }
         if ($withclean == true && isset($item->fields[$field])) {
-            return Glpi\RichText\RichText::getTextFromHtml($item->fields[$field]);
+            return RichText::getTextFromHtml($item->fields[$field]);
         } elseif (isset($item->fields[$field])) {
             return $item->fields[$field];
         }

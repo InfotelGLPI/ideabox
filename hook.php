@@ -27,21 +27,24 @@
  --------------------------------------------------------------------------
  */
 
+use GlpiPlugin\Ideabox\Profile;
+use GlpiPlugin\Ideabox\Ideabox;
+use GlpiPlugin\Ideabox\IdeaboxInjection;
 function plugin_ideabox_install() {
     global $DB;
 
     include_once(PLUGIN_IDEABOX_DIR . "/inc/profile.class.php");
 
     if (!$DB->tableExists("glpi_plugin_ideabox_ideaboxes")) {
-        $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/empty-3.0.0.sql");
+        $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/empty-4.0.0.sql");
 
-        $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='PluginIdeaboxIdeabox' AND `name` = 'Idea'";
+        $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='GlpiPlugin\\Ideabox\\Ideabox' AND `name` = 'Idea'";
         $result = $DB->doQuery($query_id) or die($DB->error());
         $itemtype = $DB->result($result, 0, 'id');
         if (empty($itemtype)) {
-            $query_id = "INSERT INTO `glpi_notificationtemplates`(`name`, `itemtype`, `date_mod`, `comment`, `css`) VALUES ('Idea','PluginIdeaboxIdeabox', NOW(),'','');";
-            $result = $DB->doQuery($query_id) or die($DB->error());
-            $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='PluginIdeaboxIdeabox' AND `name` = 'Idea'";
+            $query_id = "INSERT INTO `glpi_notificationtemplates`(`name`, `itemtype`, `date_mod`, `comment`, `css`) VALUES ('Idea','GlpiPlugin\\Ideabox\\Ideabox', NOW(),'','');";
+            $DB->doQuery($query_id) or die($DB->error());
+            $query_id = "SELECT `id` FROM `glpi_notificationtemplates` WHERE `itemtype`='GlpiPlugin\\Ideabox\\Ideabox' AND `name` = 'Idea'";
             $result = $DB->doQuery($query_id) or die($DB->error());
             $itemtype = $DB->result($result, 0, 'id');
         }
@@ -77,27 +80,30 @@ function plugin_ideabox_install() {
         $DB->doQuery($query);
 
         $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
-                VALUES ('New Idea', 0, 'PluginIdeaboxIdeabox', 'new', 1, 1);";
+                VALUES ('New Idea', 0, 'GlpiPlugin\\Ideabox\\Ideabox', 'new', 1, 1);";
         $DB->doQuery($query);
         $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
-                VALUES ('Update Idea', 0, 'PluginIdeaboxIdeabox', 'update', 1, 1);";
+                VALUES ('Update Idea', 0, 'GlpiPlugin\\Ideabox\\Ideabox', 'update', 1, 1);";
         $DB->doQuery($query);
         $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
-                VALUES ('Delete Idea', 0, 'PluginIdeaboxIdeabox', 'delete', 1, 1);";
+                VALUES ('Delete Idea', 0, 'GlpiPlugin\\Ideabox\\Ideabox', 'delete', 1, 1);";
         $DB->doQuery($query);
         $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
-                VALUES ('New comment of idea', 0, 'PluginIdeaboxIdeabox', 'newcomment', 1, 1);";
+                VALUES ('New comment of idea', 0, 'GlpiPlugin\\Ideabox\\Ideabox', 'newcomment', 1, 1);";
         $DB->doQuery($query);
         $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
-                VALUES ('Update comment of idea', 0, 'PluginIdeaboxIdeabox', 'updatecomment', 1, 1);";
+                VALUES ('Update comment of idea', 0, 'GlpiPlugin\\Ideabox\\Ideabox', 'updatecomment', 1, 1);";
         $DB->doQuery($query);
         $query = "INSERT INTO `glpi_notifications` (name, entities_id, itemtype, event, is_recursive, is_active)
-                VALUES ('Delete comment of idea', 0, 'PluginIdeaboxIdeabox', 'deletecomment', 1, 1);";
+                VALUES ('Delete comment of idea', 0, 'GlpiPlugin\\Ideabox\\Ideabox', 'deletecomment', 1, 1);";
         $DB->doQuery($query);
     } else if (!$DB->tableExists("glpi_plugin_ideabox_votes")) {
         $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/update-3.0.0.sql");
     }
-    PluginIdeaboxProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
+
+    $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/update-4.0.0.sql");
+
+    Profile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
     return true;
 }
 
@@ -117,7 +123,7 @@ function plugin_ideabox_uninstall() {
 
     $notif = new Notification();
 
-    $options = ['itemtype' => 'PluginIdeaboxIdeabox',
+    $options = ['itemtype' => Ideabox::class,
                 'event'    => 'new',
                 'FIELDS'   => 'id'];
     foreach ($DB->request([
@@ -125,7 +131,7 @@ function plugin_ideabox_uninstall() {
         'WHERE' => $options]) as $data) {
         $notif->delete($data);
     }
-    $options = ['itemtype' => 'PluginIdeaboxIdeabox',
+    $options = ['itemtype' => Ideabox::class,
                 'event'    => 'update',
                 'FIELDS'   => 'id'];
     foreach ($DB->request([
@@ -133,7 +139,7 @@ function plugin_ideabox_uninstall() {
         'WHERE' => $options]) as $data) {
         $notif->delete($data);
     }
-    $options = ['itemtype' => 'PluginIdeaboxIdeabox',
+    $options = ['itemtype' => Ideabox::class,
                 'event'    => 'delete',
                 'FIELDS'   => 'id'];
     foreach ($DB->request([
@@ -142,7 +148,7 @@ function plugin_ideabox_uninstall() {
         $notif->delete($data);
     }
 
-    $options = ['itemtype' => 'PluginIdeaboxIdeabox',
+    $options = ['itemtype' => Ideabox::class,
                 'event'    => 'newcomment',
                 'FIELDS'   => 'id'];
     foreach ($DB->request([
@@ -150,7 +156,7 @@ function plugin_ideabox_uninstall() {
         'WHERE' => $options]) as $data) {
         $notif->delete($data);
     }
-    $options = ['itemtype' => 'PluginIdeaboxIdeabox',
+    $options = ['itemtype' => Ideabox::class,
                 'event'    => 'updatecomment',
                 'FIELDS'   => 'id'];
     foreach ($DB->request([
@@ -158,7 +164,7 @@ function plugin_ideabox_uninstall() {
         'WHERE' => $options]) as $data) {
         $notif->delete($data);
     }
-    $options = ['itemtype' => 'PluginIdeaboxIdeabox',
+    $options = ['itemtype' => Ideabox::class,
                 'event'    => 'deletecomment',
                 'FIELDS'   => 'id'];
     foreach ($DB->request([
@@ -171,7 +177,7 @@ function plugin_ideabox_uninstall() {
     $template       = new NotificationTemplate();
     $translation    = new NotificationTemplateTranslation();
     $notif_template = new Notification_NotificationTemplate();
-    $options        = ['itemtype' => 'PluginIdeaboxIdeabox',
+    $options        = ['itemtype' => Ideabox::class,
                        'FIELDS'   => 'id'];
     foreach ($DB->request([
         'FROM' => 'glpi_notificationtemplates',
@@ -204,14 +210,14 @@ function plugin_ideabox_uninstall() {
                                    "glpi_dropdowntranslations"];
 
     foreach ($tables_glpi as $table_glpi) {
-        $DB->delete($table_glpi, ['itemtype' => ['LIKE' => 'PluginIdeaboxIdeabox%']]);
+        $DB->delete($table_glpi, ['itemtype' => ['LIKE' => 'GlpiPlugin\Ideabox\Ideabox%']]);
     }
     foreach ($tables_glpi as $table_glpi) {
-        $DB->delete($table_glpi, ['itemtype' => ['LIKE' => 'PluginIdeaboxComment%']]);
+        $DB->delete($table_glpi, ['itemtype' => ['LIKE' => 'GlpiPlugin\Ideabox\Comment%']]);
     }
 
     if (class_exists('PluginDatainjectionModel')) {
-        PluginDatainjectionModel::clean(['itemtype' => 'PluginIdeaboxIdeabox']);
+        PluginDatainjectionModel::clean(['itemtype' => Ideabox::class]);
     }
 
     return true;
@@ -219,7 +225,7 @@ function plugin_ideabox_uninstall() {
 
 function plugin_ideabox_AssignToTicket($types) {
     if (Session::haveRight("plugin_ideabox_open_ticket", "1")) {
-        $types['PluginIdeaboxIdeabox'] = PluginIdeaboxIdeabox::getTypeName(2);
+        $types[Ideabox::class] = Ideabox::getTypeName(2);
     }
 
     return $types;
@@ -246,7 +252,7 @@ function plugin_ideabox_getDatabaseRelations() {
 function plugin_ideabox_addDefaultWhere($type)
 {
     switch ($type) {
-        case "PluginIdeaboxIdeabox":
+        case Ideabox::class:
             $who = Session::getLoginUserID();
             if (Session::getCurrentInterface() != 'central') {
                 return " `glpi_plugin_ideabox_ideaboxes`.`users_id` = '$who' ";
@@ -257,5 +263,5 @@ function plugin_ideabox_addDefaultWhere($type)
 
 function plugin_datainjection_populate_ideabox() {
     global $INJECTABLE_TYPES;
-    $INJECTABLE_TYPES['PluginIdeaboxIdeaboxInjection'] = 'ideabox';
+    $INJECTABLE_TYPES[IdeaboxInjection::class] = 'ideabox';
 }

@@ -63,9 +63,9 @@ CREATE TABLE `glpi_plugin_ideabox_configtranslations`
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
-INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','1','1','0');
-INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','7','2','0');
-INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxIdeabox','10','3','0');
-INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxComment','1','1','0');
-INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxComment','7','2','0');
-INSERT INTO `glpi_displaypreferences` VALUES (NULL,'PluginIdeaboxComment','10','3','0');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'GlpiPlugin\\Ideabox\\Ideabox','1','1','0', 'central');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'GlpiPlugin\\Ideabox\\Ideabox','7','2','0', 'central');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'GlpiPlugin\\Ideabox\\Ideabox','10','3','0', 'central');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'GlpiPlugin\\Ideabox\\Comment','1','1','0', 'central');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'GlpiPlugin\\Ideabox\\Comment','7','2','0', 'central');
+INSERT INTO `glpi_displaypreferences` VALUES (NULL,'GlpiPlugin\\Ideabox\\Comment','10','3','0', 'central');

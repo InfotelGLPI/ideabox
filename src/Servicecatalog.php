@@ -28,71 +28,78 @@
  */
 
 
-if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
-}
+namespace GlpiPlugin\Ideabox;
 
+use CommonGLPI;
+use Session;
 
-class PluginIdeaboxServicecatalog extends CommonGLPI {
+class Servicecatalog extends CommonGLPI
+{
 
-   static $rightname = 'plugin_ideabox';
+    static $rightname = 'plugin_ideabox';
 
-   var $dohistory = false;
+    var $dohistory = false;
 
-   static function canUse() {
-      return Session::haveRight(self::$rightname, READ);
-   }
-
-   /**
-    * @return string
-    */
-   static function getMenuLink() {
-
-      return PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php";
-   }
+    static function canUse()
+    {
+        return Session::haveRight(self::$rightname, READ);
+    }
 
    /**
     * @return string
     */
-   static function getNavBarLink() {
+    static function getMenuLink()
+    {
 
-      return PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php";
-   }
+        return PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php";
+    }
 
-   static function getMenuLogo() {
+   /**
+    * @return string
+    */
+    static function getNavBarLink()
+    {
 
-      return PluginIdeaboxIdeabox::getIcon();
+        return PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php";
+    }
 
-   }
+    static function getMenuLogo()
+    {
+
+        return Ideabox::getIcon();
+    }
 
    /**
     * @return string
     * @throws \GlpitestSQLError
     */
-   static function getMenuLogoCss() {
+    static function getMenuLogoCss()
+    {
 
-      $addstyle = "font-size: 4.5em;";
-      return $addstyle;
+        $addstyle = "font-size: 4.5em;";
+        return $addstyle;
+    }
 
-   }
+    static function getMenuTitle()
+    {
 
-   static function getMenuTitle() {
-
-      return __('I have an idea', 'ideabox');
-
-   }
+        return __('I have an idea', 'ideabox');
+    }
 
 
-   static function getMenuComment() {
+    static function getMenuComment()
+    {
 
-      return __('I have an idea', 'ideabox');
-   }
+        return __('I have an idea', 'ideabox');
+    }
 
-   static function getLinkList() {
-      return "";
-   }
+    static function getLinkList()
+    {
+        return "";
+    }
 
-   static function getList() {
-      return "";
-   }
+    static function getList()
+    {
+        return "";
+    }
 }

@@ -27,13 +27,14 @@
  --------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
+use GlpiPlugin\Ideabox\Config;
+
 Session::checkLoginUser();
 
 if (Plugin::isPluginActive("ideabox")) {
     Session::checkRight("config", UPDATE);
 
-    $config = new PluginIdeaboxConfig();
+    $config = new Config();
 
     if (isset($_POST["update_setup"])) {
          $_POST['id'] = 1;

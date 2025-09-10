@@ -27,13 +27,14 @@
  --------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
+use GlpiPlugin\Ideabox\Comment;
+use GlpiPlugin\Ideabox\Ideabox;
 
 if (!isset($_GET["plugin_ideabox_ideaboxes_id"])) $_GET["plugin_ideabox_ideaboxes_id"] = "";
 
-$comment = new PluginIdeaboxComment();
+$comment = new Comment();
 
-Html::popHeader(PluginIdeaboxIdeabox::getTypeName(2));
+Html::popHeader(Ideabox::getTypeName(2));
 
 $comment->seeComments($_GET["plugin_ideabox_ideaboxes_id"], false);
 

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @version $Id: HEADER 15930 2011-10-30 15:47:55Z tsmr $
  -------------------------------------------------------------------------
@@ -27,49 +28,54 @@
  --------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
+namespace GlpiPlugin\Ideabox;
 
+use Ajax;
+use CommonDBChild;
+use CommonDBTM;
+use CommonGLPI;
+use DbUtils;
+use Dropdown;
+use Html;
+use Session;
 
 /**
- * PluginIdeaboxConfigTranslation Class
+ * ConfigTranslation Class
  *
  **/
-class PluginIdeaboxConfigTranslation extends CommonDBChild
+class ConfigTranslation extends CommonDBChild
 {
-
     public static $itemtype  = 'itemtype';
     public static $items_id  = 'items_id';
     public $dohistory = true;
 
-    static $rightname = 'plugin_ideabox';
+    public static $rightname = 'plugin_ideabox';
 
 
-   /**
-    * Return the localized name of the current Type
-    * Should be overloaded in each new class
-    *
-    * @param integer $nb Number of items
-    *
-    * @return string
-    **/
-    static function getTypeName($nb = 0)
+    /**
+     * Return the localized name of the current Type
+     * Should be overloaded in each new class
+     *
+     * @param integer $nb Number of items
+     *
+     * @return string
+     **/
+    public static function getTypeName($nb = 0)
     {
         return _n('Translation', 'Translations', $nb);
     }
 
 
-   /**
-    * Get the standard massive actions which are forbidden
-    *
-    * @return array an array of massive actions
-    **@since version 0.84
-    *
-    * This should be overloaded in Class
-    *
-    */
-    function getForbiddenStandardMassiveAction()
+    /**
+     * Get the standard massive actions which are forbidden
+     *
+     * @return array an array of massive actions
+     **@since version 0.84
+     *
+     * This should be overloaded in Class
+     *
+     */
+    public function getForbiddenStandardMassiveAction()
     {
 
         $forbidden   = parent::getForbiddenStandardMassiveAction();
@@ -78,14 +84,14 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
     }
 
 
-   /**
-    * @param \CommonGLPI $item
-    * @param int         $withtemplate
-    *
-    * @return array|string
-    * @see CommonGLPI::getTabNameForItem()
-    */
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    /**
+     * @param CommonGLPI $item
+     * @param int         $withtemplate
+     *
+     * @return array|string
+     * @see CommonGLPI::getTabNameForItem()
+     */
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
         $nb = self::getNumberOfTranslationsForItem($item);
@@ -98,15 +104,15 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
         return "ti ti-language";
     }
 
-   /**
-    * @param $item            CommonGLPI object
-    * @param $tabnum (default 1)
-    * @param $withtemplate (default 0)
-    **
-    *
-    * @return bool
-    */
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    /**
+     * @param $item            CommonGLPI object
+     * @param $tabnum (default 1)
+     * @param $withtemplate (default 0)
+     **
+     *
+     * @return bool
+     */
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
         if (self::canBeTranslated($item)) {
             self::showTranslations($item);
@@ -115,14 +121,14 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
     }
 
 
-   /**
-    * Display all translated field for a dropdown
-    *
-    * @param $item a Dropdown item
-    *
-    * @return true;
-    **/
-    static function showTranslations($item)
+    /**
+     * Display all translated field for a dropdown
+     *
+     * @param $item a Dropdown item
+     *
+     * @return true;
+     **/
+    public static function showTranslations($item)
     {
         global $DB, $CFG_GLPI;
 
@@ -130,35 +136,35 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
         $canedit = $item->can($item->getID(), UPDATE);
 
         if ($canedit) {
-            echo "<div id='viewtranslation" . $item->getType() . $item->getID() . "$rand'></div>\n";
+            echo "<div id='viewtranslationIdeabox" . $item->getID() . "$rand'></div>\n";
 
             echo "<script type='text/javascript' >\n";
-            echo "function addTranslation" . $item->getType() . $item->getID() . "$rand() {\n";
+            echo "function addTranslationIdeabox" . $item->getID() . "$rand() {\n";
             $params = ['type'                      => __CLASS__,
-                    'parenttype'                => get_class($item),
-                    $item->getForeignKeyField() => $item->getID(),
-                    'id'                        => -1];
+                'parenttype'                => get_class($item),
+                $item->getForeignKeyField() => $item->getID(),
+                'id'                        => -1];
             Ajax::updateItemJsCode(
-                "viewtranslation" . $item->getType() . $item->getID() . "$rand",
+                "viewtranslationIdeabox" . $item->getID() . "$rand",
                 $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
                 $params
             );
             echo "};";
             echo "</script>\n";
-            echo "<div class='center'>" .
-              "<a class='submit btn btn-primary' href='javascript:addTranslation" .
-              $item->getType() . $item->getID() . "$rand();'>" . __('Add a new translation') .
-              "</a></div><br>";
+            echo "<div class='center'>"
+              . "<a class='submit btn btn-primary' href='javascript:addTranslationIdeabox"
+             . $item->getID() . "$rand();'>" . __('Add a new translation')
+              . "</a></div><br>";
         }
         $iterator = $DB->request([
-                                  'FROM'  => getTableForItemType(__CLASS__),
-                                  'WHERE' => [
-                                     'itemtype' => $item->getType(),
-                                     'items_id' => $item->getID(),
-                                     'field'    => ['<>', 'completename']
-                                  ],
-                                  'ORDER' => ['language ASC']
-                               ]);
+            'FROM'  => getTableForItemType(__CLASS__),
+            'WHERE' => [
+                'itemtype' => $item->getType(),
+                'items_id' => $item->getID(),
+                'field'    => ['<>', 'completename'],
+            ],
+            'ORDER' => ['language ASC'],
+        ]);
         if (count($iterator)) {
             if ($canedit) {
                 Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
@@ -194,9 +200,9 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
                     echo "\n<script type='text/javascript' >\n";
                     echo "function viewEditTranslation" . $data['itemtype'] . $data['id'] . "$rand() {\n";
                     $params = ['type'                      => __CLASS__,
-                          'parenttype'                => get_class($item),
-                          $item->getForeignKeyField() => $item->getID(),
-                          'id'                        => $data["id"]];
+                        'parenttype'                => get_class($item),
+                        $item->getForeignKeyField() => $item->getID(),
+                        'id'                        => $data["id"]];
                     Ajax::updateItemJsCode(
                         "viewtranslation" . $item->getType() . $item->getID() . "$rand",
                         $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
@@ -220,23 +226,22 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
             }
         } else {
             echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
-            echo "<th class='b'>" . __("No translation found") . "</th></tr></table>";
+            echo "<th class='center b'>" . __("No translation has been added yet") . "</th></tr></table>";
         }
         return true;
     }
 
 
-   /**
-    * Display translation form
-    *
-    * @param int $ID field (default -1)
-    * @param     $options   array
-    *
-    * @return bool
-    */
-    function showForm($ID = -1, $options = [])
+    /**
+     * Display translation form
+     *
+     * @param int $ID field (default -1)
+     * @param     $options   array
+     *
+     * @return bool
+     */
+    public function showForm($ID = -1, $options = [])
     {
-        global $CFG_GLPI;
 
         if (isset($options['parent']) && !empty($options['parent'])) {
             $item = $options['parent'];
@@ -247,7 +252,7 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
             $options['itemtype'] = get_class($item);
             $options['items_id'] = $item->getID();
 
-           // Create item
+            // Create item
             $this->check(-1, CREATE, $options);
         }
 
@@ -264,11 +269,11 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
             $rand   = Dropdown::showLanguages(
                 "language",
                 ['display_none' => false,
-                'value'        => $_SESSION['glpilanguage']]
+                    'value'        => $_SESSION['glpilanguage']]
             );
             $params = ['language' => '__VALUE__',
-                    'itemtype' => get_class($item),
-                    'items_id' => $item->getID()];
+                'itemtype' => get_class($item),
+                'items_id' => $item->getID()];
             Ajax::updateItemOnSelectEvent(
                 "dropdown_language$rand",
                 "span_fields",
@@ -293,31 +298,31 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
         echo "<td>" . __('Value') . "</td>";
         echo "<td>";
         Html::textarea(['name'            => 'value',
-                      'value'           => $this->fields['value'],
-                      'enable_richtext' => true,
-                      'cols'            => 80,
-                      'rows'            => 3]);
+            'value'           => $this->fields['value'],
+            'enable_richtext' => true,
+            'cols'            => 80,
+            'rows'            => 3]);
         echo "</td>";
         echo "</tr>\n";
         $this->showFormButtons($options);
         return true;
     }
 
-   /**
-    * Display a dropdown with fields that can be translated for an itemtype
-    *
-    * @param \CommonDBTM $item a Dropdown item
-    * @param string      $language language to look for translations (default '')
-    * @param string      $value field which must be selected by default (default '')
-    *
-    * @return the dropdown's random identifier
-    */
-    static function dropdownFields(CommonDBTM $item, $language = '', $value = '')
+    /**
+     * Display a dropdown with fields that can be translated for an itemtype
+     *
+     * @param CommonDBTM $item a Dropdown item
+     * @param string      $language language to look for translations (default '')
+     * @param string      $value field which must be selected by default (default '')
+     *
+     * @return int|string dropdown's random identifier
+     */
+    public static function dropdownFields(CommonDBTM $item, $language = '', $value = '')
     {
         global $DB;
         $options = [];
         foreach ($item->rawSearchOptions() as $id => $field) {
-           //Can only translate name, and fields whose datatype is text or string
+            //Can only translate name, and fields whose datatype is text or string
             $dbu = new DbUtils();
             if (isset($field['field'])
              && ($field['field'] == 'name')
@@ -330,49 +335,49 @@ class PluginIdeaboxConfigTranslation extends CommonDBChild
         $used = [];
         if (!empty($options)) {
             $iterator = $DB->request([
-                                     'SELECT' => 'field',
-                                     'FROM'   => self::getTable(),
-                                     'WHERE'  => [
-                                        'itemtype' => $item->getType(),
-                                        'items_id' => $item->getID(),
-                                        'language' => $language
-                                     ]
-                                  ]);
+                'SELECT' => 'field',
+                'FROM'   => self::getTable(),
+                'WHERE'  => [
+                    'itemtype' => $item->getType(),
+                    'items_id' => $item->getID(),
+                    'language' => $language,
+                ],
+            ]);
             if (count($iterator) > 0) {
                 foreach ($iterator as $data) {
                     $used[$data['field']] = $data['field'];
                 }
             }
         }
-       //$used = array();
+        //$used = array();
         return Dropdown::showFromArray('field', $options, ['value' => $value,
-                                                         'used'  => $used]);
+            'used'  => $used]);
     }
 
-   /**
-    * Check if an item can be translated
-    * It be translated if translation if globally on and item is an instance of CommonDropdown
-    * or CommonTreeDropdown and if translation is enabled for this class
-    *
-    * @param \CommonGLPI $item
-    *
-    * @return true if item can be translated, false otherwise
-    */
-    static function canBeTranslated(CommonGLPI $item)
+    /**
+     * Check if an item can be translated
+     * It be translated if translation if globally on and item is an instance of CommonDropdown
+     * or CommonTreeDropdown and if translation is enabled for this class
+     *
+     * @param CommonGLPI $item
+     *
+     * @return true if item can be translated, false otherwise
+     */
+    public static function canBeTranslated(CommonGLPI $item)
     {
 
-        return ($item instanceof PluginIdeaboxConfig);
+        return ($item instanceof Config);
     }
 
 
-   /**
-    * Return the number of translations for an item
-    *
-    * @param item
-    *
-    * @return int number of translations for this item
-    */
-    static function getNumberOfTranslationsForItem($item)
+    /**
+     * Return the number of translations for an item
+     *
+     * @param item
+     *
+     * @return int number of translations for this item
+     */
+    public static function getNumberOfTranslationsForItem($item)
     {
         $dbu = new DbUtils();
         return $dbu->countElementsInTable(

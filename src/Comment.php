@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @version $Id: HEADER 15930 2011-10-30 15:47:55Z tsmr $
  -------------------------------------------------------------------------
@@ -27,17 +28,23 @@
  --------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
+namespace GlpiPlugin\Ideabox;
 
+use CommonDBChild;
+use CommonGLPI;
+use DbUtils;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\RichText\RichText;
+use Html;
+use NotificationEvent;
+use Session;
+use User;
 
-class PluginIdeaboxComment extends CommonDBChild
+class Comment extends CommonDBChild
 {
     public static $rightname = "plugin_ideabox";
 
-    public static $itemtype = 'PluginIdeaboxIdeabox';
+    public static $itemtype = Ideabox::class;
     public static $items_id = 'plugin_ideabox_ideaboxes_id';
 
     public static function getTypeName($nb = 0)
@@ -65,7 +72,7 @@ class PluginIdeaboxComment extends CommonDBChild
         return '';
     }
 
-    public static function countForIdea(PluginIdeaboxIdeabox $item)
+    public static function countForIdea(Ideabox $item)
     {
         $dbu = new DbUtils();
 
@@ -78,7 +85,7 @@ class PluginIdeaboxComment extends CommonDBChild
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        if ($item->getType() == 'PluginIdeaboxIdeabox') {
+        if ($item->getType() == Ideabox::class) {
             $self = new self();
             $self->showForm(0, ['plugin_ideabox_ideaboxes_id' => $item->getField('id')]);
 
@@ -145,7 +152,7 @@ class PluginIdeaboxComment extends CommonDBChild
     {
         global $CFG_GLPI;
 
-        $idea = new PluginIdeaboxIdeabox();
+        $idea = new Ideabox();
         if ($CFG_GLPI["notifications_mailing"]) {
             $options = ['comment_id' => $this->fields["id"]];
             if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
@@ -158,7 +165,7 @@ class PluginIdeaboxComment extends CommonDBChild
     {
         global $CFG_GLPI;
 
-        $idea = new PluginIdeaboxIdeabox();
+        $idea = new Ideabox();
         if ($CFG_GLPI["notifications_mailing"]) {
             if (count($this->updates)) {
                 $options = ['comment_id' => $this->fields["id"]];
@@ -179,7 +186,7 @@ class PluginIdeaboxComment extends CommonDBChild
             return false;
         }
 
-        $idea = new PluginIdeaboxIdeabox();
+        $idea = new Ideabox();
         if ($CFG_GLPI["notifications_mailing"]) {
             $options = ['comment_id' => $this->fields["id"]];
             if ($idea->getFromDB($this->fields["plugin_ideabox_ideaboxes_id"])) {
@@ -200,8 +207,8 @@ class PluginIdeaboxComment extends CommonDBChild
             $options['date_comment'] = $this->fields['date_comment'];
         }
         TemplateRenderer::getInstance()->display('@ideabox/comment_form.html.twig', [
-           'item'   => $this,
-           'params' => $options,
+            'item'   => $this,
+            'params' => $options,
         ]);
 
         return true;
@@ -215,9 +222,9 @@ class PluginIdeaboxComment extends CommonDBChild
             'SELECT' => '*',
             'FROM' => 'glpi_plugin_ideabox_comments',
             'WHERE' => [
-                'plugin_ideabox_ideaboxes_id' => $ID
+                'plugin_ideabox_ideaboxes_id' => $ID,
             ],
-            'ORDERBY' => 'date_comment DESC'
+            'ORDERBY' => 'date_comment DESC',
         ];
         $iteratorc = $DB->request($criteriac);
 
@@ -227,7 +234,7 @@ class PluginIdeaboxComment extends CommonDBChild
             echo '<ul class="nav nav-pills" style="margin-bottom: 10px;">';
             echo '<li>';
             echo '<div class="text-21">';
-            echo _n('Comment', 'Comments', count($iteratorc), 'ideabox').'&nbsp;<span class="badge">'.count($iteratorc).'</span>';
+            echo _n('Comment', 'Comments', count($iteratorc), 'ideabox') . '&nbsp;<span class="badge">' . count($iteratorc) . '</span>';
             echo '</div>';
             echo '</li>';
             echo '</ul>';
@@ -240,7 +247,7 @@ class PluginIdeaboxComment extends CommonDBChild
                 $user->getFromDB($array2['users_id']);
                 $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
                 $style = !empty($thumbnail_url) ? "background-image: url('$thumbnail_url')" : ("background-color: " . $user->getUserInitialsBgColor(
-                    ));
+                ));
                 $user_name = formatUserName(
                     $user->getID(),
                     $user->fields['name'],
@@ -264,13 +271,13 @@ class PluginIdeaboxComment extends CommonDBChild
                 echo "</div>";
 
                 echo '<div class="comment-text ue-content">';
-                echo Glpi\RichText\RichText::getEnhancedHtml($array2['comment']);
+                echo RichText::getEnhancedHtml($array2['comment']);
                 echo "</div>";
 
                 if ($fromidea == false) {
-                    $idea = new PluginIdeaboxIdeabox();
+                    $idea = new Ideabox();
                     $target = $idea->getFormURL();
-                    $target .= "?forcetab=PluginIdeaboxComment$1&id=".$ID;
+                    $target .= "?forcetab=PluginIdeaboxComment$1&id=" . $ID;
                     Html::showSimpleForm(
                         $target,
                         'addcomment',
@@ -281,7 +288,7 @@ class PluginIdeaboxComment extends CommonDBChild
                     );
                 }
 
-                if ($array2['users_id']== Session::getLoginUserID()) {
+                if ($array2['users_id'] == Session::getLoginUserID()) {
                     echo "&nbsp;";
                     $self = new self();
                     $target = $self->getFormURL();
@@ -300,7 +307,6 @@ class PluginIdeaboxComment extends CommonDBChild
             }
             echo "</div>";
         }
-
     }
 
 
@@ -312,52 +318,52 @@ class PluginIdeaboxComment extends CommonDBChild
         $tab = [];
 
         $tab[] = [
-           'id'   => 'common',
-           'name' => self::getTypeName(2)
+            'id'   => 'common',
+            'name' => self::getTypeName(2),
         ];
 
         $tab[] = [
-           'id'            => '1',
-           'table'         => $this->getTable(),
-           'field'         => 'name',
-           'name'          => __('Name'),
-           'datatype'      => 'itemlink',
-           'itemlink_type' => $this->getType(),
+            'id'            => '1',
+            'table'         => $this->getTable(),
+            'field'         => 'name',
+            'name'          => __('Name'),
+            'datatype'      => 'itemlink',
+            'itemlink_type' => $this->getType(),
         ];
 
         $tab[] = [
-           'id'            => '7',
-           'table'         => $this->getTable(),
-           'field'         => 'date_comment',
-           'name'          => __('Date of comment', 'ideabox'),
-           'datatype'      => 'datetime',
-           'massiveaction' => false,
+            'id'            => '7',
+            'table'         => $this->getTable(),
+            'field'         => 'date_comment',
+            'name'          => __('Date of comment', 'ideabox'),
+            'datatype'      => 'datetime',
+            'massiveaction' => false,
         ];
 
         $tab[] = [
-           'id'       => '10',
-           'table'    => 'glpi_users',
-           'field'    => 'name',
-           'name'     => __('Author'),
-           'datatype' => 'dropdown',
-           'right'    => 'all',
+            'id'       => '10',
+            'table'    => 'glpi_users',
+            'field'    => 'name',
+            'name'     => __('Author'),
+            'datatype' => 'dropdown',
+            'right'    => 'all',
         ];
 
         $tab[] = [
-           'id'       => '8',
-           'table'    => $this->getTable(),
-           'field'    => 'comment',
-           'name'     => __('Description', 'ideabox'),
-           'datatype' => 'text',
+            'id'       => '8',
+            'table'    => $this->getTable(),
+            'field'    => 'comment',
+            'name'     => __('Description', 'ideabox'),
+            'datatype' => 'text',
         ];
 
 
         $tab[] = [
-           'id'       => '30',
-           'table'    => $this->getTable(),
-           'field'    => 'id',
-           'name'     => __('ID'),
-           'datatype' => 'number',
+            'id'       => '30',
+            'table'    => $this->getTable(),
+            'field'    => 'id',
+            'name'     => __('ID'),
+            'datatype' => 'number',
         ];
 
 
@@ -374,7 +380,7 @@ class PluginIdeaboxComment extends CommonDBChild
         return $forbidden;
     }
 
-    public function showComments(PluginIdeaboxIdeabox $ideabox)
+    public function showComments(Ideabox $ideabox)
     {
         global $DB, $CFG_GLPI;
 
@@ -407,8 +413,8 @@ class PluginIdeaboxComment extends CommonDBChild
             Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
             $massiveactionparams
                = ['num_displayed'    => min($_SESSION['glpilist_limit'], $number),
-                  'specific_actions' => ['purge' => _x('button', 'Delete permanently')],
-                  'container'        => 'mass' . __CLASS__ . $rand];
+                   'specific_actions' => ['purge' => _x('button', 'Delete permanently')],
+                   'container'        => 'mass' . __CLASS__ . $rand];
             Html::showMassiveActions($massiveactionparams);
         }
 
@@ -429,7 +435,7 @@ class PluginIdeaboxComment extends CommonDBChild
 
             echo "</tr>";
 
-            Session::initNavigateListItems($this->getType(), PluginIdeaboxIdeabox::getTypeName(2) . " = " . $ideabox->fields["name"]);
+            Session::initNavigateListItems($this->getType(), Ideabox::getTypeName(2) . " = " . $ideabox->fields["name"]);
             $i       = 0;
             $row_num = 1;
 
@@ -455,7 +461,7 @@ class PluginIdeaboxComment extends CommonDBChild
 
                 echo "<td class='left'>" . getusername($data["users_id"]) . "</td>";
                 echo "<td class='left'>" . Html::convdatetime($data["date_comment"]) . "</td>";
-                echo "<td class='left'>" . Glpi\RichText\RichText::getTextFromHtml($data["comment"]) . "</td>";
+                echo "<td class='left'>" . RichText::getTextFromHtml($data["comment"]) . "</td>";
                 echo "</tr>";
             }
             echo "</table>";

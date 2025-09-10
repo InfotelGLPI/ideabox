@@ -33,10 +33,12 @@ define('PLUGIN_IDEABOX_VERSION', '4.0.0');
 global $CFG_GLPI;
 
 use Glpi\Plugin\Hooks;
+use GlpiPlugin\Ideabox\Ideabox;
+use GlpiPlugin\Ideabox\Servicecatalog;
+use GlpiPlugin\Ideabox\Profile;
 
 if (!defined("PLUGIN_IDEABOX_DIR")) {
     define("PLUGIN_IDEABOX_DIR", Plugin::getPhpDir("ideabox"));
-//    define("PLUGIN_IDEABOX_NOTFULL_DIR", Plugin::getPhpDir("ideabox", false));
     $root = $CFG_GLPI['root_doc'] . '/plugins/ideabox';
     define("PLUGIN_IDEABOX_WEBDIR", $root);
 }
@@ -47,7 +49,7 @@ function plugin_init_ideabox()
     global $PLUGIN_HOOKS, $CFG_GLPI;
 
     $PLUGIN_HOOKS['csrf_compliant']['ideabox'] = true;
-    $PLUGIN_HOOKS['change_profile']['ideabox']   = ['PluginIdeaboxProfile', 'initProfile'];
+    $PLUGIN_HOOKS['change_profile']['ideabox']   = [Profile::class, 'initProfile'];
     $PLUGIN_HOOKS['plugin_datainjection_populate']['ideabox'] = 'plugin_datainjection_populate_ideabox';
     $PLUGIN_HOOKS['assign_to_ticket']['ideabox'] = true;
     $PLUGIN_HOOKS[Hooks::ADD_CSS]['ideabox'] = "css/ideabox.css";
@@ -55,7 +57,7 @@ function plugin_init_ideabox()
     $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuzzysearch.js.php';
 
     if (Session::getLoginUserID()) {
-        Plugin::registerClass('PluginIdeaboxIdeabox', [
+        Plugin::registerClass(Ideabox::class, [
             'assignable_types'              => true,
             'document_types'              => true,
             'helpdesk_visible_types'      => true,
@@ -63,12 +65,12 @@ function plugin_init_ideabox()
             'notificationtemplates_types' => true,
         ]);
 
-        Plugin::registerClass('PluginIdeaboxComment', [
+        Plugin::registerClass(Comment::class, [
             'notificationtemplates_types' => true,
         ]);
 
         Plugin::registerClass(
-            'PluginIdeaboxProfile',
+            Profile::class,
             ['addtabon' => 'Profile']
         );
 
@@ -78,7 +80,7 @@ function plugin_init_ideabox()
 
         // Display a menu entry ?
         if (Session::haveRight("plugin_ideabox", READ)) {
-            $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => PluginIdeaboxIdeabox::getType()];
+            $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => Ideabox::getType()];
 
             if (!Plugin::isPluginActive('servicecatalog')) {
                 $PLUGIN_HOOKS['helpdesk_menu_entry']['ideabox'] = PLUGIN_IDEABOX_WEBDIR . '/front/ideabox.php';
@@ -86,7 +88,7 @@ function plugin_init_ideabox()
             }
 
             if (Plugin::isPluginActive('servicecatalog')) {
-                $PLUGIN_HOOKS['servicecatalog']['ideabox'] = ['PluginIdeaboxServicecatalog'];
+                $PLUGIN_HOOKS['servicecatalog']['ideabox'] = [Servicecatalog::class];
             }
 
             $PLUGIN_HOOKS['redirect_page']['ideabox']           = PLUGIN_IDEABOX_WEBDIR . '/front/ideabox.php';
@@ -126,6 +128,6 @@ function plugin_version_ideabox()
 
 function plugin_datainjection_migratetypes_ideabox($types)
 {
-    $types[4900] = 'PluginIdeaboxIdeabox';
+    $types[4900] = Ideabox::class;
     return $types;
 }
