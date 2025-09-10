@@ -36,7 +36,7 @@ use Glpi\Plugin\Hooks;
 
 if (!defined("PLUGIN_IDEABOX_DIR")) {
     define("PLUGIN_IDEABOX_DIR", Plugin::getPhpDir("ideabox"));
-    define("PLUGIN_IDEABOX_NOTFULL_DIR", Plugin::getPhpDir("ideabox", false));
+//    define("PLUGIN_IDEABOX_NOTFULL_DIR", Plugin::getPhpDir("ideabox", false));
     $root = $CFG_GLPI['root_doc'] . '/plugins/ideabox';
     define("PLUGIN_IDEABOX_WEBDIR", $root);
 }

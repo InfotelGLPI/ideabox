@@ -169,7 +169,7 @@ $(function() {
                var finaltitle = el.item.title; //el.item.type + " > " +
            }
          //$("#fuzzysearch .results")
-         //   .append("<li class='list-group-item list-group-item-primary'><i class='fa-1x fas "+el.item.icon+"' style=\"font-family:'Font Awesome 5 Free', 'Font Awesome 5 Brands';\"></i> <a target='"+el.item.target+"' href='"+ el.item.url+"'>"+finaltitle+"</a><div><i style='color: #CCC;'>"+el.item.comment+"</i></div></li>");
+         //   .append("<li class='list-group-item list-group-item-primary'><i class='fa-1x fas "+el.item.icon+"' style=\"font-family:'Font Awesome 6 Free', 'Font Awesome 6 Brands';\"></i> <a target='"+el.item.target+"' href='"+ el.item.url+"'>"+finaltitle+"</a><div><i style='color: #CCC;'>"+el.item.comment+"</i></div></li>");
            $("#fuzzysearch .results")
                .append("<li style='background-color: #FFF;'><a target='"+el.item.target+"' href='"+ el.item.url+"' class='list-group-item list-group-item-action flex-column align-items-start'>" +
                    "<div class='d-flex w-100 justify-content-between'>" +

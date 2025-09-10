@@ -56,7 +56,7 @@ class PluginIdeaboxServicecatalog extends CommonGLPI {
     */
    static function getNavBarLink() {
 
-      return PLUGIN_IDEABOX_NOTFULL_DIR . "/front/ideabox.php";
+      return PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php";
    }
 
    static function getMenuLogo() {
