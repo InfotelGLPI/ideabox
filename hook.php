@@ -30,10 +30,9 @@
 use GlpiPlugin\Ideabox\Profile;
 use GlpiPlugin\Ideabox\Ideabox;
 use GlpiPlugin\Ideabox\IdeaboxInjection;
+
 function plugin_ideabox_install() {
     global $DB;
-
-    include_once(PLUGIN_IDEABOX_DIR . "/inc/profile.class.php");
 
     if (!$DB->tableExists("glpi_plugin_ideabox_ideaboxes")) {
         $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/empty-4.0.0.sql");
@@ -118,7 +117,7 @@ function plugin_ideabox_uninstall() {
                "glpi_plugin_ideabox_configtranslations"];
 
     foreach ($tables as $table) {
-        $DB->delete($table);
+        $DB->dropTable($table, true);
     }
 
     $notif = new Notification();
