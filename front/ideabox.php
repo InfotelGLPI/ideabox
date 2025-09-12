@@ -30,12 +30,13 @@
 use GlpiPlugin\Ideabox\Ideabox;
 use GlpiPlugin\Ideabox\Config;
 use Glpi\Exception\Http\AccessDeniedHttpException;
+use GlpiPlugin\Servicecatalog\Main;
 
 if (Session::getCurrentInterface() == 'central') {
     Html::header(Ideabox::getTypeName(2), '', "tools", Ideabox::class);
 } else {
     if (Plugin::isPluginActive('servicecatalog')) {
-        PluginServicecatalogMain::showDefaultHeaderHelpdesk(Ideabox::getTypeName(2));
+        Main::showDefaultHeaderHelpdesk(Ideabox::getTypeName(2));
     } else {
         Html::helpHeader(Ideabox::getTypeName(2));
     }
@@ -80,7 +81,7 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
 
 if (Session::getCurrentInterface() != 'central'
     && Plugin::isPluginActive('servicecatalog')) {
-    PluginServicecatalogMain::showNavBarFooter('ideabox');
+    Main::showNavBarFooter('ideabox');
 }
 
 if (Session::getCurrentInterface() == 'central') {

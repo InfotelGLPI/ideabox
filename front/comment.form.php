@@ -30,6 +30,7 @@
 
 use GlpiPlugin\Ideabox\Ideabox;
 use GlpiPlugin\Ideabox\Comment;
+use GlpiPlugin\Servicecatalog\Main;
 
 if (!isset($_GET["id"])) {
     $_GET["id"] = "";
@@ -62,7 +63,7 @@ if (isset($_POST["add"])) {
         Html::header(Ideabox::getTypeName(2), '', "tools", Ideabox::class);
     } else {
         if (Plugin::isPluginActive('servicecatalog')) {
-            PluginServicecatalogMain::showDefaultHeaderHelpdesk(Ideabox::getTypeName(2), true);
+            Main::showDefaultHeaderHelpdesk(Ideabox::getTypeName(2), true);
         } else {
             Html::helpHeader(Ideabox::getTypeName(2));
         }
@@ -72,7 +73,7 @@ if (isset($_POST["add"])) {
 
     if (Session::getCurrentInterface() != 'central'
        && Plugin::isPluginActive('servicecatalog')) {
-        PluginServicecatalogMain::showNavBarFooter('ideabox');
+        Main::showNavBarFooter('ideabox');
     }
 
     if (Session::getCurrentInterface() == 'central') {
