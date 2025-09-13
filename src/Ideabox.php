@@ -497,7 +497,7 @@ class Ideabox extends CommonDBTM
                 } else {
                     echo "&nbsp;";
                     $target = $idea->getFormURL();
-                    $target .= "?forcetab=PluginIdeaboxComment$1&id=" . $idea->getID();
+                    $target .= "?forcetab=GlpiPlugin\Ideabox\Comment$1&id=" . $idea->getID();
                     Html::showSimpleForm(
                         $target,
                         'addcomment',

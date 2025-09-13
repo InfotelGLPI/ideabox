@@ -277,7 +277,7 @@ class Comment extends CommonDBChild
                 if ($fromidea == false) {
                     $idea = new Ideabox();
                     $target = $idea->getFormURL();
-                    $target .= "?forcetab=PluginIdeaboxComment$1&id=" . $ID;
+                    $target .= "?forcetab=GlpiPlugin\Ideabox\Comment$1&id=" . $ID;
                     Html::showSimpleForm(
                         $target,
                         'addcomment',
