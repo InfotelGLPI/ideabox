@@ -30,6 +30,7 @@
 namespace GlpiPlugin\Ideabox;
 
 use Dropdown;
+use Html;
 use NotificationTarget;
 use UserEmail;
 

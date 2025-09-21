@@ -113,7 +113,7 @@ function plugin_version_ideabox()
     return [
         'name'         => _n('Idea box', 'Ideas box', 2, 'ideabox'),
         'version'      => PLUGIN_IDEABOX_VERSION,
-        'author'       => "<a href='http://blogglpi.infotel.com'>Infotel</a>",
+        'author'       => "<a href='https//blogglpi.infotel.com'>Infotel</a>, Xavier CAILLAUD",
         'license'      => 'GPLv2+',
         'homepage'     => 'https://github.com/InfotelGLPI/ideabox',
         'requirements' => [
