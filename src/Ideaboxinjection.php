@@ -29,6 +29,7 @@
 
 namespace GlpiPlugin\Ideabox;
 
+use AllowDynamicProperties;
 use PluginDatainjectionCommonInjectionLib;
 use PluginDatainjectionInjectionInterface;
 use Search;
@@ -70,18 +71,6 @@ class IdeaboxInjection extends Ideabox
       return $tab;
    }
 
-   /**
-    * Standard method to delete an object into glpi
-    * WILL BE INTEGRATED INTO THE CORE IN 0.80
-    *
-    * @param fields fields to add into glpi
-    * @param options options used during creation
-    */
-   function deleteObject($values = [], $options = []) {
-      $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
-      $lib->deleteObject();
-      return $lib->getInjectionResults();
-   }
 
    /**
     * Standard method to add an object into glpi

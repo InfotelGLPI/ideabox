@@ -70,7 +70,17 @@ class NotificationTargetIdeabox extends NotificationTarget
 
     //Get recipient
     public function getUserAddress() {
-        return $this->getUserByField("users_id");
+        global $DB;
+
+        $query = "SELECT DISTINCT `glpi_users`.`id` AS id
+                FROM `glpi_plugin_ideabox_ideaboxes`
+                LEFT JOIN `glpi_users` ON (`glpi_users`.`id` = `glpi_plugin_ideabox_ideaboxes`.`users_id`)
+                WHERE `glpi_plugin_ideabox_ideaboxes`.`id` = '" . $this->obj->fields["id"] . "'";
+
+        foreach ($DB->request($query) as $data) {
+            $data['email'] = UserEmail::getDefaultForUser($data['id']);
+            $this->addToRecipientsList($data);
+        }
     }
 
     public function getUserCommentAddress() {
@@ -83,7 +93,7 @@ class NotificationTargetIdeabox extends NotificationTarget
 
         foreach ($DB->request($query) as $data) {
             $data['email'] = UserEmail::getDefaultForUser($data['id']);
-            $this->addToAddressesList($data);
+            $this->addToRecipientsList($data);
         }
     }
 
