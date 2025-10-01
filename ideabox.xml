@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <name>Ideabox</name>
+    <key>ideabox</key>
+    <state>stable</state>
+    <logo>https://raw.githubusercontent.com/InfotelGLPI/ideabox/master/ideabox.png</logo>
+    <description>
+        <short>
+            <fr><![CDATA[Ce plugin vous permet de gérer les idées des utilisateurs finaux.]]></fr>
+            <en><![CDATA[This plugin allows you to manage ideas of end user.]]></en>
+        </short>
+        <long>
+            <fr><![CDATA[Ce plugin vous permet de gérer les idées des utilisateurs finaux.<br />- Système de votes,<br />- Notifications associées.]]></fr>
+            <en><![CDATA[This plugin allows you to manage ideas of end user.<br />- Vote system,<br />- Associated notifications.]]></en>
+        </long>
+    </description>
+    <homepage>https://github.com/InfotelGLPI/ideabox</homepage>
+    <download>https://github.com/InfotelGLPI/ideabox/releases</download>
+    <issues>https://github.com/InfotelGLPI/ideabox/issues</issues>
+    <readme>https://raw.githubusercontent.com/InfotelGLPI/ideabox/master/README.md</readme>
+    <authors>
+        <author>Xavier CAILLAUD</author>
+        <author>Infotel</author>
+    </authors>
+    <versions>
+        <version>
+            <num>4.0.0</num>
+            <compatibility>~11.0</compatibility>
+            <download_url>https://github.com/InfotelGLPI/ideabox/releases/download/4.0.0/glpi-ideabox-4.0.0.tar.bz2</download_url>
+        </version>
+    </versions>
+    <langs>
+        <lang>en_GB</lang>
+        <lang>de_DE</lang>
+        <lang>es_ES</lang>
+        <lang>es_AR</lang>
+        <lang>fr_FR</lang>
+        <lang>pt_BR</lang>
+        <lang>ro_RO</lang>
+        <lang>tr_TR</lang>
+    </langs>
+    <license><![CDATA[GPL v2+]]></license>
+    <tags>
+        <fr>
+            <tag>idée</tag>
+            <tag>vote</tag>
+        </fr>
+        <en>
+            <tag>idea</tag>
+            <tag>vote</tag>
+        </en>
+    </tags>
+    <screenshots>
+    </screenshots>
+</root>
