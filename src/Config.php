@@ -172,7 +172,7 @@ class Config extends CommonDBTM
 
             echo Html::hidden('id', ['value' => $ID]);
 
-            echo "<div align='center'><table class='tab_cadre_fixe'>";
+            echo "<div class='center'><table class='tab_cadre_fixe'>";
             echo "<tr><th colspan='4'>".self::getTypeName()."</th></tr>";
 
             echo "<tr class='tab_bg_1'>";
