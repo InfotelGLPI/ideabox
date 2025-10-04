@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Kaya Zeren <kayazeren@gmail.com>, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-17 13:15+0100\n"
+"PO-Revision-Date: 2025-10-01 08:28+0000\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2025\n"
+"Language-Team: Turkish (Turkey) (https://app.transifex.com/infotelGLPI/teams/12362/tr_TR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr_TR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: inc/notificationtargetideabox.class.php:44
+msgid "A comment has been added"
+msgstr "Bir yorum yapıldı"
+
+#: inc/notificationtargetideabox.class.php:46
+msgid "A comment has been deleted"
+msgstr "Bir yorum silindi"
+
+#: inc/notificationtargetideabox.class.php:45
+msgid "A comment has been modified"
+msgstr "Bir yorum değiştirildi"
+
+#: inc/notificationtargetideabox.class.php:41
+msgid "A new idea has been submitted"
+msgstr "Yeni bir öneri gönderildi"
+
+#: inc/ideabox.class.php:522
+msgid "Add your vote"
+msgstr "Oy verin"
+
+#: inc/notificationtargetideabox.class.php:187
+msgid "An addition/modification/deletion of comments"
+msgstr "Yorumlarda bir ekleme/düzenleme/silme yapıldı"
+
+#: inc/notificationtargetideabox.class.php:182
+msgid "An addition/modification/deletion of ideas"
+msgstr "Önerilerde bir ekleme/düzenleme/silme yapıldı"
+
+#: inc/notificationtargetideabox.class.php:43
+msgid "An idea has been deleted"
+msgstr "Bir öneri silindi"
+
+#: inc/notificationtargetideabox.class.php:42
+msgid "An idea has been modified"
+msgstr "Bir öneri değiştirildi"
+
+#: templates/ideabox_form.html.twig:76
+msgid "Associable to a ticket"
+msgstr "Bir destek kaydı ile ilişkilendirilebilir"
+
+#: inc/notificationtargetideabox.class.php:150
+msgid "Associated comment"
+msgid_plural "Associated comments"
+msgstr[0] "İlişkilendirilmiş yorum"
+msgstr[1] "İlişkilendirilmiş yorumlar"
+
+#: templates/comment_form.html.twig:45 templates/ideabox_form.html.twig:43
+msgid "Author"
+msgstr "Yazan"
+
+#: inc/ideabox.class.php:544
+msgctxt "button"
+msgid "Cancel"
+msgstr "İptal"
+
+#: inc/ideabox.class.php:322 templates/ideabox_form.html.twig:63
+msgid "Closed"
+msgstr "Kapatılmış"
+
+#: inc/comment.class.php:45 inc/comment.class.php:223
+msgid "Comment"
+msgid_plural "Comments"
+msgstr[0] "Yorum"
+msgstr[1] "Yorumlar"
+
+#: inc/notificationtargetideabox.class.php:54
+#: inc/notificationtargetideabox.class.php:153
+#: inc/notificationtargetideabox.class.php:173
+msgid "Comment author"
+msgstr "Yorum yazarı"
+
+#: inc/ideabox.class.php:462
+msgid "Commented by"
+msgstr "Yorumu yazan"
+
+#: inc/comment.class.php:307 templates/comment_form.html.twig:57
+msgid "Date of comment"
+msgstr "Yorum tarihi"
+
+#: inc/ideabox.class.php:174 templates/ideabox_form.html.twig:55
+msgid "Date of submission"
+msgstr "Gönderim tarihi"
+
+#: inc/comment.class.php:325 inc/comment.class.php:403
+#: inc/ideabox.class.php:192 templates/comment_form.html.twig:67
+#: templates/ideabox_form.html.twig:85
+msgid "Description"
+msgstr "Açıklama"
+
+#: inc/servicecatalog.class.php:81 inc/servicecatalog.class.php:88
+msgid "I have an idea"
+msgstr "Bir önerim var"
+
+#: inc/ideabox.class.php:49
+msgid "Idea"
+msgid_plural "Ideas"
+msgstr[0] "Öneri"
+msgstr[1] "Öneriler"
+
+#: setup.php:106 inc/profile.class.php:162
+msgid "Idea box"
+msgid_plural "Ideas box"
+msgstr[0] "Öneri kutusu"
+msgstr[1] "Öneriler kutusu"
+
+#: inc/ideabox.class.php:320 templates/ideabox_form.html.twig:63
+msgid "In progress"
+msgstr "İşleniyor"
+
+#: inc/ideabox.class.php:318 templates/ideabox_form.html.twig:63
+msgid "In study"
+msgstr "Değerlendiriliyor"
+
+#: templates/ideabox_form.html.twig:64
+msgid "Internal state"
+msgstr "İç durum"
+
+#: inc/notificationtargetideabox.class.php:125
+msgid "Modified fields"
+msgstr "Değiştirilmiş alanlar"
+
+#: templates/comment_form.html.twig:31 templates/ideabox_form.html.twig:29
+msgid "Name"
+msgstr "Ad"
+
+#: inc/ideabox.class.php:324 templates/ideabox_form.html.twig:63
+msgid "New"
+msgstr "Yeni"
+
+#: inc/comment.class.php:131 inc/comment.class.php:172
+#: inc/ideabox.class.php:255
+msgid "Only original author can modify it"
+msgstr "Yalnızca özgün yazar değişiklik yapabilir"
+
+#: front/config.form.php:55 front/config.php:44
+msgid "Please activate the plugin"
+msgstr "Lütfen eklentiyi etkinleştirin"
+
+#: inc/comment.class.php:268
+msgctxt "button"
+msgid "Post a comment"
+msgstr "Bir yorum yapın"
+
+#: inc/ideabox.class.php:507
+msgid "Read description"
+msgstr "Açıklamayı okuyun"
+
+#: inc/ideabox.class.php:477
+msgid "See comments"
+msgstr "Yorumlara bakın"
+
+#: inc/ideabox.class.php:590 inc/ideabox.class.php:631
+msgid "Start typing to find a idea"
+msgstr "Bir öneri bulmak için yazmaya başlayın"
+
+#: front/ideabox.php:63
+msgid "Submit an idea"
+msgstr "Bir öneri gönderin"
+
+#: templates/comment_form.html.twig:31 templates/ideabox_form.html.twig:29
+msgid "Surname"
+msgstr "Soyad"
+
+#: inc/ideabox.class.php:557
+msgctxt "button"
+msgid "Suscribe"
+msgstr "Abone ol"
+
+#: inc/comment.class.php:120 inc/ideabox.class.php:244
+msgid "The description is mandatory"
+msgstr "Açıklamanın yazılması zorunludur"
+
+#: inc/comment.class.php:115 inc/ideabox.class.php:239
+msgid "The name is mandatory"
+msgstr "Adın yazılması zorunludur"
+
+#: inc/vote.class.php:43
+msgid "Vote"
+msgid_plural "Votes"
+msgstr[0] "Oy"
+msgstr[1] "Oylar"
