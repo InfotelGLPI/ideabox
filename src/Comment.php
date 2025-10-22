@@ -67,7 +67,7 @@ class Comment extends CommonDBChild
             if ($_SESSION['glpishow_count_on_tabs']) {
                 return self::createTabEntry(self::getTypeName(2), self::countForIdea($item));
             }
-            return self::getTypeName(2);
+            return self::createTabEntry(self::getTypeName(2));
         }
         return '';
     }
