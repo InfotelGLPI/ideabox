@@ -106,7 +106,7 @@ class Config extends CommonDBTM
         if ($item->getType() == __CLASS__) {
             switch ($tabnum) {
                 case 1:
-                    $item->showConfigForm($item->getID());
+                    $item->showConfigForm();
                     break;
             }
         }
