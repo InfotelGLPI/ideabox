@@ -48,6 +48,8 @@ function plugin_ideabox_install()
 
     $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/update-4.0.0.sql");
 
+    $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/update-4.0.3.sql");
+
     Profile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
     return true;
 }
