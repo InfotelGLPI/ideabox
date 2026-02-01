@@ -28,11 +28,12 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_IDEABOX_VERSION', '4.0.3');
+define('PLUGIN_IDEABOX_VERSION', '4.0.4');
 
 global $CFG_GLPI;
 
 use Glpi\Plugin\Hooks;
+use GlpiPlugin\Ideabox\Comment;
 use GlpiPlugin\Ideabox\Ideabox;
 use GlpiPlugin\Ideabox\Servicecatalog;
 use GlpiPlugin\Ideabox\Profile;
