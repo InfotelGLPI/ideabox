@@ -72,12 +72,24 @@ class NotificationTargetIdeabox extends NotificationTarget
     public function getUserAddress() {
         global $DB;
 
-        $query = "SELECT DISTINCT `glpi_users`.`id` AS id
-                FROM `glpi_plugin_ideabox_ideaboxes`
-                LEFT JOIN `glpi_users` ON (`glpi_users`.`id` = `glpi_plugin_ideabox_ideaboxes`.`users_id`)
-                WHERE `glpi_plugin_ideabox_ideaboxes`.`id` = '" . $this->obj->fields["id"] . "'";
+        $criteria = [
+            'SELECT' => 'glpi_users.id AS id',
+            'DISTINCT' => true,
+            'FROM' => 'glpi_plugin_ideabox_ideaboxes',
+            'LEFT JOIN'       => [
+                'glpi_users' => [
+                    'ON' => [
+                        'glpi_users' => 'id',
+                        'glpi_plugin_ideabox_ideaboxes'          => 'users_id'
+                    ]
+                ]
+            ],
+            'WHERE' => [
+                'glpi_plugin_ideabox_ideaboxes.id' => $this->obj->fields["id"]
+            ]
+        ];
 
-        foreach ($DB->request($query) as $data) {
+        foreach ($DB->request($criteria) as $data) {
             $data['email'] = UserEmail::getDefaultForUser($data['id']);
             $this->addToRecipientsList($data);
         }
@@ -86,12 +98,24 @@ class NotificationTargetIdeabox extends NotificationTarget
     public function getUserCommentAddress() {
         global $DB;
 
-        $query = "SELECT DISTINCT `glpi_users`.`id` AS id
-                FROM `glpi_plugin_ideabox_comments`
-                LEFT JOIN `glpi_users` ON (`glpi_users`.`id` = `glpi_plugin_ideabox_comments`.`users_id`)
-                WHERE `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id` = '" . $this->obj->fields["id"] . "'";
+        $criteria = [
+            'SELECT' => 'glpi_users.id AS id',
+            'DISTINCT' => true,
+            'FROM' => 'glpi_plugin_ideabox_comments',
+            'LEFT JOIN'       => [
+                'glpi_users' => [
+                    'ON' => [
+                        'glpi_users' => 'id',
+                        'glpi_plugin_ideabox_comments'          => 'users_id'
+                    ]
+                ]
+            ],
+            'WHERE' => [
+                'glpi_plugin_ideabox_comments.plugin_ideabox_ideaboxes_id' => $this->obj->fields["id"]
+            ]
+        ];
 
-        foreach ($DB->request($query) as $data) {
+        foreach ($DB->request($criteria) as $data) {
             $data['email'] = UserEmail::getDefaultForUser($data['id']);
             $this->addToRecipientsList($data);
         }
