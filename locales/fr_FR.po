@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Xavier CAILLAUD <thetsmr@gmail.com>, 2025
+# Xavier CAILLAUD <thetsmr@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 15:24+0200\n"
+"POT-Creation-Date: 2026-02-24 16:12+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
-"Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2025\n"
+"Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2026\n"
 "Language-Team: French (France) (https://app.transifex.com/infotelGLPI/teams/12362/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,11 +41,11 @@ msgstr "Une nouvelle idée a été soumise"
 msgid "Add your vote"
 msgstr "Voter"
 
-#: src/NotificationTargetIdeabox.php:199
+#: src/NotificationTargetIdeabox.php:223
 msgid "An addition/modification/deletion of comments"
 msgstr "A l'ajout/modification/suppression de commentaires"
 
-#: src/NotificationTargetIdeabox.php:194
+#: src/NotificationTargetIdeabox.php:218
 msgid "An addition/modification/deletion of ideas"
 msgstr "A l'ajout/modification/suppression d'idées"
 
@@ -57,19 +57,27 @@ msgstr "Une idée a été supprimée"
 msgid "An idea has been modified"
 msgstr "Une idée a été modifiée"
 
-#: src/NotificationTargetIdeabox.php:162
+#: templates/ideabox_form.html.twig:104
+msgid "Associable to a ticket"
+msgstr "Associable à un ticket"
+
+#: src/NotificationTargetIdeabox.php:186
 msgid "Associated comment"
 msgid_plural "Associated comments"
 msgstr[0] "Commentaire associé"
 msgstr[1] "Commentaires associés"
 msgstr[2] "Commentaires associés"
 
+#: templates/ideabox_form.html.twig:71 templates/comment_form.html.twig:73
+msgid "Author"
+msgstr "Auteur"
+
 #: src/Ideabox.php:556
 msgctxt "button"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/Ideabox.php:334
+#: src/Ideabox.php:334 templates/ideabox_form.html.twig:91
 msgid "Closed"
 msgstr "Terminé"
 
@@ -80,8 +88,8 @@ msgstr[0] "Commentaire"
 msgstr[1] "Commentaires"
 msgstr[2] "Commentaires"
 
-#: src/NotificationTargetIdeabox.php:56 src/NotificationTargetIdeabox.php:165
-#: src/NotificationTargetIdeabox.php:185
+#: src/NotificationTargetIdeabox.php:56 src/NotificationTargetIdeabox.php:189
+#: src/NotificationTargetIdeabox.php:209
 msgid "Comment author"
 msgstr "Auteur du commentaire"
 
@@ -89,11 +97,11 @@ msgstr "Auteur du commentaire"
 msgid "Commented by"
 msgstr "Commenté par"
 
-#: src/Comment.php:338
+#: src/Comment.php:338 templates/comment_form.html.twig:85
 msgid "Date of comment"
 msgstr "Date du commentaire"
 
-#: src/Ideabox.php:183
+#: src/Ideabox.php:183 templates/ideabox_form.html.twig:83
 msgid "Date of submission"
 msgstr "Date de soumission"
 
@@ -102,9 +110,18 @@ msgctxt "button"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/Comment.php:356 src/Comment.php:434 src/Ideabox.php:201
+#: src/Ideabox.php:201 src/Comment.php:356 src/Comment.php:446
+#: templates/ideabox_form.html.twig:113 templates/comment_form.html.twig:95
 msgid "Description"
 msgstr "Description"
+
+#: templates/ideabox_translation.html.twig:44
+#: templates/ideabox_translation.html.twig:98
+msgid "Field"
+msgid_plural "Fields"
+msgstr[0] "Champ"
+msgstr[1] "Champs"
+msgstr[2] "Champs"
 
 #: src/Servicecatalog.php:86 src/Servicecatalog.php:93
 msgid "I have an idea"
@@ -117,30 +134,43 @@ msgstr[0] "Idée"
 msgstr[1] "Idées"
 msgstr[2] "Idées"
 
-#: setup.php:114 src/Profile.php:183
+#: setup.php:115 src/Profile.php:151
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] "Boite à idée"
 msgstr[1] "Boite à idées"
 msgstr[2] "Boite à idées"
 
-#: src/Ideabox.php:332
+#: src/Ideabox.php:332 templates/ideabox_form.html.twig:91
 msgid "In progress"
 msgstr "Commencé"
 
-#: src/Ideabox.php:330
+#: src/Ideabox.php:330 templates/ideabox_form.html.twig:91
 msgid "In study"
 msgstr "A l'étude"
 
-#: src/NotificationTargetIdeabox.php:137
+#: templates/ideabox_form.html.twig:92
+msgid "Internal state"
+msgstr "Statut interne"
+
+#: templates/ideabox_translation.html.twig:40
+#: templates/ideabox_translation.html.twig:63
+msgid "Language"
+msgstr "Langue"
+
+#: src/NotificationTargetIdeabox.php:161
 msgid "Modified fields"
 msgstr "Champs modifiés"
 
-#: src/Ideabox.php:336
+#: templates/ideabox_form.html.twig:57 templates/comment_form.html.twig:59
+msgid "Name"
+msgstr "Nom"
+
+#: src/Ideabox.php:336 templates/ideabox_form.html.twig:91
 msgid "New"
 msgstr "Nouveau"
 
-#: src/Comment.php:144 src/Comment.php:185 src/Ideabox.php:267
+#: src/Ideabox.php:267 src/Comment.php:144 src/Comment.php:185
 msgid "Only original author can modify it"
 msgstr "Seul l'auteur peut le modifier"
 
@@ -157,6 +187,11 @@ msgstr "Poster un commentaire"
 msgid "Read description"
 msgstr "Lire la description"
 
+#: templates/profile.html.twig:35
+msgctxt "button"
+msgid "Save"
+msgstr "SAuver"
+
 #: src/Ideabox.php:489
 msgid "See comments"
 msgstr "Voir les commentaires"
@@ -169,18 +204,28 @@ msgstr "Commencer à écrire pour trouver une idée"
 msgid "Submit an idea"
 msgstr "Soumettre une idée"
 
+#: templates/ideabox_form.html.twig:57 templates/comment_form.html.twig:59
+msgid "Surname"
+msgstr "Surnom"
+
 #: src/Ideabox.php:569
 msgctxt "button"
 msgid "Suscribe"
 msgstr "S'abonner"
 
-#: src/Comment.php:133 src/Ideabox.php:256
+#: src/Ideabox.php:256 src/Comment.php:133
 msgid "The description is mandatory"
 msgstr "La description est obligatoire"
 
-#: src/Comment.php:128 src/Ideabox.php:251
+#: src/Ideabox.php:251 src/Comment.php:128
 msgid "The name is mandatory"
 msgstr "Le nom est obligatoire"
+
+#: templates/ideabox_translation.html.twig:47
+#: templates/ideabox_translation.html.twig:53
+#: templates/ideabox_translation.html.twig:103
+msgid "Value"
+msgstr "Valeur"
 
 #: src/Vote.php:43
 msgid "Vote"
