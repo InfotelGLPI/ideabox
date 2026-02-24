@@ -125,12 +125,12 @@ class Comment extends CommonDBChild
         $input['date_comment'] = $_SESSION["glpi_currenttime"];
 
         if (empty($input['name'])) {
-            Session::addMessageAfterRedirect(__("The name is mandatory", "ideabox"), false, ERROR);
+            Session::addMessageAfterRedirect(__s("The name is mandatory", "ideabox"), false, ERROR);
             return false;
         }
 
         if (empty($input['comment'])) {
-            Session::addMessageAfterRedirect(__("The description is mandatory", "ideabox"), false, ERROR);
+            Session::addMessageAfterRedirect(__s("The description is mandatory", "ideabox"), false, ERROR);
             return false;
         }
 
@@ -141,7 +141,7 @@ class Comment extends CommonDBChild
     {
         if (Session::getCurrentInterface() != 'central'
             && $input['users_id'] != Session::getLoginUserID()) {
-            Session::addMessageAfterRedirect(__("Only original author can modify it", "ideabox"), false, ERROR);
+            Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
             return false;
         }
 
@@ -182,7 +182,7 @@ class Comment extends CommonDBChild
 
         if (Session::getCurrentInterface() != 'central'
             && $this->fields['users_id'] != Session::getLoginUserID()) {
-            Session::addMessageAfterRedirect(__("Only original author can modify it", "ideabox"), false, ERROR);
+            Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
             return false;
         }
 
@@ -275,9 +275,9 @@ class Comment extends CommonDBChild
                 echo "</div>";
 
                 if ($fromidea == false) {
-                    $idea = new Ideabox();
+                    $idea = new self();
                     $target = $idea->getFormURL();
-                    $target .= "?forcetab=GlpiPlugin\Ideabox\Comment$1&id=" . $ID;
+                    $target .= "?in_modal=1&plugin_ideabox_ideaboxes_id=" . $ID;
                     Html::showSimpleForm(
                         $target,
                         'addcomment',
@@ -326,7 +326,7 @@ class Comment extends CommonDBChild
             'id'            => '1',
             'table'         => $this->getTable(),
             'field'         => 'name',
-            'name'          => __('Name'),
+            'name'          => __s('Name'),
             'datatype'      => 'itemlink',
             'itemlink_type' => $this->getType(),
         ];
@@ -335,7 +335,7 @@ class Comment extends CommonDBChild
             'id'            => '7',
             'table'         => $this->getTable(),
             'field'         => 'date_comment',
-            'name'          => __('Date of comment', 'ideabox'),
+            'name'          => __s('Date of comment', 'ideabox'),
             'datatype'      => 'datetime',
             'massiveaction' => false,
         ];
@@ -344,7 +344,7 @@ class Comment extends CommonDBChild
             'id'       => '10',
             'table'    => 'glpi_users',
             'field'    => 'name',
-            'name'     => __('Author'),
+            'name'     => __s('Author'),
             'datatype' => 'dropdown',
             'right'    => 'all',
         ];
@@ -353,7 +353,7 @@ class Comment extends CommonDBChild
             'id'       => '8',
             'table'    => $this->getTable(),
             'field'    => 'comment',
-            'name'     => __('Description', 'ideabox'),
+            'name'     => __s('Description', 'ideabox'),
             'datatype' => 'text',
         ];
 
@@ -362,7 +362,7 @@ class Comment extends CommonDBChild
             'id'       => '30',
             'table'    => $this->getTable(),
             'field'    => 'id',
-            'name'     => __('ID'),
+            'name'     => __s('ID'),
             'datatype' => 'number',
         ];
 
@@ -393,19 +393,31 @@ class Comment extends CommonDBChild
         $rand    = mt_rand();
         $canedit = $ideabox->can($instID, UPDATE);
 
-        $query  = "SELECT `glpi_plugin_ideabox_comments`.`name` AS name,
-                        `glpi_plugin_ideabox_comments`.`id`,
-                        `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id`,
-                        `glpi_plugin_ideabox_comments`.`date_comment`,
-                        `glpi_plugin_ideabox_comments`.`comment`,
-                        `glpi_plugin_ideabox_comments`.`users_id` AS users_id
-               FROM `glpi_plugin_ideabox_comments` ";
-        $query  .= " LEFT JOIN `glpi_plugin_ideabox_ideaboxes`
-      ON (`glpi_plugin_ideabox_ideaboxes`.`id` = `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id`)";
-        $query  .= " WHERE `glpi_plugin_ideabox_comments`.`plugin_ideabox_ideaboxes_id` = '$instID'
-          ORDER BY `glpi_plugin_ideabox_comments`.`name`";
-        $result = $DB->doQuery($query);
-        $number = $DB->numrows($result);
+        $iterator = $DB->request([
+            'SELECT'    => [
+                'glpi_plugin_ideabox_comments.name AS name',
+                'glpi_plugin_ideabox_comments.id',
+                'glpi_plugin_ideabox_comments.plugin_ideabox_ideaboxes_id',
+                'glpi_plugin_ideabox_comments.date_comment',
+                'glpi_plugin_ideabox_comments.comment',
+                'glpi_plugin_ideabox_comments.users_id AS users_id',
+            ],
+            'FROM'      => 'glpi_plugin_ideabox_comments',
+            'LEFT JOIN'       => [
+                'glpi_plugin_ideabox_ideaboxes' => [
+                    'ON' => [
+                        'glpi_plugin_ideabox_ideaboxes' => 'id',
+                        'glpi_plugin_ideabox_comments'  => 'plugin_ideabox_ideaboxes_id'
+                    ]
+                ]
+            ],
+            'WHERE'     => [
+                'glpi_plugin_ideabox_comments.plugin_ideabox_ideaboxes_id'  => $instID
+            ],
+            'ORDERBY'   => 'glpi_plugin_ideabox_comments.name',
+        ]);
+
+        $number = count($iterator);
 
         echo "<div class='spaced'>";
 
@@ -428,10 +440,10 @@ class Comment extends CommonDBChild
                 echo "<th width='10'></th>";
             }
 
-            echo "<th>" . __('Name') . "</th>";
-            echo "<th>" . __('Author') . "</th>";
-            echo "<th>" . __('Date') . "</th>";
-            echo "<th>" . __('Description', 'ideabox') . "</th>";
+            echo "<th>" . __s('Name') . "</th>";
+            echo "<th>" . __s('Author') . "</th>";
+            echo "<th>" . __s('Date') . "</th>";
+            echo "<th>" . __s('Description', 'ideabox') . "</th>";
 
             echo "</tr>";
 
@@ -439,7 +451,7 @@ class Comment extends CommonDBChild
             $i       = 0;
             $row_num = 1;
 
-            while ($data = $DB->fetchArray($result)) {
+            foreach ($iterator as $data) {
                 Session::addToNavigateListItems($this->getType(), $data['id']);
 
                 $i++;

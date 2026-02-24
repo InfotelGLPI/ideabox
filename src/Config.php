@@ -48,7 +48,7 @@ class Config extends CommonDBTM
      * */
     public static function getTypeName($nb = 0)
     {
-        return __('Setup');
+        return __s('Setup');
     }
 
     public function __construct()
@@ -84,7 +84,7 @@ class Config extends CommonDBTM
      */
     function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
         if (!$withtemplate) {
-            $ong[1] =  self::createTabEntry(__('Setup'));
+            $ong[1] =  self::createTabEntry(__s('Setup'));
             return $ong;
         }
         return '';
@@ -135,7 +135,7 @@ class Config extends CommonDBTM
             'id'         => '1',
             'table'      => $this->getTable(),
             'field'      => 'title',
-            'name'       => __('Title'),
+            'name'       => __s('Title'),
             'searchtype' => 'equals',
             'datatype'   => 'text'
         ];
@@ -144,7 +144,7 @@ class Config extends CommonDBTM
             'id'         => '2',
             'table'      => $this->getTable(),
             'field'      => 'comment',
-            'name'       => __('Comments'),
+            'name'       => __s('Comments'),
             'searchtype' => 'equals',
             'datatype'   => 'text'
         ];
@@ -177,14 +177,14 @@ class Config extends CommonDBTM
 
             echo "<tr class='tab_bg_1'>";
             echo "<td>";
-            echo __('Title');
+            echo __s('Title');
             echo "</td>";
             echo "<td>";
             echo Html::input('title', ['value' => $this->fields['title'], 'size' => 40]);
             echo "</td>";
 
             echo "<td>";
-            echo __('Comments');
+            echo __s('Comments');
             echo "</td>";
             echo "<td>";
             echo Html::input('comment', ['value' => $this->fields['comment'], 'size' => 40]);

@@ -62,7 +62,7 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
 
             echo "<tr class='tab_bg_1'><td class='center'>";
             echo "<a href=\"./ideabox.form.php\" class='submit btn btn-primary'>";
-            echo "<i class='" . Ideabox::getIcon() . "'></i>&nbsp;" . __('Submit an idea', 'ideabox');
+            echo "<i class='" . Ideabox::getIcon() . "'></i>&nbsp;" . __s('Submit an idea', 'ideabox');
             echo "</a>";
             echo "</td></tr>";
             echo " </table></div>";

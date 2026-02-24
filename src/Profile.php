@@ -32,6 +32,7 @@ namespace GlpiPlugin\Ideabox;
 
 use CommonGLPI;
 use DbUtils;
+use Glpi\Application\View\TemplateRenderer;
 use Html;
 use ProfileRight;
 use Session;
@@ -53,22 +54,6 @@ class Profile extends \Profile
         return "ti ti-bulb";
     }
 
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
-    {
-
-        if ($item->getType() == 'Profile') {
-            $ID   = $item->getID();
-            $prof = new self();
-
-            self::addDefaultProfileInfos(
-                $ID,
-                ['plugin_ideabox'                    => 0,
-                    'plugin_ideabox_open_ticket' => 0]
-            );
-            $prof->showForm($ID);
-        }
-        return true;
-    }
 
 
     public static function createFirstAccess($ID)
@@ -117,58 +102,41 @@ class Profile extends \Profile
         }
     }
 
-    /**
-     * Show profile form
-     *
-     * @param int  $profiles_id
-     * @param bool $openform
-     * @param bool $closeform
-     *
-     * @return nothing
-     * @internal param int $items_id id of the profile
-     * @internal param value $target url of target
-     *
-     */
-    public function showForm($profiles_id = 0, $openform = true, $closeform = true)
-    {
-
-        echo "<div class='firstbloc'>";
-        if (($canedit = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE]))
-          && $openform) {
-            $profile = new \Profile();
-            echo "<form method='post' action='" . $profile->getFormURL() . "'>";
+    public static function displayTabContentForItem(
+        CommonGLPI $item,
+        $tabnum = 1,
+        $withtemplate = 0
+    ) {
+        if (!$item instanceof \Profile || !self::canView()) {
+            return false;
         }
 
         $profile = new \Profile();
-        $profile->getFromDB($profiles_id);
-        //      if ($profile->getField('interface') == 'central') {
-        $rights = $this->getAllRights();
-        $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
-            'default_class' => 'tab_bg_2',
-            'title'         => __('General')]);
-        //      }
-        echo "<table class='tab_cadre_fixehov'>";
-        echo "<tr class='tab_bg_1'><th colspan='4'>" . __('Helpdesk') . "</th></tr>\n";
+        $profile->getFromDB($item->getID());
 
-        $effective_rights = ProfileRight::getProfileRights($profiles_id, ['plugin_ideabox_open_ticket']);
-        echo "<tr class='tab_bg_2'>";
-        echo "<td width='20%'>" . __('Associable items to a ticket') . "</td>";
-        echo "<td colspan='5'>";
-        Html::showCheckbox(['name'    => '_plugin_ideabox_open_ticket',
-            'checked' => $effective_rights['plugin_ideabox_open_ticket']]);
-        echo "</td></tr>\n";
-        echo "</table>";
+        $twig = TemplateRenderer::getInstance();
+        $twig->display('@ideabox/profile.html.twig', [
+            'id'      => $item->getID(),
+            'profile' => $profile,
+            'title'   => self::getTypeName(Session::getPluralNumber()),
+            'rights'  => [
+                [
+                    'itemtype' => Ideabox::getType(),
+                    'label'    => Ideabox::getTypeName(Session::getPluralNumber()),
+                    'field'    => Ideabox::$rightname,
+                ],
+                [
+                    'itemtype' => Ideabox::getType(),
+                    'label'    => __s('Associable items to a ticket'),
+                    'field'    => 'plugin_ideabox_open_ticket',
+                    [
+                        READ  => __('Read'),
+                        ],
+                ],
+            ],
+        ]);
 
-        if ($canedit
-          && $closeform
-        ) {
-            echo "<div class='center'>";
-            echo Html::hidden('id', ['value' => $profiles_id]);
-            echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
-            echo "</div>\n";
-            Html::closeForm();
-        }
-        echo "</div>";
+        return true;
     }
 
     /**
@@ -187,7 +155,7 @@ class Profile extends \Profile
 
         if ($all) {
             $rights[] = ['itemtype' => Ideabox::class,
-                'label'    => __('Associable items to a ticket'),
+                'label'    => __s('Associable items to a ticket'),
                 'field'    => 'plugin_ideabox_open_ticket'];
         }
 
@@ -291,16 +259,6 @@ class Profile extends \Profile
         foreach ($it as $prof) {
             if (isset($_SESSION['glpiactiveprofile'])) {
                 $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
-            }
-        }
-    }
-
-
-    public static function removeRightsFromSession()
-    {
-        foreach (self::getAllRights(true) as $right) {
-            if (isset($_SESSION['glpiactiveprofile'][$right['field']])) {
-                unset($_SESSION['glpiactiveprofile'][$right['field']]);
             }
         }
     }

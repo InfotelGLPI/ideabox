@@ -40,20 +40,20 @@ class NotificationTargetIdeabox extends NotificationTarget
     const IDEABOX_COMMENT_USER = 4901;
 
     public function getEvents() {
-        return ['new'           => __('A new idea has been submitted', 'ideabox'),
-                'update'        => __('An idea has been modified', 'ideabox'),
-                'delete'        => __('An idea has been deleted', 'ideabox'),
-                'newcomment'    => __('A comment has been added', 'ideabox'),
-                'updatecomment' => __('A comment has been modified', 'ideabox'),
-                'deletecomment' => __('A comment has been deleted', 'ideabox')];
+        return ['new'           => __s('A new idea has been submitted', 'ideabox'),
+                'update'        => __s('An idea has been modified', 'ideabox'),
+                'delete'        => __s('An idea has been deleted', 'ideabox'),
+                'newcomment'    => __s('A comment has been added', 'ideabox'),
+                'updatecomment' => __s('A comment has been modified', 'ideabox'),
+                'deletecomment' => __s('A comment has been deleted', 'ideabox')];
     }
 
     /**
      * Get additionnals targets for Tickets
      */
     public function addAdditionalTargets($event = '') {
-        $this->addTarget(NotificationTargetIdeabox::IDEABOX_USER, __('Author'));
-        $this->addTarget(NotificationTargetIdeabox::IDEABOX_COMMENT_USER, __('Comment author', 'ideabox'));
+        $this->addTarget(NotificationTargetIdeabox::IDEABOX_USER, __s('Author'));
+        $this->addTarget(NotificationTargetIdeabox::IDEABOX_COMMENT_USER, __s('Comment author', 'ideabox'));
     }
 
     public function addSpecificTargets($data, $options) {
@@ -136,7 +136,7 @@ class NotificationTargetIdeabox extends NotificationTarget
 
         $this->data['##lang.ideabox.title##'] = $events[$event];
 
-        $this->data['##lang.ideabox.entity##'] = __('Entity');
+        $this->data['##lang.ideabox.entity##'] = __s('Entity');
         $this->data['##ideabox.entity##']      =
             Dropdown::getDropdownName(
                 'glpi_entities',
@@ -144,10 +144,10 @@ class NotificationTargetIdeabox extends NotificationTarget
             );
         $this->data['##ideabox.id##']          = sprintf("%07d", $ideabox->fields['id']);
 
-        $this->data['##lang.ideabox.name##'] = __('Title');
+        $this->data['##lang.ideabox.name##'] = __s('Title');
         $this->data['##ideabox.name##']      = $ideabox->fields['name'];
 
-        $this->data['##lang.ideabox.comment##'] = __('Description');
+        $this->data['##lang.ideabox.comment##'] = __s('Description');
         $comment                                 = stripslashes(str_replace(['\r\n', '\n', '\r'], "<br/>", $ideabox->fields['comment']));
         $this->data['##ideabox.comment##']      = nl2br($comment);
 
@@ -158,7 +158,7 @@ class NotificationTargetIdeabox extends NotificationTarget
         //old values infos
         if (isset($this->target_object->oldvalues)
             && !empty($this->target_object->oldvalues) && $event == 'update') {
-            $this->data['##lang.update.title##'] = __('Modified fields', 'ideabox');
+            $this->data['##lang.update.title##'] = __s('Modified fields', 'ideabox');
 
             $tmp = [];
 
@@ -185,10 +185,10 @@ class NotificationTargetIdeabox extends NotificationTarget
 
         $this->data['##lang.comment.title##'] = _n('Associated comment', 'Associated comments', 2, 'ideabox');
 
-        $this->data['##lang.comment.name##']        = __('Name');
-        $this->data['##lang.comment.author##']      = __('Comment author', 'ideabox');
-        $this->data['##lang.comment.datecomment##'] = __('Date');
-        $this->data['##lang.comment.comment##']     = __('Content');
+        $this->data['##lang.comment.name##']        = __s('Name');
+        $this->data['##lang.comment.author##']      = __s('Comment author', 'ideabox');
+        $this->data['##lang.comment.datecomment##'] = __s('Date');
+        $this->data['##lang.comment.comment##']     = __s('Content');
 
         foreach ($comments as $comment) {
             $tmp = [];
@@ -203,24 +203,24 @@ class NotificationTargetIdeabox extends NotificationTarget
     }
 
     public function getTags() {
-        $tags = ['ideabox.name'        => __('Title'),
-                 'ideabox.comment'     => __('Description'),
-                 'comment.name'        => __('Name'),
-                 'comment.author'      => __('Comment author', 'ideabox'),
-                 'comment.datecomment' => __('Date'),
-                 'comment.comment'     => __('Content')];
+        $tags = ['ideabox.name'        => __s('Title'),
+                 'ideabox.comment'     => __s('Description'),
+                 'comment.name'        => __s('Name'),
+                 'comment.author'      => __s('Comment author', 'ideabox'),
+                 'comment.datecomment' => __s('Date'),
+                 'comment.comment'     => __s('Content')];
         foreach ($tags as $tag => $label) {
             $this->addTagToList(['tag'   => $tag, 'label' => $label,
                                  'value' => true]);
         }
 
         $this->addTagToList(['tag'     => 'ideabox',
-                             'label'   => __('An addition/modification/deletion of ideas', 'ideabox'),
+                             'label'   => __s('An addition/modification/deletion of ideas', 'ideabox'),
                              'value'   => false,
                              'foreach' => true,
                              'events'  => ['new', 'update', 'delete']]);
         $this->addTagToList(['tag'     => 'comments',
-                             'label'   => __('An addition/modification/deletion of comments', 'ideabox'),
+                             'label'   => __s('An addition/modification/deletion of comments', 'ideabox'),
                              'value'   => false,
                              'foreach' => true,
                              'events'  => ['newcomment', 'updatecomment', 'deletecomment']]);

@@ -42,14 +42,14 @@ if (Plugin::isPluginActive("ideabox")) {
 
         Html::back();
     } else {
-        Html::header(__('Setup'), '', "helpdesk", "pluginideabox", "config");
+        Html::header(__s('Setup'), '', "helpdesk", "pluginideabox", "config");
         $_GET['id'] = 1;
         $config->display($_GET);
         Html::footer();
     }
 } else {
-    Html::header(__('Setup'), '', "config", "plugins");
+    Html::header(__s('Setup'), '', "config", "plugins");
     echo "<div class='alert alert-important alert-warning d-flex'>";
-    echo "<b>".__('Please activate the plugin', 'ideabox')."</b></div>";
+    echo "<b>".__s('Please activate the plugin', 'ideabox')."</b></div>";
     Html::footer();
 }

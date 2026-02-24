@@ -41,6 +41,9 @@ if (!isset($_GET["withtemplate"])) {
 if (!isset($_GET["plugin_ideabox_ideaboxes_id"])) {
     $_GET["plugin_ideabox_ideaboxes_id"] = "";
 }
+if (!isset($_GET["in_modal"])) {
+    $_GET["in_modal"] = 0;
+}
 
 $comment = new Comment();
 
@@ -59,26 +62,39 @@ if (isset($_POST["add"])) {
 } else {
     $comment->checkGlobal(READ);
 
-    if (Session::getCurrentInterface() == 'central') {
-        Html::header(Ideabox::getTypeName(2), '', "tools", Ideabox::class);
-    } else {
-        if (Plugin::isPluginActive('servicecatalog')) {
-            Main::showDefaultHeaderHelpdesk(Ideabox::getTypeName(2), true);
+    if ($_GET["in_modal"] == 0) {
+        if (Session::getCurrentInterface() == 'central') {
+            Html::header(Ideabox::getTypeName(2), '', "tools", Ideabox::class);
         } else {
-            Html::helpHeader(Ideabox::getTypeName(2));
+            if (Plugin::isPluginActive('servicecatalog')) {
+                Main::showDefaultHeaderHelpdesk(Ideabox::getTypeName(2), true);
+            } else {
+                Html::helpHeader(Ideabox::getTypeName(2));
+            }
         }
-    }
-
-    $comment->showForm($_GET["id"], ['plugin_ideabox_ideaboxes_id' => $_GET["plugin_ideabox_ideaboxes_id"]]);
-
-    if (Session::getCurrentInterface() != 'central'
-       && Plugin::isPluginActive('servicecatalog')) {
-        Main::showNavBarFooter('ideabox');
-    }
-
-    if (Session::getCurrentInterface() == 'central') {
-        Html::footer();
     } else {
-        Html::helpFooter();
+        Html::popHeader(Ideabox::getTypeName(2));
+    }
+
+    if ($_GET["in_modal"] == 0) {
+        $comment->display($_GET);
+    } else {
+        $comment->showForm($_GET["id"], ['plugin_ideabox_ideaboxes_id' => $_GET["plugin_ideabox_ideaboxes_id"]]);
+    }
+
+
+    if ($_GET["in_modal"] == 0) {
+        if (Session::getCurrentInterface() != 'central'
+            && Plugin::isPluginActive('servicecatalog')) {
+            Main::showNavBarFooter('ideabox');
+        }
+
+        if (Session::getCurrentInterface() == 'central') {
+            Html::footer();
+        } else {
+            Html::helpFooter();
+        }
+    } else {
+        Html::popFooter();
     }
 }

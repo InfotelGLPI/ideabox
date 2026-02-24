@@ -38,8 +38,8 @@ if (Plugin::isPluginActive("ideabox")) {
         throw new AccessDeniedHttpException();
     }
 } else {
-    Html::header(__('Setup'), '', "config", "plugin");
+    Html::header(__s('Setup'), '', "config", "plugin");
     echo "<div class='alert alert-important alert-warning d-flex'>";
-    echo "<b>" . __('Please activate the plugin', 'ideabox') . "</b></div>";
+    echo "<b>" . __s('Please activate the plugin', 'ideabox') . "</b></div>";
     Html::footer();
 }

@@ -171,7 +171,7 @@ class Ideabox extends CommonDBTM
             'id'            => '1',
             'table'         => $this->getTable(),
             'field'         => 'name',
-            'name'          => __('Name'),
+            'name'          => __s('Name'),
             'datatype'      => 'itemlink',
             'itemlink_type' => $this->getType(),
         ];
@@ -180,7 +180,7 @@ class Ideabox extends CommonDBTM
             'id'            => '7',
             'table'         => $this->getTable(),
             'field'         => 'date_idea',
-            'name'          => __('Date of submission', 'ideabox'),
+            'name'          => __s('Date of submission', 'ideabox'),
             'datatype'      => 'datetime',
             'massiveaction' => false,
         ];
@@ -189,7 +189,7 @@ class Ideabox extends CommonDBTM
             'id'       => '10',
             'table'    => 'glpi_users',
             'field'    => 'name',
-            'name'     => __('Author'),
+            'name'     => __s('Author'),
             'datatype' => 'dropdown',
             'right'    => 'all',
         ];
@@ -198,7 +198,7 @@ class Ideabox extends CommonDBTM
             'id'       => '8',
             'table'    => $this->getTable(),
             'field'    => 'comment',
-            'name'     => __('Description', 'ideabox'),
+            'name'     => __s('Description', 'ideabox'),
             'datatype' => 'text',
         ];
 
@@ -206,7 +206,7 @@ class Ideabox extends CommonDBTM
             'id'       => '9',
             'table'    => $this->getTable(),
             'field'    => 'is_helpdesk_visible',
-            'name'     => __('Associable to a ticket'),
+            'name'     => __s('Associable to a ticket'),
             'datatype' => 'bool',
         ];
 
@@ -214,7 +214,7 @@ class Ideabox extends CommonDBTM
             'id'       => '30',
             'table'    => $this->getTable(),
             'field'    => 'id',
-            'name'     => __('ID'),
+            'name'     => __s('ID'),
             'datatype' => 'number',
         ];
 
@@ -222,7 +222,7 @@ class Ideabox extends CommonDBTM
             'id'       => '80',
             'table'    => 'glpi_entities',
             'field'    => 'completename',
-            'name'     => __('Entity'),
+            'name'     => __s('Entity'),
             'datatype' => 'dropdown',
         ];
 
@@ -248,12 +248,12 @@ class Ideabox extends CommonDBTM
         $input['date_idea'] = $_SESSION["glpi_currenttime"];
 
         if (empty($input['name'])) {
-            Session::addMessageAfterRedirect(__("The name is mandatory", "ideabox"), false, ERROR);
+            Session::addMessageAfterRedirect(__s("The name is mandatory", "ideabox"), false, ERROR);
             return false;
         }
 
         if (empty($input['comment'])) {
-            Session::addMessageAfterRedirect(__("The description is mandatory", "ideabox"), false, ERROR);
+            Session::addMessageAfterRedirect(__s("The description is mandatory", "ideabox"), false, ERROR);
             return false;
         }
 
@@ -264,7 +264,7 @@ class Ideabox extends CommonDBTM
     {
         if (Session::getCurrentInterface() != 'central'
             && $input['users_id'] != Session::getLoginUserID()) {
-            Session::addMessageAfterRedirect(__("Only original author can modify it", "ideabox"), false, ERROR);
+            Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
             return false;
         }
 
@@ -327,13 +327,13 @@ class Ideabox extends CommonDBTM
         switch ($state) {
 
             case self::STUDY:
-                return __('In study', 'ideabox');
+                return __s('In study', 'ideabox');
             case self::IN_PROGRESS:
-                return __('In progress', 'ideabox');
+                return __s('In progress', 'ideabox');
             case self::CLOSED:
-                return __('Closed', 'ideabox');
+                return __s('Closed', 'ideabox');
             default:
-                return __('New', 'ideabox');
+                return __s('New', 'ideabox');
         }
     }
 
@@ -471,7 +471,7 @@ class Ideabox extends CommonDBTM
                     echo "</span>";
                     echo ' - <span class="topic-updated-info">';
 
-                    echo __('Commented by', 'ideabox');
+                    echo __s('Commented by', 'ideabox');
                     echo "&nbsp;" . getUserName($last_comment['users_id'], 0, true);
                     echo ' - <span class="date-updated">';
 
@@ -486,7 +486,7 @@ class Ideabox extends CommonDBTM
                     echo Ajax::createIframeModalWindow(
                         'seecomments' . $id,
                         PLUGIN_IDEABOX_WEBDIR . '/front/comment.php?plugin_ideabox_ideaboxes_id=' . $idea->getID(),
-                        ['title'         => __("See comments", 'ideabox'),
+                        ['title'         => __s("See comments", 'ideabox'),
                             'display'       => false,
                             //                            'width'         => 550,
                             //                            'height'        => 850,
@@ -515,7 +515,7 @@ class Ideabox extends CommonDBTM
                 $description = $idea->fields['comment'];
 
                 if (strlen($idea->fields['comment']) > 10) {
-                    echo "<a href=\"#anchor$id\" onclick=\"$(this).hide();$('#$id').show();\">" . __(
+                    echo "<a href=\"#anchor$id\" onclick=\"$(this).hide();$('#$id').show();\">" . __s(
                         'Read description',
                         'ideabox'
                     ) . "</a>";
@@ -531,7 +531,7 @@ class Ideabox extends CommonDBTM
                 echo '<div class="actions-bar">';
                 echo '<div style="bottom: 5px;position: absolute">';
                 echo '<span class="vote-text hidden-xs">';
-                echo __('Add your vote', 'ideabox');
+                echo __s('Add your vote', 'ideabox');
                 echo '&nbsp;</span>';
                 $already_voted = 0;
                 $target = $idea->getFormURL();
@@ -599,7 +599,7 @@ class Ideabox extends CommonDBTM
     public static function fuzzySearchForm($name)
     {
 
-        $title = __("Start typing to find a idea", "ideabox");
+        $title = __s("Start typing to find a idea", "ideabox");
         $strict_search = 1;
 
 
@@ -640,11 +640,11 @@ class Ideabox extends CommonDBTM
     {
         global $DB;
 
-        $title = __("Start typing to find a idea", "ideabox");
+        $title = __s("Start typing to find a idea", "ideabox");
         $strict_search = 1;
         switch ($action) {
             case 'getModalHtml':
-                $modal_header = __('Search');
+                $modal_header = __s('Search');
                 $placeholder = $title;
                 $html = <<<HTML
                <div class="modal" tabindex="-1" id="fuzzysearch">
@@ -690,7 +690,7 @@ HTML;
 
                 if (count($iterator) > 0) {
                     foreach ($iterator as $idea) {
-                        $identity = __('Idea');
+                        $identity = __s('Idea');
                         $fuzzy_entries[] = [
                             'url' => PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php?id=" . $idea['id'],
                             'title' => $idea['name'],
