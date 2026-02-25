@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2025
+# Kaya Zeren <kayazeren@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 15:24+0200\n"
+"POT-Creation-Date: 2026-02-24 16:16+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2025\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2026\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/infotelGLPI/teams/12362/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,11 +41,11 @@ msgstr "Yeni bir öneri gönderildi"
 msgid "Add your vote"
 msgstr "Oy verin"
 
-#: src/NotificationTargetIdeabox.php:199
+#: src/NotificationTargetIdeabox.php:223
 msgid "An addition/modification/deletion of comments"
 msgstr "Yorumlarda bir ekleme/düzenleme/silme yapıldı"
 
-#: src/NotificationTargetIdeabox.php:194
+#: src/NotificationTargetIdeabox.php:218
 msgid "An addition/modification/deletion of ideas"
 msgstr "Önerilerde bir ekleme/düzenleme/silme yapıldı"
 
@@ -57,18 +57,26 @@ msgstr "Bir öneri silindi"
 msgid "An idea has been modified"
 msgstr "Bir öneri değiştirildi"
 
-#: src/NotificationTargetIdeabox.php:162
+#: templates/ideabox_form.html.twig:104
+msgid "Associable to a ticket"
+msgstr "Bir destek kaydı ile ilişkilendirilebilir"
+
+#: src/NotificationTargetIdeabox.php:186
 msgid "Associated comment"
 msgid_plural "Associated comments"
 msgstr[0] "İlişkilendirilmiş yorum"
 msgstr[1] "İlişkilendirilmiş yorumlar"
+
+#: templates/ideabox_form.html.twig:71 templates/comment_form.html.twig:73
+msgid "Author"
+msgstr "Yazan"
 
 #: src/Ideabox.php:556
 msgctxt "button"
 msgid "Cancel"
 msgstr "İptal"
 
-#: src/Ideabox.php:334
+#: src/Ideabox.php:334 templates/ideabox_form.html.twig:91
 msgid "Closed"
 msgstr "Kapatılmış"
 
@@ -78,8 +86,8 @@ msgid_plural "Comments"
 msgstr[0] "Yorum"
 msgstr[1] "Yorumlar"
 
-#: src/NotificationTargetIdeabox.php:56 src/NotificationTargetIdeabox.php:165
-#: src/NotificationTargetIdeabox.php:185
+#: src/NotificationTargetIdeabox.php:56 src/NotificationTargetIdeabox.php:189
+#: src/NotificationTargetIdeabox.php:209
 msgid "Comment author"
 msgstr "Yorum yazarı"
 
@@ -87,11 +95,11 @@ msgstr "Yorum yazarı"
 msgid "Commented by"
 msgstr "Yorumu yazan"
 
-#: src/Comment.php:338
+#: src/Comment.php:338 templates/comment_form.html.twig:85
 msgid "Date of comment"
 msgstr "Yorum tarihi"
 
-#: src/Ideabox.php:183
+#: src/Ideabox.php:183 templates/ideabox_form.html.twig:83
 msgid "Date of submission"
 msgstr "Gönderim tarihi"
 
@@ -100,9 +108,17 @@ msgctxt "button"
 msgid "Delete"
 msgstr "Sil"
 
-#: src/Comment.php:356 src/Comment.php:434 src/Ideabox.php:201
+#: src/Ideabox.php:201 src/Comment.php:356 src/Comment.php:446
+#: templates/ideabox_form.html.twig:113 templates/comment_form.html.twig:95
 msgid "Description"
 msgstr "Açıklama"
+
+#: templates/ideabox_translation.html.twig:44
+#: templates/ideabox_translation.html.twig:98
+msgid "Field"
+msgid_plural "Fields"
+msgstr[0] "Alan"
+msgstr[1] "Alanlar"
 
 #: src/Servicecatalog.php:86 src/Servicecatalog.php:93
 msgid "I have an idea"
@@ -114,29 +130,42 @@ msgid_plural "Ideas"
 msgstr[0] "Öneri"
 msgstr[1] "Öneriler"
 
-#: setup.php:114 src/Profile.php:183
+#: setup.php:115 src/Profile.php:151
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] "Öneri kutusu"
 msgstr[1] "Öneriler kutusu"
 
-#: src/Ideabox.php:332
+#: src/Ideabox.php:332 templates/ideabox_form.html.twig:91
 msgid "In progress"
 msgstr "İşleniyor"
 
-#: src/Ideabox.php:330
+#: src/Ideabox.php:330 templates/ideabox_form.html.twig:91
 msgid "In study"
 msgstr "Değerlendiriliyor"
 
-#: src/NotificationTargetIdeabox.php:137
+#: templates/ideabox_form.html.twig:92
+msgid "Internal state"
+msgstr "İç durum"
+
+#: templates/ideabox_translation.html.twig:40
+#: templates/ideabox_translation.html.twig:63
+msgid "Language"
+msgstr "Dil"
+
+#: src/NotificationTargetIdeabox.php:161
 msgid "Modified fields"
 msgstr "Değiştirilmiş alanlar"
 
-#: src/Ideabox.php:336
+#: templates/ideabox_form.html.twig:57 templates/comment_form.html.twig:59
+msgid "Name"
+msgstr "Ad"
+
+#: src/Ideabox.php:336 templates/ideabox_form.html.twig:91
 msgid "New"
 msgstr "Yeni"
 
-#: src/Comment.php:144 src/Comment.php:185 src/Ideabox.php:267
+#: src/Ideabox.php:267 src/Comment.php:144 src/Comment.php:185
 msgid "Only original author can modify it"
 msgstr "Yalnızca özgün yazar değişiklik yapabilir"
 
@@ -153,6 +182,11 @@ msgstr "Bir yorum yapın"
 msgid "Read description"
 msgstr "Açıklamayı okuyun"
 
+#: templates/profile.html.twig:35
+msgctxt "button"
+msgid "Save"
+msgstr "Kaydet"
+
 #: src/Ideabox.php:489
 msgid "See comments"
 msgstr "Yorumlara bakın"
@@ -165,18 +199,28 @@ msgstr "Bir öneri bulmak için yazmaya başlayın"
 msgid "Submit an idea"
 msgstr "Bir öneri gönderin"
 
+#: templates/ideabox_form.html.twig:57 templates/comment_form.html.twig:59
+msgid "Surname"
+msgstr "Soyad"
+
 #: src/Ideabox.php:569
 msgctxt "button"
 msgid "Suscribe"
 msgstr "Abone ol"
 
-#: src/Comment.php:133 src/Ideabox.php:256
+#: src/Ideabox.php:256 src/Comment.php:133
 msgid "The description is mandatory"
 msgstr "Açıklamanın yazılması zorunludur"
 
-#: src/Comment.php:128 src/Ideabox.php:251
+#: src/Ideabox.php:251 src/Comment.php:128
 msgid "The name is mandatory"
 msgstr "Adın yazılması zorunludur"
+
+#: templates/ideabox_translation.html.twig:47
+#: templates/ideabox_translation.html.twig:53
+#: templates/ideabox_translation.html.twig:103
+msgid "Value"
+msgstr "Değer"
 
 #: src/Vote.php:43
 msgid "Vote"
