@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-24 16:16+0000\n"
+"POT-Creation-Date: 2026-04-01 13:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr ""
 msgid "A new idea has been submitted"
 msgstr ""
 
-#: src/Ideabox.php:534
+#: src/Ideabox.php:541
 msgid "Add your vote"
 msgstr ""
 
@@ -68,16 +68,16 @@ msgstr[1] ""
 msgid "Author"
 msgstr ""
 
-#: src/Ideabox.php:556
+#: src/Ideabox.php:563
 msgctxt "button"
 msgid "Cancel"
 msgstr ""
 
-#: src/Ideabox.php:334 templates/ideabox_form.html.twig:91
+#: src/Ideabox.php:341 templates/ideabox_form.html.twig:91
 msgid "Closed"
 msgstr ""
 
-#: src/Comment.php:52 src/Comment.php:237
+#: src/Comment.php:58 src/Comment.php:243
 msgid "Comment"
 msgid_plural "Comments"
 msgstr[0] ""
@@ -88,24 +88,24 @@ msgstr[1] ""
 msgid "Comment author"
 msgstr ""
 
-#: src/Ideabox.php:474
+#: src/Ideabox.php:481
 msgid "Commented by"
 msgstr ""
 
-#: src/Comment.php:338 templates/comment_form.html.twig:85
+#: src/Comment.php:344 templates/comment_form.html.twig:85
 msgid "Date of comment"
 msgstr ""
 
-#: src/Ideabox.php:183 templates/ideabox_form.html.twig:83
+#: src/Ideabox.php:190 templates/ideabox_form.html.twig:83
 msgid "Date of submission"
 msgstr ""
 
-#: src/Comment.php:298
+#: src/Comment.php:304
 msgctxt "button"
 msgid "Delete"
 msgstr ""
 
-#: src/Ideabox.php:201 src/Comment.php:356 src/Comment.php:446
+#: src/Ideabox.php:208 src/Comment.php:362 src/Comment.php:452
 #: templates/ideabox_form.html.twig:113 templates/comment_form.html.twig:95
 msgid "Description"
 msgstr ""
@@ -121,23 +121,23 @@ msgstr[1] ""
 msgid "I have an idea"
 msgstr ""
 
-#: src/Ideabox.php:55
+#: src/Ideabox.php:62
 msgid "Idea"
 msgid_plural "Ideas"
 msgstr[0] ""
 msgstr[1] ""
 
-#: setup.php:115 src/Profile.php:151
+#: src/Profile.php:150 setup.php:117
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Ideabox.php:332 templates/ideabox_form.html.twig:91
+#: src/Ideabox.php:339 templates/ideabox_form.html.twig:91
 msgid "In progress"
 msgstr ""
 
-#: src/Ideabox.php:330 templates/ideabox_form.html.twig:91
+#: src/Ideabox.php:337 templates/ideabox_form.html.twig:91
 msgid "In study"
 msgstr ""
 
@@ -158,24 +158,24 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/Ideabox.php:336 templates/ideabox_form.html.twig:91
+#: src/Ideabox.php:343 templates/ideabox_form.html.twig:91
 msgid "New"
 msgstr ""
 
-#: src/Ideabox.php:267 src/Comment.php:144 src/Comment.php:185
+#: src/Ideabox.php:274 src/Comment.php:150 src/Comment.php:191
 msgid "Only original author can modify it"
 msgstr ""
 
-#: front/config.form.php:53 front/config.php:43
+#: front/config.php:43 front/config.form.php:53
 msgid "Please activate the plugin"
 msgstr ""
 
-#: src/Comment.php:284
+#: src/Comment.php:290
 msgctxt "button"
 msgid "Post a comment"
 msgstr ""
 
-#: src/Ideabox.php:519
+#: src/Ideabox.php:526
 msgid "Read description"
 msgstr ""
 
@@ -184,11 +184,11 @@ msgctxt "button"
 msgid "Save"
 msgstr ""
 
-#: src/Ideabox.php:489
+#: src/Ideabox.php:496
 msgid "See comments"
 msgstr ""
 
-#: src/Ideabox.php:602 src/Ideabox.php:643
+#: src/Ideabox.php:609 src/Ideabox.php:650
 msgid "Start typing to find a idea"
 msgstr ""
 
@@ -200,16 +200,16 @@ msgstr ""
 msgid "Surname"
 msgstr ""
 
-#: src/Ideabox.php:569
+#: src/Ideabox.php:576
 msgctxt "button"
 msgid "Suscribe"
 msgstr ""
 
-#: src/Ideabox.php:256 src/Comment.php:133
+#: src/Ideabox.php:263 src/Comment.php:139
 msgid "The description is mandatory"
 msgstr ""
 
-#: src/Ideabox.php:251 src/Comment.php:128
+#: src/Ideabox.php:258 src/Comment.php:134
 msgid "The name is mandatory"
 msgstr ""
 
@@ -219,7 +219,7 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: src/Vote.php:43
+#: src/Vote.php:45
 msgid "Vote"
 msgid_plural "Votes"
 msgstr[0] ""
