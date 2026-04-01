@@ -54,9 +54,11 @@ function plugin_init_ideabox()
     $PLUGIN_HOOKS['plugin_datainjection_populate']['ideabox'] = 'plugin_datainjection_populate_ideabox';
     $PLUGIN_HOOKS['assign_to_ticket']['ideabox'] = true;
     $PLUGIN_HOOKS[Hooks::ADD_CSS]['ideabox'] = "css/ideabox.css";
-    $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuse.js';
-    $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuzzysearch.js.php';
-
+    if (isset($_SESSION['glpiactiveprofile']['interface'])
+        && $_SESSION['glpiactiveprofile']['interface'] != 'central') {
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuse.js';
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuzzysearch.js.php';
+    }
     if (Session::getLoginUserID()) {
         Plugin::registerClass(Ideabox::class, [
             'assignable_types'              => true,

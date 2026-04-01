@@ -33,7 +33,6 @@ namespace GlpiPlugin\Ideabox;
 use CommonGLPI;
 use DbUtils;
 use Glpi\Application\View\TemplateRenderer;
-use Html;
 use ProfileRight;
 use Session;
 
@@ -129,9 +128,9 @@ class Profile extends \Profile
                     'itemtype' => Ideabox::getType(),
                     'label'    => __s('Associable items to a ticket'),
                     'field'    => 'plugin_ideabox_open_ticket',
-                    [
-                        READ  => __('Read'),
-                        ],
+                    'rights' => [
+                        READ  => __s('Read'),
+                    ],
                 ],
             ],
         ]);

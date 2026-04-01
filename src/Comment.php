@@ -32,11 +32,17 @@ namespace GlpiPlugin\Ideabox;
 
 use CommonDBChild;
 use CommonGLPI;
+use DBConnection;
 use DbUtils;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\RichText\RichText;
 use Html;
+use Migration;
+use Notification;
+use Notification_NotificationTemplate;
 use NotificationEvent;
+use NotificationTemplate;
+use NotificationTemplateTranslation;
 use Session;
 use User;
 
@@ -485,5 +491,189 @@ class Comment extends CommonDBChild
             Html::closeForm();
         }
         echo "</div>";
+    }
+
+    public static function install(Migration $migration)
+    {
+        global $DB;
+
+        $default_charset   = DBConnection::getDefaultCharset();
+        $default_collation = DBConnection::getDefaultCollation();
+        $default_key_sign  = DBConnection::getDefaultPrimaryKeySignOption();
+        $table  = self::getTable();
+
+        if (!$DB->tableExists($table)) {
+            $query = "CREATE TABLE `$table` (
+                        `id` int {$default_key_sign} NOT NULL auto_increment,
+                        `name` varchar(255) collate utf8mb4_unicode_ci DEFAULT NULL,
+                        `date_comment` timestamp DEFAULT NULL,
+                        `plugin_ideabox_ideaboxes_id` int {$default_key_sign} NOT NULL DEFAULT '0' COMMENT 'RELATION to glpi_plugin_ideabox_ideaboxes (id)',
+                        `users_id` int {$default_key_sign} NOT NULL DEFAULT '0' COMMENT 'RELATION to glpi_users (id)',
+                        `comment` text collate utf8mb4_unicode_ci,
+                        PRIMARY KEY  (`id`),
+                        KEY `name` (`name`),
+                        KEY `plugin_ideabox_ideaboxes_id` (`plugin_ideabox_ideaboxes_id`)
+               ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+
+            $DB->doQuery($query);
+
+            $DB->insert(
+                'glpi_displaypreferences',
+                ['itemtype' => self::class,
+                    'num' => 1,
+                    'rank' => 1,
+                    'users_id' => 0,
+                    'interface' => 'central']
+            );
+
+            $DB->insert(
+                'glpi_displaypreferences',
+                ['itemtype' => self::class,
+                    'num' => 7,
+                    'rank' => 2,
+                    'users_id' => 0,
+                    'interface' => 'central']
+            );
+
+            $DB->insert(
+                'glpi_displaypreferences',
+                ['itemtype' => self::class,
+                    'num' => 10,
+                    'rank' => 3,
+                    'users_id' => 0,
+                    'interface' => 'central']
+            );
+        }
+
+        //DisplayPreferences Migration
+        $classes = ['PluginIdeaboxComment' => self::class];
+
+        foreach ($classes as $old => $new) {
+            $displayusers = $DB->request([
+                'SELECT' => [
+                    'users_id'
+                ],
+                'DISTINCT' => true,
+                'FROM' => 'glpi_displaypreferences',
+                'WHERE' => [
+                    'itemtype' => $old,
+                ],
+            ]);
+
+            if (count($displayusers) > 0) {
+                foreach ($displayusers as $displayuser) {
+                    $iterator = $DB->request([
+                        'SELECT' => [
+                            'num',
+                            'id'
+                        ],
+                        'FROM' => 'glpi_displaypreferences',
+                        'WHERE' => [
+                            'itemtype' => $old,
+                            'users_id' => $displayuser['users_id'],
+                            'interface' => 'central'
+                        ],
+                    ]);
+
+                    if (count($iterator) > 0) {
+                        foreach ($iterator as $data) {
+                            $iterator2 = $DB->request([
+                                'SELECT' => [
+                                    'id'
+                                ],
+                                'FROM' => 'glpi_displaypreferences',
+                                'WHERE' => [
+                                    'itemtype' => $new,
+                                    'users_id' => $displayuser['users_id'],
+                                    'num' => $data['num'],
+                                    'interface' => 'central'
+                                ],
+                            ]);
+                            if (count($iterator2) > 0) {
+                                foreach ($iterator2 as $dataid) {
+                                    $query = $DB->buildDelete(
+                                        'glpi_displaypreferences',
+                                        [
+                                            'id' => $dataid['id'],
+                                        ]
+                                    );
+                                    $DB->doQuery($query);
+                                }
+                            } else {
+                                $query = $DB->buildUpdate(
+                                    'glpi_displaypreferences',
+                                    [
+                                        'itemtype' => $new,
+                                    ],
+                                    [
+                                        'id' => $data['id'],
+                                    ]
+                                );
+                                $DB->doQuery($query);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static function uninstall()
+    {
+        global $DB;
+
+        $DB->dropTable(self::getTable(), true);
+
+        $notif = new Notification();
+
+        $options = ['itemtype' => self::class];
+        foreach ($DB->request([
+            'FROM' => 'glpi_notifications',
+            'WHERE' => $options]) as $data) {
+            $notif->delete($data);
+        }
+
+        //templates
+        $template       = new NotificationTemplate();
+        $translation    = new NotificationTemplateTranslation();
+        $notif_template = new Notification_NotificationTemplate();
+
+        $options        = ['itemtype' => self::class];
+        foreach ($DB->request([
+            'FROM' => 'glpi_notificationtemplates',
+            'WHERE' => $options]) as $data) {
+            $options_template = [
+                'notificationtemplates_id' => $data['id'],
+            ];
+
+            foreach ($DB->request([
+                'FROM' => 'glpi_notificationtemplatetranslations',
+                'WHERE' => $options_template]) as $data_template) {
+                $translation->delete($data_template);
+            }
+            $template->delete($data);
+
+            foreach ($DB->request([
+                'FROM' => 'glpi_notifications_notificationtemplates',
+                'WHERE' => $options_template]) as $data_template) {
+                $notif_template->delete($data_template);
+            }
+        }
+
+        $itemtypes = ['Alert',
+            'DisplayPreference',
+            'Document_Item',
+            'ImpactItem',
+            'Item_Ticket',
+            'Link_Itemtype',
+            'Notepad',
+            'SavedSearch',
+            'DropdownTranslation',
+            'NotificationTemplate',
+            'Notification'];
+        foreach ($itemtypes as $itemtype) {
+            $item = new $itemtype();
+            $item->deleteByCriteria(['itemtype' => self::class]);
+        }
     }
 }

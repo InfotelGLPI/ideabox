@@ -31,8 +31,10 @@ namespace GlpiPlugin\Ideabox;
 
 use CommonDBTM;
 use CommonGLPI;
+use DBConnection;
 use Glpi\RichText\RichText;
 use Html;
+use Migration;
 
 /**
  * Class Config
@@ -237,5 +239,40 @@ class Config extends CommonDBTM
         } elseif (isset($item->fields[$field])) {
             return $item->fields[$field];
         }
+    }
+
+    public static function install(Migration $migration)
+    {
+        global $DB;
+
+        $default_charset   = DBConnection::getDefaultCharset();
+        $default_collation = DBConnection::getDefaultCollation();
+        $default_key_sign  = DBConnection::getDefaultPrimaryKeySignOption();
+        $table  = self::getTable();
+
+        if (!$DB->tableExists($table)) {
+            $query = "CREATE TABLE `$table` (
+                        `id` int {$default_key_sign} NOT NULL auto_increment,
+                        `title` varchar(255) collate utf8mb4_unicode_ci DEFAULT '',
+                        `comment` varchar(255) collate utf8mb4_unicode_ci DEFAULT '',
+                        PRIMARY KEY  (`id`)
+               ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+
+            $DB->doQuery($query);
+
+            $DB->insert(
+                $table,
+                ['id' => 1,
+                    'title' => '',
+                    'comment' => '']
+            );
+        }
+    }
+
+    public static function uninstall()
+    {
+        global $DB;
+
+        $DB->dropTable(self::getTable(), true);
     }
 }
