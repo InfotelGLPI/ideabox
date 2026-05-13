@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 13:39+0000\n"
+"POT-Creation-Date: 2026-05-13 16:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,11 +38,11 @@ msgstr ""
 msgid "Add your vote"
 msgstr ""
 
-#: src/NotificationTargetIdeabox.php:223
+#: src/NotificationTargetIdeabox.php:227
 msgid "An addition/modification/deletion of comments"
 msgstr ""
 
-#: src/NotificationTargetIdeabox.php:218
+#: src/NotificationTargetIdeabox.php:222
 msgid "An addition/modification/deletion of ideas"
 msgstr ""
 
@@ -58,7 +58,7 @@ msgstr ""
 msgid "Associable to a ticket"
 msgstr ""
 
-#: src/NotificationTargetIdeabox.php:186
+#: src/NotificationTargetIdeabox.php:190
 msgid "Associated comment"
 msgid_plural "Associated comments"
 msgstr[0] ""
@@ -83,8 +83,8 @@ msgid_plural "Comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/NotificationTargetIdeabox.php:56 src/NotificationTargetIdeabox.php:189
-#: src/NotificationTargetIdeabox.php:209
+#: src/NotificationTargetIdeabox.php:56 src/NotificationTargetIdeabox.php:193
+#: src/NotificationTargetIdeabox.php:213
 msgid "Comment author"
 msgstr ""
 
@@ -110,8 +110,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: templates/ideabox_translation.html.twig:44
-#: templates/ideabox_translation.html.twig:98
+#: templates/ideabox_translation.html.twig:44 templates/ideabox_translation.html.twig:98
 msgid "Field"
 msgid_plural "Fields"
 msgstr[0] ""
@@ -127,7 +126,7 @@ msgid_plural "Ideas"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Profile.php:150 setup.php:117
+#: src/Profile.php:150 setup.php:116
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] ""
@@ -145,8 +144,7 @@ msgstr ""
 msgid "Internal state"
 msgstr ""
 
-#: templates/ideabox_translation.html.twig:40
-#: templates/ideabox_translation.html.twig:63
+#: templates/ideabox_translation.html.twig:40 templates/ideabox_translation.html.twig:63
 msgid "Language"
 msgstr ""
 
@@ -166,7 +164,7 @@ msgstr ""
 msgid "Only original author can modify it"
 msgstr ""
 
-#: front/config.php:43 front/config.form.php:53
+#: front/config.form.php:53 front/config.php:43
 msgid "Please activate the plugin"
 msgstr ""
 
@@ -213,9 +211,7 @@ msgstr ""
 msgid "The name is mandatory"
 msgstr ""
 
-#: templates/ideabox_translation.html.twig:47
-#: templates/ideabox_translation.html.twig:53
-#: templates/ideabox_translation.html.twig:103
+#: templates/ideabox_translation.html.twig:47 templates/ideabox_translation.html.twig:53 templates/ideabox_translation.html.twig:103
 msgid "Value"
 msgstr ""
 
