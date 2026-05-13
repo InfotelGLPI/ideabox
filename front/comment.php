@@ -30,6 +30,12 @@
 use GlpiPlugin\Ideabox\Comment;
 use GlpiPlugin\Ideabox\Ideabox;
 
+Session::checkLoginUser();
+if (!Session::haveRight('plugin_ideabox', READ)) {
+    Html::displayRightError();
+    exit;
+}
+
 if (!isset($_GET["plugin_ideabox_ideaboxes_id"])) $_GET["plugin_ideabox_ideaboxes_id"] = "";
 
 $comment = new Comment();

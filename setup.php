@@ -49,8 +49,7 @@ function plugin_init_ideabox()
 {
     global $PLUGIN_HOOKS, $CFG_GLPI;
 
-    $PLUGIN_HOOKS['csrf_compliant']['ideabox'] = true;
-    $PLUGIN_HOOKS['change_profile']['ideabox']   = [Profile::class, 'initProfile'];
+    $PLUGIN_HOOKS[Hooks::CHANGE_PROFILE]['ideabox']   = [Profile::class, 'initProfile'];
     $PLUGIN_HOOKS['plugin_datainjection_populate']['ideabox'] = 'plugin_datainjection_populate_ideabox';
     $PLUGIN_HOOKS['assign_to_ticket']['ideabox'] = true;
     $PLUGIN_HOOKS[Hooks::ADD_CSS]['ideabox'] = "css/ideabox.css";
@@ -78,16 +77,16 @@ function plugin_init_ideabox()
         );
 
         if (Session::haveRight("config", UPDATE)) {
-            $PLUGIN_HOOKS['config_page']['ideabox'] = 'front/config.form.php';
+            $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['ideabox'] = 'front/config.form.php';
         }
 
         // Display a menu entry ?
         if (Session::haveRight("plugin_ideabox", READ)) {
-            $PLUGIN_HOOKS['menu_toadd']['ideabox'] = ['tools' => Ideabox::getType()];
+            $PLUGIN_HOOKS[Hooks::MENU_TOADD]['ideabox'] = ['tools' => Ideabox::getType()];
 
             if (!Plugin::isPluginActive('servicecatalog')) {
-                $PLUGIN_HOOKS['helpdesk_menu_entry']['ideabox'] = PLUGIN_IDEABOX_WEBDIR . '/front/ideabox.php';
-                $PLUGIN_HOOKS['helpdesk_menu_entry_icon']['ideabox'] = 'ti ti-bulb';
+                $PLUGIN_HOOKS[Hooks::HELPDESK_MENU_ENTRY]['ideabox'] = PLUGIN_IDEABOX_WEBDIR . '/front/ideabox.php';
+                $PLUGIN_HOOKS[Hooks::HELPDESK_MENU_ENTRY_ICON]['ideabox'] = 'ti ti-bulb';
             }
 
             if (Plugin::isPluginActive('servicecatalog')) {
@@ -98,7 +97,7 @@ function plugin_init_ideabox()
         }
 
         if (Session::haveRight("plugin_ideabox", UPDATE)) {
-            $PLUGIN_HOOKS['use_massive_action']['ideabox']   = 1;
+            $PLUGIN_HOOKS[Hooks::USE_MASSIVE_ACTION]['ideabox']   = 1;
         }
 
         $PLUGIN_HOOKS['migratetypes']['ideabox'] = 'plugin_datainjection_migratetypes_ideabox';

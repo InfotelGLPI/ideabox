@@ -122,7 +122,7 @@ class NotificationTargetIdeabox extends NotificationTarget
     }
 
     public function addDataForTemplate($event, $options = []) {
-        global $CFG_GLPI;
+        global $CFG_GLPI, $DB;
 
         $events = $this->getAllEvents();
         $ideabox = $this->obj;
@@ -175,13 +175,17 @@ class NotificationTargetIdeabox extends NotificationTarget
         }
 
         //comment infos
-        $restrict = "`plugin_ideabox_ideaboxes_id`='" . $ideabox->fields['id'] . "'";
+        $where = ['plugin_ideabox_ideaboxes_id' => (int) $ideabox->fields['id']];
 
         if (isset($options['comment_id']) && $options['comment_id']) {
-            $restrict .= " AND `glpi_plugin_ideabox_comments`.`id` = '" . $options['comment_id'] . "'";
+            $where['id'] = (int) $options['comment_id'];
         }
 
-        $comments = getAllDataFromTable('glpi_plugin_ideabox_comments', ['ORDER' => 'date_comment DESC']);
+        $comments = $DB->request([
+            'FROM'    => 'glpi_plugin_ideabox_comments',
+            'WHERE'   => $where,
+            'ORDERBY' => 'date_comment DESC',
+        ]);
 
         $this->data['##lang.comment.title##'] = _n('Associated comment', 'Associated comments', 2, 'ideabox');
 

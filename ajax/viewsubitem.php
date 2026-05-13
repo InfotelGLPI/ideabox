@@ -33,10 +33,19 @@
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
-if (!isset($_POST['type'])) {
+Session::checkLoginUser();
+
+$allowed_types = [
+    \GlpiPlugin\Ideabox\Comment::class,
+];
+$allowed_parent_types = [
+    \GlpiPlugin\Ideabox\Ideabox::class,
+];
+
+if (!isset($_POST['type']) || !in_array($_POST['type'], $allowed_types, true)) {
     return;
 }
-if (!isset($_POST['parenttype'])) {
+if (!isset($_POST['parenttype']) || !in_array($_POST['parenttype'], $allowed_parent_types, true)) {
     return;
 }
 
@@ -44,11 +53,7 @@ if (
     ($item = getItemForItemtype($_POST['type']))
     && ($parent = getItemForItemtype($_POST['parenttype']))
 ) {
-    if (
-//        isset($_POST[$parent::getForeignKeyField()], $_POST["id"])
-//        &&
-        $parent->getFromDB($_POST["items_id"])
-    ) {
+    if ($parent->getFromDB($_POST["items_id"])) {
         $item->showForm($_POST["id"], ['parent' => $parent]);
     } else {
         echo __s('Access denied');

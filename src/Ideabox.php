@@ -270,7 +270,7 @@ class Ideabox extends CommonDBTM
     public function prepareInputForUpdate($input)
     {
         if (Session::getCurrentInterface() != 'central'
-            && $input['users_id'] != Session::getLoginUserID()) {
+            && $this->fields['users_id'] != Session::getLoginUserID()) {
             Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
             return false;
         }

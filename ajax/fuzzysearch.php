@@ -33,7 +33,7 @@
 use GlpiPlugin\Ideabox\Ideabox;
 
 $AJAX_INCLUDE = 1;
-header("Content-Type: text/html; charset=UTF-8");
+header("Content-Type: application/json; charset=UTF-8");
 Html::header_nocache();
 
 Session::checkLoginUser();

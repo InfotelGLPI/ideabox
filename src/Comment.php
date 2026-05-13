@@ -146,7 +146,7 @@ class Comment extends CommonDBChild
     public function prepareInputForUpdate($input)
     {
         if (Session::getCurrentInterface() != 'central'
-            && $input['users_id'] != Session::getLoginUserID()) {
+            && $this->fields['users_id'] != Session::getLoginUserID()) {
             Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
             return false;
         }
@@ -471,7 +471,7 @@ class Comment extends CommonDBChild
 
                 echo "<td class='left'>";
                 echo "<a href='" . $CFG_GLPI["root_doc"] . "/plugins/ideabox/front/comment.form.php?id=" . $data["id"] . "&amp;plugin_ideabox_ideaboxes_id=" . $data["plugin_ideabox_ideaboxes_id"] . "'>";
-                echo $data["name"];
+                echo htmlescape($data["name"]);
                 if ($_SESSION["glpiis_ids_visible"] || empty($data["name"])) {
                     echo " (" . $data["id"] . ")";
                 }

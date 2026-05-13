@@ -56,7 +56,7 @@ if ($idea->canView() || Session::haveRight("config", UPDATE)) {
             $comment = Config::displayField($config, 'comment');
             if (!empty($comment)) {
                 echo "<tr class='tab_bg_1'><td class='center'>";
-                echo $comment;
+                echo htmlescape($comment);
                 echo "</td></tr>";
             }
 
