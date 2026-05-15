@@ -776,39 +776,28 @@ HTML;
                     'users_id' => 0,
                     'interface' => 'central']
             );
-        }
 
-        if (!$DB->fieldExists($table, "state")) {
-            $migration->addField($table, "state", "int {$default_key_sign} NOT NULL DEFAULT '1'");
-            $migration->migrationOneTable($table);
-        }
+            // Notifications
+            $options_notif        = ['itemtype' => self::class,
+                'name' => 'Idea'];
+            $DB->insert(
+                "glpi_notificationtemplates",
+                $options_notif
+            );
 
-        if (!$DB->fieldExists($table, "is_recursive")) {
-            $migration->addField($table, "is_recursive", "tinyint NOT NULL DEFAULT '0'");
-            $migration->migrationOneTable($table);
-        }
+            foreach ($DB->request([
+                'FROM' => 'glpi_notificationtemplates',
+                'WHERE' => $options_notif]) as $data) {
+                $templates_id = $data['id'];
 
-        // Notifications
-        $options_notif        = ['itemtype' => self::class,
-            'name' => 'Idea'];
-        $DB->insert(
-            "glpi_notificationtemplates",
-            $options_notif
-        );
+                if ($templates_id) {
 
-        foreach ($DB->request([
-            'FROM' => 'glpi_notificationtemplates',
-            'WHERE' => $options_notif]) as $data) {
-            $templates_id = $data['id'];
-
-            if ($templates_id) {
-
-                $DB->insert(
-                    "glpi_notificationtemplatetranslations",
-                    [
-                        'notificationtemplates_id' => $templates_id,
-                        'subject' => '##lang.ideabox.title##',
-                        'content_text' => '##lang.ideabox.url## : ##ideabox.url##
+                    $DB->insert(
+                        "glpi_notificationtemplatetranslations",
+                        [
+                            'notificationtemplates_id' => $templates_id,
+                            'subject' => '##lang.ideabox.title##',
+                            'content_text' => '##lang.ideabox.url## : ##ideabox.url##
                        ##lang.ideabox.entity## : ##ideabox.entity##
                        ##IFideabox.name####lang.ideabox.name## : ##ideabox.name##
                        ##ENDIFideabox.name##
@@ -832,263 +821,276 @@ HTML;
                        ##IFcomment.comment####lang.comment.comment## : ##comment.comment####ENDIFcomment.comment##
                        -------
                        ##ENDFOREACHcomments##',
-                        'content_html' => '&lt;p&gt;&lt;strong&gt;##lang.ideabox.url##&lt;/strong&gt; : &lt;a href=\"##ideabox.url##\"&gt;##ideabox.url##&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;##lang.ideabox.entity##&lt;/strong&gt; : ##ideabox.entity##&lt;br /&gt; ##IFideabox.name##&lt;strong&gt;##lang.ideabox.name##&lt;/strong&gt; : ##ideabox.name####ENDIFideabox.name##&lt;br /&gt;&lt;br /&gt; ##IFideabox.comment##&lt;strong&gt;##lang.ideabox.comment##&lt;/strong&gt; : ##ideabox.comment####ENDIFideabox.comment##&lt;br /&gt;&lt;br /&gt;##FOREACHupdates##----------&lt;br /&gt;&lt;strong&gt;##lang.update.title## :&lt;/strong&gt;&lt;br /&gt;##IFupdate.name##&lt;strong&gt;##lang.ideabox.name##&lt;/strong&gt; : ##update.name####ENDIFupdate.name##&lt;br /&gt;##IFupdate.comment##&lt;br /&gt;&lt;strong&gt;##lang.ideabox.comment##&lt;/strong&gt; : ##update.comment##&lt;br /&gt;##ENDIFupdate.comment##&lt;br /&gt;----------##ENDFOREACHupdates##&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;##lang.comment.title## :&lt;/strong&gt;&lt;br /&gt;----------&lt;br /&gt;##FOREACHcomments####IFcomment.name##&lt;strong&gt;##lang.comment.name##&lt;/strong&gt; : ##comment.name####ENDIFcomment.name##&lt;br /&gt;##IFcomment.author##&lt;strong&gt;##lang.comment.author##&lt;/strong&gt; : ##comment.author####ENDIFcomment.author##&lt;br /&gt;##IFcomment.datecomment##&lt;strong&gt;##lang.comment.datecomment##&lt;/strong&gt; : ##comment.datecomment####ENDIFcomment.datecomment##&lt;br /&gt;##IFcomment.comment##&lt;strong&gt;##lang.comment.comment##&lt;/strong&gt; : ##comment.comment####ENDIFcomment.comment##&lt;br /&gt;----------&lt;br /&gt;##ENDFOREACHcomments##&lt;/p&gt;',
-                    ]
-                );
+                            'content_html' => '&lt;p&gt;&lt;strong&gt;##lang.ideabox.url##&lt;/strong&gt; : &lt;a href=\"##ideabox.url##\"&gt;##ideabox.url##&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;##lang.ideabox.entity##&lt;/strong&gt; : ##ideabox.entity##&lt;br /&gt; ##IFideabox.name##&lt;strong&gt;##lang.ideabox.name##&lt;/strong&gt; : ##ideabox.name####ENDIFideabox.name##&lt;br /&gt;&lt;br /&gt; ##IFideabox.comment##&lt;strong&gt;##lang.ideabox.comment##&lt;/strong&gt; : ##ideabox.comment####ENDIFideabox.comment##&lt;br /&gt;&lt;br /&gt;##FOREACHupdates##----------&lt;br /&gt;&lt;strong&gt;##lang.update.title## :&lt;/strong&gt;&lt;br /&gt;##IFupdate.name##&lt;strong&gt;##lang.ideabox.name##&lt;/strong&gt; : ##update.name####ENDIFupdate.name##&lt;br /&gt;##IFupdate.comment##&lt;br /&gt;&lt;strong&gt;##lang.ideabox.comment##&lt;/strong&gt; : ##update.comment##&lt;br /&gt;##ENDIFupdate.comment##&lt;br /&gt;----------##ENDFOREACHupdates##&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;##lang.comment.title## :&lt;/strong&gt;&lt;br /&gt;----------&lt;br /&gt;##FOREACHcomments####IFcomment.name##&lt;strong&gt;##lang.comment.name##&lt;/strong&gt; : ##comment.name####ENDIFcomment.name##&lt;br /&gt;##IFcomment.author##&lt;strong&gt;##lang.comment.author##&lt;/strong&gt; : ##comment.author####ENDIFcomment.author##&lt;br /&gt;##IFcomment.datecomment##&lt;strong&gt;##lang.comment.datecomment##&lt;/strong&gt; : ##comment.datecomment####ENDIFcomment.datecomment##&lt;br /&gt;##IFcomment.comment##&lt;strong&gt;##lang.comment.comment##&lt;/strong&gt; : ##comment.comment####ENDIFcomment.comment##&lt;br /&gt;----------&lt;br /&gt;##ENDFOREACHcomments##&lt;/p&gt;',
+                        ]
+                    );
 
-                $DB->insert(
-                    "glpi_notifications",
-                    [
+                    $DB->insert(
+                        "glpi_notifications",
+                        [
+                            'name' => 'New Idea',
+                            'entities_id' => 0,
+                            'itemtype' => self::class,
+                            'event' => 'new',
+                            'is_recursive' => 1,
+                        ]
+                    );
+                    $options_notif        = ['itemtype' => self::class,
                         'name' => 'New Idea',
-                        'entities_id' => 0,
-                        'itemtype' => self::class,
-                        'event' => 'new',
-                        'is_recursive' => 1,
-                    ]
-                );
-                $options_notif        = ['itemtype' => self::class,
-                    'name' => 'New Idea',
-                    'event' => 'new'];
+                        'event' => 'new'];
 
-                foreach ($DB->request([
-                    'FROM' => 'glpi_notifications',
-                    'WHERE' => $options_notif]) as $data_notif) {
-                    $notification = $data_notif['id'];
-                    if ($notification) {
-                        $DB->insert(
-                            "glpi_notifications_notificationtemplates",
-                            [
-                                'notifications_id' => $notification,
-                                'mode' => 'mailing',
-                                'notificationtemplates_id' => $templates_id,
-                            ]
-                        );
+                    foreach ($DB->request([
+                        'FROM' => 'glpi_notifications',
+                        'WHERE' => $options_notif]) as $data_notif) {
+                        $notification = $data_notif['id'];
+                        if ($notification) {
+                            $DB->insert(
+                                "glpi_notifications_notificationtemplates",
+                                [
+                                    'notifications_id' => $notification,
+                                    'mode' => 'mailing',
+                                    'notificationtemplates_id' => $templates_id,
+                                ]
+                            );
+                        }
                     }
-                }
 
-                $DB->insert(
-                    "glpi_notifications",
-                    [
+                    $DB->insert(
+                        "glpi_notifications",
+                        [
+                            'name' => 'Update Idea',
+                            'entities_id' => 0,
+                            'itemtype' => self::class,
+                            'event' => 'update',
+                            'is_recursive' => 1,
+                        ]
+                    );
+                    $options_notif        = ['itemtype' => self::class,
                         'name' => 'Update Idea',
-                        'entities_id' => 0,
-                        'itemtype' => self::class,
-                        'event' => 'update',
-                        'is_recursive' => 1,
-                    ]
-                );
-                $options_notif        = ['itemtype' => self::class,
-                    'name' => 'Update Idea',
-                    'event' => 'update'];
+                        'event' => 'update'];
 
-                foreach ($DB->request([
-                    'FROM' => 'glpi_notifications',
-                    'WHERE' => $options_notif]) as $data_notif) {
-                    $notification = $data_notif['id'];
-                    if ($notification) {
-                        $DB->insert(
-                            "glpi_notifications_notificationtemplates",
-                            [
-                                'notifications_id' => $notification,
-                                'mode' => 'mailing',
-                                'notificationtemplates_id' => $templates_id,
-                            ]
-                        );
+                    foreach ($DB->request([
+                        'FROM' => 'glpi_notifications',
+                        'WHERE' => $options_notif]) as $data_notif) {
+                        $notification = $data_notif['id'];
+                        if ($notification) {
+                            $DB->insert(
+                                "glpi_notifications_notificationtemplates",
+                                [
+                                    'notifications_id' => $notification,
+                                    'mode' => 'mailing',
+                                    'notificationtemplates_id' => $templates_id,
+                                ]
+                            );
+                        }
                     }
-                }
 
-                $DB->insert(
-                    "glpi_notifications",
-                    [
+                    $DB->insert(
+                        "glpi_notifications",
+                        [
+                            'name' => 'Delete Idea',
+                            'entities_id' => 0,
+                            'itemtype' => self::class,
+                            'event' => 'delete',
+                            'is_recursive' => 1,
+                        ]
+                    );
+                    $options_notif        = ['itemtype' => self::class,
                         'name' => 'Delete Idea',
-                        'entities_id' => 0,
-                        'itemtype' => self::class,
-                        'event' => 'delete',
-                        'is_recursive' => 1,
-                    ]
-                );
-                $options_notif        = ['itemtype' => self::class,
-                    'name' => 'Delete Idea',
-                    'event' => 'delete'];
+                        'event' => 'delete'];
 
-                foreach ($DB->request([
-                    'FROM' => 'glpi_notifications',
-                    'WHERE' => $options_notif]) as $data_notif) {
-                    $notification = $data_notif['id'];
-                    if ($notification) {
-                        $DB->insert(
-                            "glpi_notifications_notificationtemplates",
-                            [
-                                'notifications_id' => $notification,
-                                'mode' => 'mailing',
-                                'notificationtemplates_id' => $templates_id,
-                            ]
-                        );
+                    foreach ($DB->request([
+                        'FROM' => 'glpi_notifications',
+                        'WHERE' => $options_notif]) as $data_notif) {
+                        $notification = $data_notif['id'];
+                        if ($notification) {
+                            $DB->insert(
+                                "glpi_notifications_notificationtemplates",
+                                [
+                                    'notifications_id' => $notification,
+                                    'mode' => 'mailing',
+                                    'notificationtemplates_id' => $templates_id,
+                                ]
+                            );
+                        }
                     }
-                }
 
-                $DB->insert(
-                    "glpi_notifications",
-                    [
-                        'name' => 'New comment of idea',
-                        'entities_id' => 0,
-                        'itemtype' => Comment::class,
-                        'event' => 'newcomment',
-                        'is_recursive' => 1,
-                    ]
-                );
-                $options_notif        = ['itemtype' => Comment::class,
-                    'name' => 'New comment of Idea',
-                    'event' => 'newcomment'];
+                    $DB->insert(
+                        "glpi_notifications",
+                        [
+                            'name' => 'New comment of idea',
+                            'entities_id' => 0,
+                            'itemtype' => Comment::class,
+                            'event' => 'newcomment',
+                            'is_recursive' => 1,
+                        ]
+                    );
+                    $options_notif        = ['itemtype' => Comment::class,
+                        'name' => 'New comment of Idea',
+                        'event' => 'newcomment'];
 
-                foreach ($DB->request([
-                    'FROM' => 'glpi_notifications',
-                    'WHERE' => $options_notif]) as $data_notif) {
-                    $notification = $data_notif['id'];
-                    if ($notification) {
-                        $DB->insert(
-                            "glpi_notifications_notificationtemplates",
-                            [
-                                'notifications_id' => $notification,
-                                'mode' => 'mailing',
-                                'notificationtemplates_id' => $templates_id,
-                            ]
-                        );
+                    foreach ($DB->request([
+                        'FROM' => 'glpi_notifications',
+                        'WHERE' => $options_notif]) as $data_notif) {
+                        $notification = $data_notif['id'];
+                        if ($notification) {
+                            $DB->insert(
+                                "glpi_notifications_notificationtemplates",
+                                [
+                                    'notifications_id' => $notification,
+                                    'mode' => 'mailing',
+                                    'notificationtemplates_id' => $templates_id,
+                                ]
+                            );
+                        }
                     }
-                }
 
-                $DB->insert(
-                    "glpi_notifications",
-                    [
+                    $DB->insert(
+                        "glpi_notifications",
+                        [
+                            'name' => 'Update comment of idea',
+                            'entities_id' => 0,
+                            'itemtype' => Comment::class,
+                            'event' => 'updatecomment',
+                            'is_recursive' => 1,
+                        ]
+                    );
+                    $options_notif        = ['itemtype' => Comment::class,
                         'name' => 'Update comment of idea',
-                        'entities_id' => 0,
-                        'itemtype' => Comment::class,
-                        'event' => 'updatecomment',
-                        'is_recursive' => 1,
-                    ]
-                );
-                $options_notif        = ['itemtype' => Comment::class,
-                    'name' => 'Update comment of idea',
-                    'event' => 'updatecomment'];
+                        'event' => 'updatecomment'];
 
-                foreach ($DB->request([
-                    'FROM' => 'glpi_notifications',
-                    'WHERE' => $options_notif]) as $data_notif) {
-                    $notification = $data_notif['id'];
-                    if ($notification) {
-                        $DB->insert(
-                            "glpi_notifications_notificationtemplates",
-                            [
-                                'notifications_id' => $notification,
-                                'mode' => 'mailing',
-                                'notificationtemplates_id' => $templates_id,
-                            ]
-                        );
+                    foreach ($DB->request([
+                        'FROM' => 'glpi_notifications',
+                        'WHERE' => $options_notif]) as $data_notif) {
+                        $notification = $data_notif['id'];
+                        if ($notification) {
+                            $DB->insert(
+                                "glpi_notifications_notificationtemplates",
+                                [
+                                    'notifications_id' => $notification,
+                                    'mode' => 'mailing',
+                                    'notificationtemplates_id' => $templates_id,
+                                ]
+                            );
+                        }
                     }
-                }
 
-                $DB->insert(
-                    "glpi_notifications",
-                    [
+                    $DB->insert(
+                        "glpi_notifications",
+                        [
+                            'name' => 'Delete comment of idea',
+                            'entities_id' => 0,
+                            'itemtype' => Comment::class,
+                            'event' => 'deletecomment',
+                            'is_recursive' => 1,
+                        ]
+                    );
+                    $options_notif        = ['itemtype' => Comment::class,
                         'name' => 'Delete comment of idea',
-                        'entities_id' => 0,
-                        'itemtype' => Comment::class,
-                        'event' => 'deletecomment',
-                        'is_recursive' => 1,
-                    ]
-                );
-                $options_notif        = ['itemtype' => Comment::class,
-                    'name' => 'Delete comment of idea',
-                    'event' => 'deletecomment'];
+                        'event' => 'deletecomment'];
 
-                foreach ($DB->request([
-                    'FROM' => 'glpi_notifications',
-                    'WHERE' => $options_notif]) as $data_notif) {
-                    $notification = $data_notif['id'];
-                    if ($notification) {
-                        $DB->insert(
-                            "glpi_notifications_notificationtemplates",
-                            [
-                                'notifications_id' => $notification,
-                                'mode' => 'mailing',
-                                'notificationtemplates_id' => $templates_id,
-                            ]
-                        );
+                    foreach ($DB->request([
+                        'FROM' => 'glpi_notifications',
+                        'WHERE' => $options_notif]) as $data_notif) {
+                        $notification = $data_notif['id'];
+                        if ($notification) {
+                            $DB->insert(
+                                "glpi_notifications_notificationtemplates",
+                                [
+                                    'notifications_id' => $notification,
+                                    'mode' => 'mailing',
+                                    'notificationtemplates_id' => $templates_id,
+                                ]
+                            );
+                        }
                     }
                 }
             }
-        }
 
-        //DisplayPreferences Migration
-        $classes = ['PluginIdeaboxIdeabox' => self::class];
+            //DisplayPreferences Migration
+            $classes = ['PluginIdeaboxIdeabox' => self::class];
 
-        foreach ($classes as $old => $new) {
-            $displayusers = $DB->request([
-                'SELECT' => [
-                    'users_id'
-                ],
-                'DISTINCT' => true,
-                'FROM' => 'glpi_displaypreferences',
-                'WHERE' => [
-                    'itemtype' => $old,
-                ],
-            ]);
+            foreach ($classes as $old => $new) {
+                $displayusers = $DB->request([
+                    'SELECT' => [
+                        'users_id'
+                    ],
+                    'DISTINCT' => true,
+                    'FROM' => 'glpi_displaypreferences',
+                    'WHERE' => [
+                        'itemtype' => $old,
+                    ],
+                ]);
 
-            if (count($displayusers) > 0) {
-                foreach ($displayusers as $displayuser) {
-                    $iterator = $DB->request([
-                        'SELECT' => [
-                            'num',
-                            'id'
-                        ],
-                        'FROM' => 'glpi_displaypreferences',
-                        'WHERE' => [
-                            'itemtype' => $old,
-                            'users_id' => $displayuser['users_id'],
-                            'interface' => 'central'
-                        ],
-                    ]);
+                if (count($displayusers) > 0) {
+                    foreach ($displayusers as $displayuser) {
+                        $iterator = $DB->request([
+                            'SELECT' => [
+                                'num',
+                                'id'
+                            ],
+                            'FROM' => 'glpi_displaypreferences',
+                            'WHERE' => [
+                                'itemtype' => $old,
+                                'users_id' => $displayuser['users_id'],
+                                'interface' => 'central'
+                            ],
+                        ]);
 
-                    if (count($iterator) > 0) {
-                        foreach ($iterator as $data) {
-                            $iterator2 = $DB->request([
-                                'SELECT' => [
-                                    'id'
-                                ],
-                                'FROM' => 'glpi_displaypreferences',
-                                'WHERE' => [
-                                    'itemtype' => $new,
-                                    'users_id' => $displayuser['users_id'],
-                                    'num' => $data['num'],
-                                    'interface' => 'central'
-                                ],
-                            ]);
-                            if (count($iterator2) > 0) {
-                                foreach ($iterator2 as $dataid) {
-                                    $query = $DB->buildDelete(
+                        if (count($iterator) > 0) {
+                            foreach ($iterator as $data) {
+                                $iterator2 = $DB->request([
+                                    'SELECT' => [
+                                        'id'
+                                    ],
+                                    'FROM' => 'glpi_displaypreferences',
+                                    'WHERE' => [
+                                        'itemtype' => $new,
+                                        'users_id' => $displayuser['users_id'],
+                                        'num' => $data['num'],
+                                        'interface' => 'central'
+                                    ],
+                                ]);
+                                if (count($iterator2) > 0) {
+                                    foreach ($iterator2 as $dataid) {
+                                        $query = $DB->buildDelete(
+                                            'glpi_displaypreferences',
+                                            [
+                                                'id' => $dataid['id'],
+                                            ]
+                                        );
+                                        $DB->doQuery($query);
+                                    }
+                                } else {
+                                    $query = $DB->buildUpdate(
                                         'glpi_displaypreferences',
                                         [
-                                            'id' => $dataid['id'],
+                                            'itemtype' => $new,
+                                        ],
+                                        [
+                                            'id' => $data['id'],
                                         ]
                                     );
                                     $DB->doQuery($query);
                                 }
-                            } else {
-                                $query = $DB->buildUpdate(
-                                    'glpi_displaypreferences',
-                                    [
-                                        'itemtype' => $new,
-                                    ],
-                                    [
-                                        'id' => $data['id'],
-                                    ]
-                                );
-                                $DB->doQuery($query);
                             }
                         }
                     }
                 }
             }
         }
+
+        if (!$DB->fieldExists($table, "state")) {
+            $migration->addField($table, "state", "int {$default_key_sign} NOT NULL DEFAULT '1'");
+            $migration->migrationOneTable($table);
+        }
+
+        if (!$DB->fieldExists($table, "is_recursive")) {
+            $migration->addField($table, "is_recursive", "tinyint NOT NULL DEFAULT '0'");
+            $migration->migrationOneTable($table);
+        }
+
+
     }
 
     public static function uninstall()
