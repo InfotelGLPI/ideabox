@@ -1,32 +1,31 @@
 <?php
-/*
- * @version $Id: HEADER 15930 2011-10-30 15:47:55Z tsmr $
- -------------------------------------------------------------------------
- ideaxox plugin for GLPI
- Copyright (C) 2022-2023 by the ideaxox Development Team.
 
- https://github.com/InfotelGLPI/ideaxox
+/*
+ -------------------------------------------------------------------------
+ ideabox plugin for GLPI
+ Copyright (C) 2025-2026 by the ideabox Development Team.
+
+ https://github.com/InfotelGLPI/ideabox
  -------------------------------------------------------------------------
 
  LICENSE
 
- This file is part of ideaxox.
+ This file is part of ideabox.
 
- ideaxox is free software; you can redistribute it and/or modify
+ ideabox is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 
- ideaxox is distributed in the hope that it will be useful,
+ ideabox is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with ideaxox. If not, see <http://www.gnu.org/licenses/>.
+ along with ideabox. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-
 
 namespace GlpiPlugin\Ideabox;
 
