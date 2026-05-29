@@ -362,228 +362,143 @@ class Ideabox extends CommonDBTM
     {
         global $DB;
 
-
         $criteria = [
-            'SELECT' => 'id',
-            'FROM' => 'glpi_plugin_ideabox_ideaboxes',
-            'WHERE' => [
-                'is_deleted' => 0,
-            ],
+            'SELECT'  => 'id',
+            'FROM'    => 'glpi_plugin_ideabox_ideaboxes',
+            'WHERE'   => ['is_deleted' => 0],
             'ORDERBY' => 'date_idea DESC',
         ];
 
         if (isset($params['id'])) {
-            $criteria['WHERE'] = $criteria['WHERE'] + ['id' => $params['id']];
+            $criteria['WHERE']['id'] = $params['id'];
         }
-
-        $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
-            'glpi_plugin_ideabox_ideaboxes'
-        );
+        $criteria['WHERE'] += getEntitiesRestrictCriteria('glpi_plugin_ideabox_ideaboxes');
 
         $iterator = $DB->request($criteria);
-
-        if (count($iterator) > 0) {
-            echo "<div class='topiclist-topics' style='display: flex;flex-wrap: wrap;'>";
-            foreach ($iterator as $array) {
-                $idea = new self();
-                $idea->getFromDB($array['id']);
-
-                $comments = [];
-
-                $criteriac = [
-                    'SELECT' => '*',
-                    'FROM' => 'glpi_plugin_ideabox_comments',
-                    'WHERE' => [
-                        'plugin_ideabox_ideaboxes_id' => $idea->getID(),
-                    ],
-                ];
-                $iteratorc = $DB->request($criteriac);
-
-                if (count($iteratorc) > 0) {
-                    foreach ($iteratorc as $array2) {
-                        $comments[$array2['id']]['users_id'] = $array2['users_id'];
-                        $comments[$array2['id']]['name'] = $array2['name'];
-                        $comments[$array2['id']]['comment'] = $array2['comment'];
-                        $comments[$array2['id']]['date_comment'] = $array2['date_comment'];
-                    }
-                }
-
-                $votes = [];
-
-                $criteriav = [
-                    'SELECT' => '*',
-                    'FROM' => 'glpi_plugin_ideabox_votes',
-                    'WHERE' => [
-                        'plugin_ideabox_ideaboxes_id' => $idea->getID(),
-                    ],
-                ];
-                $iteratorv = $DB->request($criteriav);
-
-                if (count($iteratorv) > 0) {
-                    foreach ($iteratorv as $array3) {
-                        $votes[$array3['id']]['users_id'] = $array3['users_id'];
-                        $votes[$array3['id']]['date_comment'] = $array3['date_vote'];
-                    }
-                }
-                $id = $idea->getID();
-                echo "<div id='anchor$id' class='topic-item topic-item-medium-list' style='flex: 1 0 45%;position: relative;'>";
-
-                echo "<div class='topic-avatar'>";
-                $user = new User();
-                $user->getFromDB($idea->fields['users_id']);
-                $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
-                $style = !empty($thumbnail_url)
-                    ? "background-image: url('" . htmlspecialchars($thumbnail_url, ENT_QUOTES) . "')"
-                    : ("background-color: " . htmlspecialchars($user->getUserInitialsBgColor(), ENT_QUOTES));
-                $user_name = formatUserName(
-                    $user->getID(),
-                    $user->fields['name'],
-                    $user->fields['realname'],
-                    $user->fields['firstname']
-                );
-                echo '<span class="avatar avatar-md rounded" style="' . $style . '" title="' . htmlspecialchars($user_name, ENT_QUOTES) . '">';
-                if (empty($thumbnail_url)) {
-                    echo htmlspecialchars($user->getUserInitials(), ENT_QUOTES);
-                }
-                echo "</span>";
-                echo "</div>";
-
-                echo '<div class="topic-votes pull-right">';
-                echo '<span title="" class="topic-label topic-label-success" >';
-                echo '+' . count($votes);
-                echo "</span>";
-                echo "</div>";
-
-                echo "<div class='topic-status'>";
-                $color = self::getStateColor($idea->fields['state']);
-                echo "<span class='topic-label topic-label-sm' style='background-color:" . $color . "'>";
-                echo self::getStateName($idea->fields['state']);
-                echo "</div>";
-
-
-                echo "<h3 class='topic-header'>";
-                echo $idea->getLink();
-                echo "</h3>";
-
-                echo "<div class='topic-details'>";
-                echo '<i class="ti ti-bulb icon-source"></i>';
-
-                echo getUserName($idea->fields['users_id'], 0, true);
-                echo ' - <span class="date-created">';
-                echo Html::timestampToRelativeStr($idea->fields['date_idea']);
-
-                if (count($comments) > 0) {
-                    $last_comment = end($comments);
-
-                    echo "</span>";
-                    echo ' - <span class="topic-updated-info">';
-
-                    echo __s('Commented by', 'ideabox');
-                    echo "&nbsp;" . getUserName($last_comment['users_id'], 0, true);
-                    echo ' - <span class="date-updated">';
-
-                    echo Html::timestampToRelativeStr($last_comment['date_comment']);
-                    echo "</span>";
-                    echo ' - <span class="topic-comment-count">';
-
-                    $id = $idea->getID();
-                    echo "<button class='submit btn btn-default mb-2' data-bs-toggle='modal' data-bs-target='#seecomments$id'>"
-                        . "<i class='ti ti-message'></i><span>" . count($comments) . "</span></button>";
-
-                    echo Ajax::createIframeModalWindow(
-                        'seecomments' . $id,
-                        PLUGIN_IDEABOX_WEBDIR . '/front/comment.php?plugin_ideabox_ideaboxes_id=' . $idea->getID(),
-                        ['title'         => __s("See comments", 'ideabox'),
-                            'display'       => false,
-                            //                            'width'         => 550,
-                            //                            'height'        => 850,
-                            'reloadonclose' => true]
-                    );
-
-                    echo "</span>";
-                } else {
-                    echo "&nbsp;";
-                    $target = $idea->getFormURL();
-                    $target .= "?forcetab=GlpiPlugin\Ideabox\Comment$1&id=" . $idea->getID();
-                    Html::showSimpleForm(
-                        $target,
-                        'addcomment',
-                        '',
-                        ['plugin_ideabox_ideaboxes_id' => $idea->getID()],
-                        'ti-message-plus',
-                        "class='btn btn-default'"
-                    );
-                }
-
-                echo "</div>";
-
-                echo '<div class="topic-text ue-content">';
-
-                $description = $idea->fields['comment'];
-
-                if (strlen($idea->fields['comment']) > 10) {
-                    echo "<a href=\"#anchor$id\" onclick=\"$(this).hide();$('#$id').show();\">" . __s(
-                        'Read description',
-                        'ideabox'
-                    ) . "</a>";
-                    echo '<div style="display:none;padding-bottom: 10px;" id="' . $id . '">' . RichText::getEnhancedHtml(
-                        $description
-                    ) . '</div>';
-                } else {
-                    echo RichText::getEnhancedHtml($description);
-                }
-
-                echo '</div>';
-
-                echo '<div class="actions-bar">';
-                echo '<div style="bottom: 5px;position: absolute">';
-                echo '<span class="vote-text hidden-xs">';
-                echo __s('Add your vote', 'ideabox');
-                echo '&nbsp;</span>';
-                $already_voted = 0;
-                $target = $idea->getFormURL();
-                $vote = new Vote();
-                if ($vote->getFromDBByCrit(['users_id' => Session::getLoginUserID(),'plugin_ideabox_ideaboxes_id' =>  $idea->getID()])) {
-                    $already_voted = 1;
-                }
-                if ($already_voted == 0) {
-
-                    Html::showSimpleForm(
-                        $target,
-                        'vote',
-                        count($votes),
-                        ['id' => $idea->getID()],
-                        'ti-thumb-up',
-                        "class='btn btn-default'"
-                    );
-                } else {
-                    Html::showSimpleForm(
-                        $target,
-                        'cancelvote',
-                        _x('button', 'Cancel', 'ideabox'),
-                        ['id' => $idea->getID()],
-                        'ti-circle-x',
-                        "class='btn btn-default'"
-                    );
-                }
-                echo "</div>";
-
-
-                $target = "";
-                Html::showSimpleForm(
-                    $target,
-                    'suscribe',
-                    _x('button', 'Suscribe', 'ideabox'),
-                    ['id' => $idea->getID()],
-                    'ti-mail',
-                    "style='float: right;position: absolute;bottom: 5px;right: 5px;color: #CCC;' class='btn btn-default'"
-                );
-
-                echo "</div>";
-                echo "</div>";
-            }
-            echo "</div>";
+        if (count($iterator) === 0) {
+            return;
         }
+
+        $ideas = [];
+        foreach ($iterator as $row) {
+            $idea = new self();
+            $idea->getFromDB($row['id']);
+            $id = $idea->getID();
+
+            $comments_raw = [];
+            foreach ($DB->request([
+                'SELECT'  => '*',
+                'FROM'    => 'glpi_plugin_ideabox_comments',
+                'WHERE'   => ['plugin_ideabox_ideaboxes_id' => $id],
+                'ORDERBY' => 'date_comment ASC',
+            ]) as $c) {
+                $comments_raw[] = $c;
+            }
+
+            $votes_count = count($DB->request([
+                'SELECT' => 'id',
+                'FROM'   => 'glpi_plugin_ideabox_votes',
+                'WHERE'  => ['plugin_ideabox_ideaboxes_id' => $id],
+            ]));
+
+            $user = new User();
+            $user->getFromDB($idea->fields['users_id']);
+            $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
+            $avatar_style = !empty($thumbnail_url)
+                ? "background-image:url('" . htmlspecialchars($thumbnail_url, ENT_QUOTES) . "')"
+                : 'background-color:' . htmlspecialchars($user->getUserInitialsBgColor(), ENT_QUOTES);
+
+            $already_voted = (new Vote())->getFromDBByCrit([
+                'users_id'                    => Session::getLoginUserID(),
+                'plugin_ideabox_ideaboxes_id' => $id,
+            ]);
+
+            ob_start();
+            Html::showSimpleForm(
+                $idea->getFormURL(),
+                $already_voted ? 'cancelvote' : 'vote',
+                $already_voted ? _x('button', 'Cancel', 'ideabox') : $votes_count,
+                ['id' => $id],
+                $already_voted ? 'ti-circle-x' : 'ti-thumb-up',
+                "class='btn btn-sm " . ($already_voted ? 'btn-ghost-danger' : 'btn-ghost-success') . "'"
+            );
+            $vote_form = ob_get_clean();
+
+            ob_start();
+            Html::showSimpleForm(
+                '',
+                'suscribe',
+                _x('button', 'Suscribe', 'ideabox'),
+                ['id' => $id],
+                'ti-mail',
+                "class='btn btn-sm btn-ghost-secondary'"
+            );
+            $subscribe_form = ob_get_clean();
+
+            $comments_modal   = '';
+            $add_comment_form = '';
+            if (count($comments_raw) > 0) {
+                $comments_modal = Ajax::createIframeModalWindow(
+                    'seecomments' . $id,
+                    PLUGIN_IDEABOX_WEBDIR . '/front/comment.php?plugin_ideabox_ideaboxes_id=' . $id,
+                    ['title' => __s('See comments', 'ideabox'), 'display' => false, 'reloadonclose' => true]
+                );
+            } else {
+                ob_start();
+                Html::showSimpleForm(
+                    $idea->getFormURL() . '?forcetab=GlpiPlugin\Ideabox\Comment$1&id=' . $id,
+                    'addcomment',
+                    '',
+                    ['plugin_ideabox_ideaboxes_id' => $id],
+                    'ti-message-plus',
+                    "class='btn btn-sm btn-ghost-secondary'"
+                );
+                $add_comment_form = ob_get_clean();
+            }
+
+            $last_comment = null;
+            if (count($comments_raw) > 0) {
+                $lc = end($comments_raw);
+                $last_comment = [
+                    'user_name'     => getUserName($lc['users_id'], 0),
+                    'date_relative' => Html::timestampToRelativeStr($lc['date_comment']),
+                ];
+            }
+
+            $description      = $idea->fields['comment'];
+            $description_long = strlen($description) > 10;
+
+            $ideas[] = [
+                'id'               => $id,
+                'link'             => $idea->getLink(),
+                'user_name'        => htmlspecialchars(
+                    formatUserName($user->getID(), $user->fields['name'], $user->fields['realname'], $user->fields['firstname']),
+                    ENT_QUOTES
+                ),
+                'avatar_style'     => $avatar_style,
+                'user_initials'    => htmlspecialchars($user->getUserInitials(), ENT_QUOTES),
+                'has_thumbnail'    => !empty($thumbnail_url),
+                'date_relative'    => Html::timestampToRelativeStr($idea->fields['date_idea']),
+                'state_color'      => self::getStateColor($idea->fields['state']),
+                'state_name'       => self::getStateName($idea->fields['state']),
+                'description'      => RichText::getEnhancedHtml($description),
+                'description_long' => $description_long,
+                'votes_count'      => $votes_count,
+                'has_voted'        => (bool) $already_voted,
+                'comments_count'   => count($comments_raw),
+                'last_comment'     => $last_comment,
+                'vote_form'        => $vote_form,
+                'subscribe_form'   => $subscribe_form,
+                'comments_modal'   => $comments_modal,
+                'add_comment_form' => $add_comment_form,
+                'label_read_desc'  => __s('Read description', 'ideabox'),
+                'label_commented_by' => __s('Commented by', 'ideabox'),
+            ];
+        }
+
+        TemplateRenderer::getInstance()->display('@ideabox/ideabox_list.html.twig', [
+            'ideas' => $ideas,
+        ]);
     }
 
 

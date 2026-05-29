@@ -229,96 +229,79 @@ class Comment extends CommonDBChild
             return;
         }
 
-        $criteriac = [
-            'SELECT' => '*',
-            'FROM' => 'glpi_plugin_ideabox_comments',
-            'WHERE' => [
-                'plugin_ideabox_ideaboxes_id' => $ID,
-            ],
+        $raw_comments = [];
+        foreach ($DB->request([
+            'SELECT'  => '*',
+            'FROM'    => 'glpi_plugin_ideabox_comments',
+            'WHERE'   => ['plugin_ideabox_ideaboxes_id' => $ID],
             'ORDERBY' => 'date_comment DESC',
-        ];
-        $iteratorc = $DB->request($criteriac);
-
-        if (count($iteratorc) > 0) {
-            echo '<div class="module module-comments">';
-            echo '<div class="module-body">';
-            echo '<ul class="nav nav-pills" style="margin-bottom: 10px;">';
-            echo '<li>';
-            echo '<div class="text-21">';
-            echo _n('Comment', 'Comments', count($iteratorc), 'ideabox') . '&nbsp;<span class="badge">' . count($iteratorc) . '</span>';
-            echo '</div>';
-            echo '</li>';
-            echo '</ul>';
-            echo '<div class="comments-list" data-comments-order="up" data-topic-id="2049">';
-
-            foreach ($iteratorc as $array2) {
-                echo '<div class="comment-item co0 ">';
-                echo '<div class="topic-avatar">';
-                $user = new User();
-                $user->getFromDB($array2['users_id']);
-                $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
-                $style = !empty($thumbnail_url)
-                    ? "background-image: url('" . htmlspecialchars($thumbnail_url, ENT_QUOTES) . "')"
-                    : ("background-color: " . htmlspecialchars($user->getUserInitialsBgColor(), ENT_QUOTES));
-                $user_name = formatUserName(
-                    $user->getID(),
-                    $user->fields['name'],
-                    $user->fields['realname'],
-                    $user->fields['firstname']
-                );
-                echo '<span class="avatar avatar-md rounded" style="' . $style . '" title="' . htmlspecialchars($user_name, ENT_QUOTES) . '">';
-                if (empty($thumbnail_url)) {
-                    echo htmlspecialchars($user->getUserInitials(), ENT_QUOTES);
-                }
-                echo "</span>";
-                echo "</div>";
-
-                echo '<div class="comment-details">';
-                echo '<i class="fa-fw ti ti-message"></i>&nbsp;';
-
-                echo getUserName($array2['users_id'], 0, true);
-                echo ' - <span class="date-created">';
-                echo Html::timestampToRelativeStr($array2['date_comment']);
-                echo "</span>";
-                echo "</div>";
-
-                echo '<div class="comment-text ue-content">';
-                echo RichText::getEnhancedHtml($array2['comment']);
-                echo "</div>";
-
-                if ($fromidea == false) {
-                    $idea = new self();
-                    $target = $idea->getFormURL();
-                    $target .= "?in_modal=1&plugin_ideabox_ideaboxes_id=" . $ID;
-                    Html::showSimpleForm(
-                        $target,
-                        'addcomment',
-                        _sx('button', 'Post a comment', 'ideabox'),
-                        ['plugin_ideabox_ideaboxes_id' => $ID],
-                        '',
-                        "class='btn btn-default'"
-                    );
-                }
-
-                if ($array2['users_id'] == Session::getLoginUserID()) {
-                    echo "&nbsp;";
-                    $self = new self();
-                    $target = $self->getFormURL();
-                    Html::showSimpleForm(
-                        $target,
-                        'purge',
-                        _sx('button', 'Delete', 'ideabox'),
-                        ['id' => $array2['id']],
-                        '',
-                        "class='btn btn-danger'"
-                    );
-                }
-
-
-                echo "</div>";
-            }
-            echo "</div>";
+        ]) as $row) {
+            $raw_comments[] = $row;
         }
+
+        if (empty($raw_comments)) {
+            return;
+        }
+
+        $comments = [];
+        foreach ($raw_comments as $row) {
+            $user = new User();
+            $user->getFromDB($row['users_id']);
+            $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
+
+            $delete_form = '';
+            if ($row['users_id'] == Session::getLoginUserID()) {
+                ob_start();
+                Html::showSimpleForm(
+                    (new self())->getFormURL(),
+                    'purge',
+                    _sx('button', 'Delete', 'ideabox'),
+                    ['id' => $row['id']],
+                    'ti-trash',
+                    "class='btn btn-sm btn-ghost-danger'"
+                );
+                $delete_form = ob_get_clean();
+            }
+
+            $comments[] = [
+                'avatar_style'  => !empty($thumbnail_url)
+                    ? "background-image:url('" . htmlspecialchars($thumbnail_url, ENT_QUOTES) . "')"
+                    : 'background-color:' . htmlspecialchars($user->getUserInitialsBgColor(), ENT_QUOTES),
+                'user_initials' => htmlspecialchars($user->getUserInitials(), ENT_QUOTES),
+                'has_thumbnail' => !empty($thumbnail_url),
+                'user_name'     => htmlspecialchars(
+                    formatUserName($user->getID(), $user->fields['name'], $user->fields['realname'], $user->fields['firstname']),
+                    ENT_QUOTES
+                ),
+                'user_name_link' => getUserName($row['users_id'], 0, true),
+                'date_relative'  => Html::timestampToRelativeStr($row['date_comment']),
+                'text'           => RichText::getEnhancedHtml($row['comment']),
+                'can_delete'     => $row['users_id'] == Session::getLoginUserID(),
+                'delete_form'    => $delete_form,
+            ];
+        }
+
+        $add_comment_form = '';
+        if (!$fromidea) {
+            ob_start();
+            Html::showSimpleForm(
+                (new self())->getFormURL() . '?in_modal=1&plugin_ideabox_ideaboxes_id=' . $ID,
+                'addcomment',
+                _sx('button', 'Post a comment', 'ideabox'),
+                ['plugin_ideabox_ideaboxes_id' => $ID],
+                'ti-send',
+                "class='btn btn-primary btn-sm'"
+            );
+            $add_comment_form = ob_get_clean();
+        }
+
+        TemplateRenderer::getInstance()->display('@ideabox/comments_list.html.twig', [
+            'comments'         => $comments,
+            'count'            => count($comments),
+            'label_comments'   => _n('comment', 'comments', count($comments), 'ideabox'),
+            'from_idea'        => $fromidea,
+            'add_comment_form' => $add_comment_form,
+        ]);
     }
 
 
