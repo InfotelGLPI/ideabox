@@ -223,6 +223,12 @@ class Comment extends CommonDBChild
     {
         global $DB;
 
+        $parent = new Ideabox();
+        if (!$parent->getFromDB($ID) || !$parent->can($ID, READ)) {
+            echo __s('Access denied');
+            return;
+        }
+
         $criteriac = [
             'SELECT' => '*',
             'FROM' => 'glpi_plugin_ideabox_comments',
@@ -251,17 +257,18 @@ class Comment extends CommonDBChild
                 $user = new User();
                 $user->getFromDB($array2['users_id']);
                 $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
-                $style = !empty($thumbnail_url) ? "background-image: url('$thumbnail_url')" : ("background-color: " . $user->getUserInitialsBgColor(
-                ));
+                $style = !empty($thumbnail_url)
+                    ? "background-image: url('" . htmlspecialchars($thumbnail_url, ENT_QUOTES) . "')"
+                    : ("background-color: " . htmlspecialchars($user->getUserInitialsBgColor(), ENT_QUOTES));
                 $user_name = formatUserName(
                     $user->getID(),
                     $user->fields['name'],
                     $user->fields['realname'],
                     $user->fields['firstname']
                 );
-                echo '<span class="avatar avatar-md rounded" style="' . $style . '" title="' . $user_name . '">';
+                echo '<span class="avatar avatar-md rounded" style="' . $style . '" title="' . htmlspecialchars($user_name, ENT_QUOTES) . '">';
                 if (empty($thumbnail_url)) {
-                    echo $user->getUserInitials();
+                    echo htmlspecialchars($user->getUserInitials(), ENT_QUOTES);
                 }
                 echo "</span>";
                 echo "</div>";

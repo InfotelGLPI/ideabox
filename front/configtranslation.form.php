@@ -29,7 +29,6 @@
 
 use GlpiPlugin\Ideabox\ConfigTranslation;
 
-Session::checkLoginUser();
 Session::checkRight("config", UPDATE);
 
 $translation = new ConfigTranslation();

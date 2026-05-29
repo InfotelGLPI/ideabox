@@ -56,12 +56,11 @@ class Profile extends \Profile
 
     public static function createFirstAccess($ID)
     {
-
         self::addDefaultProfileInfos(
             $ID,
             ['plugin_ideabox'             => 127,
                 'plugin_ideabox_open_ticket' => 1],
-            true
+            false
         );
     }
 

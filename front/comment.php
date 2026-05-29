@@ -30,7 +30,6 @@
 use GlpiPlugin\Ideabox\Comment;
 use GlpiPlugin\Ideabox\Ideabox;
 
-Session::checkLoginUser();
 if (!Session::haveRight('plugin_ideabox', READ)) {
     Html::displayRightError();
     exit;

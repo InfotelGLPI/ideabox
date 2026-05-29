@@ -34,10 +34,22 @@ Session::checkLoginUser();
 
 $allowed_types = [
     \GlpiPlugin\Ideabox\Comment::class,
+    \GlpiPlugin\Ideabox\ConfigTranslation::class,
 ];
 $allowed_parent_types = [
     \GlpiPlugin\Ideabox\Ideabox::class,
+    \GlpiPlugin\Ideabox\Config::class,
 ];
+
+if (
+    isset($_POST['type'])
+    && $_POST['type'] === \GlpiPlugin\Ideabox\ConfigTranslation::class
+    && !Session::haveRight('config', UPDATE)
+) {
+    http_response_code(403);
+    echo __s('Access denied');
+    exit;
+}
 
 if (!isset($_POST['type']) || !in_array($_POST['type'], $allowed_types, true)) {
     return;

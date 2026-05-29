@@ -29,8 +29,6 @@
 
 use GlpiPlugin\Ideabox\Config;
 
-Session::checkLoginUser();
-
 if (Plugin::isPluginActive("ideabox")) {
     Session::checkRight("config", UPDATE);
 

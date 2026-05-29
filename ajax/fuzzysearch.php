@@ -35,4 +35,10 @@ Html::header_nocache();
 
 Session::checkLoginUser();
 
+if (!Session::haveRight('plugin_ideabox', READ)) {
+    http_response_code(403);
+    echo json_encode([]);
+    exit;
+}
+
 echo Ideabox::fuzzySearch($_REQUEST['action']);

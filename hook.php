@@ -49,7 +49,9 @@ function plugin_ideabox_install()
 
     $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/update-4.0.3.sql");
 
-    Profile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
+    foreach (\Profile::getSuperAdminProfilesId() as $profiles_id) {
+        Profile::createFirstAccess($profiles_id);
+    }
 
     return true;
 }
@@ -62,6 +64,10 @@ function plugin_ideabox_uninstall()
     Vote::uninstall();
     Config::uninstall();
     ConfigTranslation::uninstall();
+
+    $profileRight = new ProfileRight();
+    $profileRight->deleteByCriteria(['name' => 'plugin_ideabox']);
+    $profileRight->deleteByCriteria(['name' => 'plugin_ideabox_open_ticket']);
 
     return true;
 }
