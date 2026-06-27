@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-29 12:11+0000\n"
+"POT-Creation-Date: 2026-06-27 09:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,7 +101,7 @@ msgctxt "button"
 msgid "Delete"
 msgstr ""
 
-#: src/Comment.php:351 src/Comment.php:441 src/Ideabox.php:207
+#: src/Ideabox.php:207 src/Comment.php:351 src/Comment.php:441
 #: templates/ideabox_form.html.twig:112 templates/comment_form.html.twig:94
 msgid "Description"
 msgstr ""
@@ -158,11 +158,11 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: src/Comment.php:149 src/Comment.php:190 src/Ideabox.php:273
+#: src/Ideabox.php:273 src/Comment.php:149 src/Comment.php:190
 msgid "Only original author can modify it"
 msgstr ""
 
-#: front/config.form.php:51 front/config.php:43
+#: front/config.php:43 front/config.form.php:51
 msgid "Please activate the plugin"
 msgstr ""
 
@@ -201,11 +201,11 @@ msgctxt "button"
 msgid "Suscribe"
 msgstr ""
 
-#: src/Comment.php:138 src/Ideabox.php:262
+#: src/Ideabox.php:262 src/Comment.php:138
 msgid "The description is mandatory"
 msgstr ""
 
-#: src/Comment.php:133 src/Ideabox.php:257
+#: src/Ideabox.php:257 src/Comment.php:133
 msgid "The name is mandatory"
 msgstr ""
 
