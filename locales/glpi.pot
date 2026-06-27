@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-29 10:53+0000\n"
+"POT-Creation-Date: 2026-05-29 12:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,10 +32,6 @@ msgstr ""
 
 #: src/NotificationTargetIdeabox.php:43
 msgid "A new idea has been submitted"
-msgstr ""
-
-#: src/Ideabox.php:541
-msgid "Add your vote"
 msgstr ""
 
 #: src/NotificationTargetIdeabox.php:227
@@ -68,7 +64,7 @@ msgstr[1] ""
 msgid "Author"
 msgstr ""
 
-#: src/Ideabox.php:563
+#: src/Ideabox.php:420
 msgctxt "button"
 msgid "Cancel"
 msgstr ""
@@ -77,7 +73,7 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
-#: src/Comment.php:57 src/Comment.php:248
+#: src/Comment.php:57
 msgid "Comment"
 msgid_plural "Comments"
 msgstr[0] ""
@@ -88,11 +84,11 @@ msgstr[1] ""
 msgid "Comment author"
 msgstr ""
 
-#: src/Ideabox.php:481
+#: src/Ideabox.php:495
 msgid "Commented by"
 msgstr ""
 
-#: src/Comment.php:350 templates/comment_form.html.twig:84
+#: src/Comment.php:333 templates/comment_form.html.twig:84
 msgid "Date of comment"
 msgstr ""
 
@@ -100,12 +96,12 @@ msgstr ""
 msgid "Date of submission"
 msgstr ""
 
-#: src/Comment.php:310
+#: src/Comment.php:258
 msgctxt "button"
 msgid "Delete"
 msgstr ""
 
-#: src/Comment.php:368 src/Comment.php:458 src/Ideabox.php:207
+#: src/Comment.php:351 src/Comment.php:441 src/Ideabox.php:207
 #: templates/ideabox_form.html.twig:112 templates/comment_form.html.twig:94
 msgid "Description"
 msgstr ""
@@ -170,12 +166,12 @@ msgstr ""
 msgid "Please activate the plugin"
 msgstr ""
 
-#: src/Comment.php:296
+#: src/Comment.php:290
 msgctxt "button"
 msgid "Post a comment"
 msgstr ""
 
-#: src/Ideabox.php:526
+#: src/Ideabox.php:494
 msgid "Read description"
 msgstr ""
 
@@ -184,11 +180,11 @@ msgctxt "button"
 msgid "Save"
 msgstr ""
 
-#: src/Ideabox.php:496
+#: src/Ideabox.php:444
 msgid "See comments"
 msgstr ""
 
-#: src/Ideabox.php:609 src/Ideabox.php:650
+#: src/Ideabox.php:524 src/Ideabox.php:565
 msgid "Start typing to find a idea"
 msgstr ""
 
@@ -200,7 +196,7 @@ msgstr ""
 msgid "Surname"
 msgstr ""
 
-#: src/Ideabox.php:576
+#: src/Ideabox.php:431
 msgctxt "button"
 msgid "Suscribe"
 msgstr ""
@@ -222,5 +218,11 @@ msgstr ""
 #: src/Vote.php:45
 msgid "Vote"
 msgid_plural "Votes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Comment.php:301
+msgid "comment"
+msgid_plural "comments"
 msgstr[0] ""
 msgstr[1] ""
