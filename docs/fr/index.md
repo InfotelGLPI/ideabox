@@ -4,8 +4,6 @@
 
 Le plugin **Ideabox** pour GLPI permet de collecter, gérer et suivre les idées soumises par les utilisateurs finaux. Il offre un système de votes, de commentaires et de notifications pour impliquer l'ensemble des utilisateurs dans un processus d'amélioration continue.
 
-- **Version** : 4.0.9
-- **Compatibilité GLPI** : 11.0.x
 - **Licence** : GPLv3+
 - **Auteurs** : Xavier CAILLAUD, Infotel
 

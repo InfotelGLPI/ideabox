@@ -4,8 +4,6 @@
 
 The **Ideabox** plugin for GLPI lets you collect, manage, and track ideas submitted by end users. It provides a voting system, commenting, and notifications to engage the entire user base in a continuous improvement process.
 
-- **Version**: 4.0.9
-- **GLPI compatibility**: 11.0.x
 - **License**: GPLv3+
 - **Authors**: Xavier CAILLAUD, Infotel
 
