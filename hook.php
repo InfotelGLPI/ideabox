@@ -47,7 +47,11 @@ function plugin_ideabox_install()
     Config::install($migration);
     ConfigTranslation::install($migration);
 
-    $DB->runFile(PLUGIN_IDEABOX_DIR . "/sql/update-4.0.3.sql");
+    // Rename legacy itemtypes to their namespaced counterparts across every
+    // GLPI table (display preferences, notifications, tickets, documents...).
+    // renameItemtype() updates all itemtype/itemtype_* columns natively.
+    $migration->renameItemtype('PluginIdeaboxIdeabox', Ideabox::class, false);
+    $migration->renameItemtype('PluginIdeaboxComment', Comment::class, false);
 
     foreach (\Profile::getSuperAdminProfilesId() as $profiles_id) {
         Profile::createFirstAccess($profiles_id);

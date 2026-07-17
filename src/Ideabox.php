@@ -615,11 +615,13 @@ HTML;
                         $identity = __s('Idea');
                         $fuzzy_entries[] = [
                             'url' => PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php?id=" . $idea['id'],
-                            'title' => $idea['name'],
-                            'comment' => ($idea['comment'] != null) ? Html::resume_text(
+                            // The client inserts these values as HTML (jQuery .append), so
+                            // escape them here to prevent stored XSS through the idea name.
+                            'title' => htmlescape($idea['name']),
+                            'comment' => ($idea['comment'] != null) ? htmlescape(Html::resume_text(
                                 RichText::getTextFromHtml($idea['comment']),
                                 "200"
-                            ) : "",
+                            )) : "",
                             'icon' => 'ti ti-bulb',
                             'background' => '',
                             'order' => "2",
