@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-28 18:30+0000\n"
+"POT-Creation-Date: 2026-07-17 14:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,7 +60,7 @@ msgid_plural "Associated comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/ideabox_form.html.twig:70 templates/comment_form.html.twig:72
+#: templates/comment_form.html.twig:72 templates/ideabox_form.html.twig:70
 msgid "Author"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgid "Delete"
 msgstr ""
 
 #: src/Ideabox.php:207 src/Comment.php:351 src/Comment.php:441
-#: templates/ideabox_form.html.twig:112 templates/comment_form.html.twig:94
+#: templates/comment_form.html.twig:94 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr ""
 
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Modified fields"
 msgstr ""
 
-#: templates/ideabox_form.html.twig:56 templates/comment_form.html.twig:58
+#: templates/comment_form.html.twig:58 templates/ideabox_form.html.twig:56
 msgid "Name"
 msgstr ""
 
@@ -192,7 +192,7 @@ msgstr ""
 msgid "Submit an idea"
 msgstr ""
 
-#: templates/ideabox_form.html.twig:56 templates/comment_form.html.twig:58
+#: templates/comment_form.html.twig:58 templates/ideabox_form.html.twig:56
 msgid "Surname"
 msgstr ""
 
