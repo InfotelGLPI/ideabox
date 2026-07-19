@@ -27,11 +27,12 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Ideabox\Comment;
 use GlpiPlugin\Ideabox\Ideabox;
 
 if (!Session::haveRight('plugin_ideabox', READ)) {
-    Html::displayRightError();
+    throw new AccessDeniedHttpException();
     exit;
 }
 
