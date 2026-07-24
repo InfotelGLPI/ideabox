@@ -60,9 +60,27 @@ if (
     ($item = getItemForItemtype($_POST['type']))
     && ($parent = getItemForItemtype($_POST['parenttype']))
 ) {
-    if ($parent->getFromDB($_POST["items_id"])) {
-        $item->showForm($_POST["id"], ['parent' => $parent]);
-    } else {
+    if (!$parent->getFromDB($_POST["items_id"])) {
+        http_response_code(403);
         echo __s('Access denied');
+        return;
     }
+
+    // The Comment sub-form discloses comment content: require the plugin READ
+    // right and access to the parent idea (right + entity) before rendering it,
+    // like Comment::seeComments() does. The parent table carries the entity
+    // scope, so $parent->can() enforces the cross-entity boundary.
+    if (
+        $_POST['type'] === \GlpiPlugin\Ideabox\Comment::class
+        && (
+            !Session::haveRight('plugin_ideabox', READ)
+            || !$parent->can($parent->getID(), READ)
+        )
+    ) {
+        http_response_code(403);
+        echo __s('Access denied');
+        return;
+    }
+
+    $item->showForm($_POST["id"], ['parent' => $parent]);
 }

@@ -1,6 +1,4 @@
-<?php
-
-/*
+{#
  -------------------------------------------------------------------------
  ideabox plugin for GLPI
  Copyright (C) 2025-2026 by the ideabox Development Team.
@@ -25,23 +23,24 @@
  You should have received a copy of the GNU General Public License
  along with ideabox. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+ #}
 
-use Glpi\Application\View\TemplateRenderer;
-use Glpi\Exception\Http\AccessDeniedHttpException;
+{% import "components/form/fields_macros.html.twig" as fields %}
 
-global $CFG_GLPI;
+<form name="form" method="post" action="{{ target }}">
+    <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="id" value="{{ id }}">
 
-if (Plugin::isPluginActive("ideabox")) {
-    if (Session::haveRight("plugin_ideabox", UPDATE)) {
-        Html::redirect(PLUGIN_IDEABOX_WEBDIR . "/front/config.form.php");
-    } else {
-        throw new AccessDeniedHttpException();
-    }
-} else {
-    Html::header(__s('Setup'), '', "config", "plugin");
-    TemplateRenderer::getInstance()->display('@ideabox/plugin_inactive.html.twig', [
-        'message' => __('Please activate the plugin', 'ideabox'),
-    ]);
-    Html::footer();
-}
+    <div class="card">
+        <div class="card-body">
+            {{ fields.textField('title', value_title, __('Title')) }}
+            {{ fields.textField('comment', value_comment, __('Comments')) }}
+        </div>
+        <div class="card-footer text-center">
+            <button type="submit" name="update_setup" class="btn btn-primary">
+                <i class="ti ti-device-floppy"></i>
+                {{ _x('button', 'Update') }}
+            </button>
+        </div>
+    </div>
+</form>

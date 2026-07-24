@@ -504,49 +504,10 @@ class Ideabox extends CommonDBTM
 
     public static function showSearchForm()
     {
-
-        echo "<div id='searchidea'>";
-        echo "</div>";
-
-        echo self::fuzzySearchForm('id-home-trigger-fuzzy');
-
-    }
-
-
-    /**
-     * @param $name
-     * @param $type
-     * @return void
-     */
-    public static function fuzzySearchForm($name)
-    {
-
-        $title = __s("Start typing to find a idea", "ideabox");
-        $strict_search = 1;
-
-
-        $style = "style='display:none;margin-right: auto;margin-top: 20px;'";
-        echo "<div tabindex='-1' id='fuzzysearch' $style>";
-
-        $position = "";
-
-        echo "<div class='modal-content' style='background-color: transparent!important;'>";
-        echo "<div class='modal-body' style='padding: unset;background-color: transparent!important;" . $position . "width: 100%;'>";
-        echo "<div class='input-group'>";
-
-        echo "<input type='text' class='$name form-control' placeholder=\"" . $title . "\">";
-        echo "<input type='hidden' name='fuzzy-strict' id='fuzzy-strict' value='" . $strict_search . "'/>";
-        echo "<div class='input-group-prepend'>";
-        echo "<span class='input-group-text input-group-text-search' style='padding: 10px;'><i class='ti ti-search'></i></span>";
-        echo "</div>";
-        echo "</div>";
-        echo "<ul class='results list-group mb-2' style='background-color: transparent;'></ul>";
-        echo "</div>";
-        echo "</div>";
-        echo "</div>";
-        echo Html::scriptBlock("$(document).ready(function() {
-                                        $('#fuzzysearch').show();
-                                    });");
+        TemplateRenderer::getInstance()->display('@ideabox/search_form.html.twig', [
+            'trigger_class' => 'id-home-trigger-fuzzy',
+            'placeholder'   => __('Start typing to find a idea', 'ideabox'),
+        ]);
     }
 
     /**

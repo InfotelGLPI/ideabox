@@ -29,6 +29,7 @@
 
 use GlpiPlugin\Ideabox\Ideabox;
 use GlpiPlugin\Ideabox\Config;
+use Glpi\Application\View\TemplateRenderer;
 use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Servicecatalog\Main;
 
@@ -47,25 +48,14 @@ $idea = new Ideabox();
 if ($idea->canView() || Session::haveRight("config", UPDATE)) {
     if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
         if ($idea->canCreate()) {
-            echo "<div class='center'><table class='tab_cadre_fixe' cellpadding='5'>";
             $config = new Config();
             $config->getFromDB(1);
-            $title = Config::displayField($config, 'title');
-            echo "<tr><th class='center'>" . $title . "</th></tr>";
-
-            $comment = Config::displayField($config, 'comment');
-            if (!empty($comment)) {
-                echo "<tr class='tab_bg_1'><td class='center'>";
-                echo htmlescape($comment);
-                echo "</td></tr>";
-            }
-
-            echo "<tr class='tab_bg_1'><td class='center'>";
-            echo "<a href=\"./ideabox.form.php\" class='submit btn btn-primary'>";
-            echo "<i class='" . Ideabox::getIcon() . "'></i>&nbsp;" . __s('Submit an idea', 'ideabox');
-            echo "</a>";
-            echo "</td></tr>";
-            echo " </table></div>";
+            TemplateRenderer::getInstance()->display('@ideabox/home_intro.html.twig', [
+                'title'        => Config::displayField($config, 'title'),
+                'comment'      => Config::displayField($config, 'comment'),
+                'icon'         => Ideabox::getIcon(),
+                'submit_label' => __('Submit an idea', 'ideabox'),
+            ]);
         }
 
         Ideabox::showSearchForm();

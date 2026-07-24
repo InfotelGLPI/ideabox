@@ -92,10 +92,11 @@ class Comment extends CommonDBChild
     {
         if ($item->getType() == Ideabox::class) {
             $self = new self();
-            $self->showForm(0, ['plugin_ideabox_ideaboxes_id' => $item->getField('id')]);
-
 
             if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
+                // Helpdesk keeps the standalone add form; the central interface
+                // adds comments through the modal embedded in showComments().
+                $self->showForm(0, ['plugin_ideabox_ideaboxes_id' => $item->getField('id')]);
                 $self->seeComments($item->getField('id'), true);
             } else {
                 $self->showComments($item);
@@ -377,7 +378,7 @@ class Comment extends CommonDBChild
 
     public function showComments(Ideabox $ideabox)
     {
-        global $DB, $CFG_GLPI;
+        global $DB;
 
         $instID = $ideabox->fields['id'];
 
@@ -385,101 +386,42 @@ class Comment extends CommonDBChild
             return false;
         }
 
-        $rand    = mt_rand();
         $canedit = $ideabox->can($instID, UPDATE);
+        $current_user = Session::getLoginUserID();
 
-        $iterator = $DB->request([
-            'SELECT'    => [
-                'glpi_plugin_ideabox_comments.name AS name',
-                'glpi_plugin_ideabox_comments.id',
-                'glpi_plugin_ideabox_comments.plugin_ideabox_ideaboxes_id',
-                'glpi_plugin_ideabox_comments.date_comment',
-                'glpi_plugin_ideabox_comments.comment',
-                'glpi_plugin_ideabox_comments.users_id AS users_id',
-            ],
-            'FROM'      => 'glpi_plugin_ideabox_comments',
-            'LEFT JOIN'       => [
-                'glpi_plugin_ideabox_ideaboxes' => [
-                    'ON' => [
-                        'glpi_plugin_ideabox_ideaboxes' => 'id',
-                        'glpi_plugin_ideabox_comments'  => 'plugin_ideabox_ideaboxes_id'
-                    ]
-                ]
-            ],
-            'WHERE'     => [
-                'glpi_plugin_ideabox_comments.plugin_ideabox_ideaboxes_id'  => $instID
-            ],
-            'ORDERBY'   => 'glpi_plugin_ideabox_comments.name',
+        Session::initNavigateListItems(
+            $this->getType(),
+            Ideabox::getTypeName(2) . " = " . $ideabox->fields["name"]
+        );
+
+        $comments = [];
+        foreach ($DB->request([
+            'FROM'    => 'glpi_plugin_ideabox_comments',
+            'WHERE'   => ['plugin_ideabox_ideaboxes_id' => $instID],
+            'ORDERBY' => 'date_comment DESC',
+        ]) as $data) {
+            Session::addToNavigateListItems($this->getType(), $data['id']);
+
+            $comments[] = [
+                'id'            => $data['id'],
+                'users_id'      => $data['users_id'],
+                'date_creation' => $data['date_comment'],
+                'name'          => $data['name'],
+                // Raw stored HTML: the template sanitizes it with |safe_html, like
+                // the native notepad component (no re-escaping, no double-encoding).
+                'comment'       => $data['comment'],
+                '_can_edit'     => $canedit && ($data['users_id'] == $current_user),
+            ];
+        }
+
+        TemplateRenderer::getInstance()->display('@ideabox/comments.html.twig', [
+            'comments' => $comments,
+            'canedit'  => $canedit,
+            'idea_id'  => $instID,
+            'url'      => $this->getFormURL(),
         ]);
 
-        $number = count($iterator);
-
-        echo "<div class='spaced'>";
-
-        if ($canedit && $number) {
-            Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
-            $massiveactionparams
-               = ['num_displayed'    => min($_SESSION['glpilist_limit'], $number),
-                   'specific_actions' => ['purge' => _x('button', 'Delete permanently')],
-                   'container'        => 'mass' . __CLASS__ . $rand];
-            Html::showMassiveActions($massiveactionparams);
-        }
-
-        if ($number != 0) {
-            echo "<table class='tab_cadre_fixe'>";
-            echo "<tr>";
-
-            if ($canedit && $number) {
-                echo "<th width='10'>" . Html::getCheckAllAsCheckbox('mass' . __CLASS__ . $rand) . "</th>";
-            } else {
-                echo "<th width='10'></th>";
-            }
-
-            echo "<th>" . __s('Name') . "</th>";
-            echo "<th>" . __s('Author') . "</th>";
-            echo "<th>" . __s('Date') . "</th>";
-            echo "<th>" . __s('Description', 'ideabox') . "</th>";
-
-            echo "</tr>";
-
-            Session::initNavigateListItems($this->getType(), Ideabox::getTypeName(2) . " = " . $ideabox->fields["name"]);
-            $i       = 0;
-            $row_num = 1;
-
-            foreach ($iterator as $data) {
-                Session::addToNavigateListItems($this->getType(), $data['id']);
-
-                $i++;
-                $row_num++;
-                echo "<tr class='tab_bg_1 center'>";
-                echo "<td width='10'>";
-                if ($canedit) {
-                    Html::showMassiveActionCheckBox(__CLASS__, $data["id"]);
-                }
-                echo "</td>";
-
-                echo "<td class='left'>";
-                echo "<a href='" . $CFG_GLPI["root_doc"] . "/plugins/ideabox/front/comment.form.php?id=" . $data["id"] . "&amp;plugin_ideabox_ideaboxes_id=" . $data["plugin_ideabox_ideaboxes_id"] . "'>";
-                echo htmlescape($data["name"]);
-                if ($_SESSION["glpiis_ids_visible"] || empty($data["name"])) {
-                    echo " (" . $data["id"] . ")";
-                }
-                echo "</a></td>";
-
-                echo "<td class='left'>" . getusername($data["users_id"]) . "</td>";
-                echo "<td class='left'>" . Html::convdatetime($data["date_comment"]) . "</td>";
-                echo "<td class='left'>" . RichText::getTextFromHtml($data["comment"]) . "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        }
-
-        if ($canedit && $number) {
-            $massiveactionparams['ontop'] = false;
-            Html::showMassiveActions($massiveactionparams);
-            Html::closeForm();
-        }
-        echo "</div>";
+        return true;
     }
 
     public static function install(Migration $migration)

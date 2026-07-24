@@ -1,6 +1,4 @@
-<?php
-
-/*
+{#
  -------------------------------------------------------------------------
  ideabox plugin for GLPI
  Copyright (C) 2025-2026 by the ideabox Development Team.
@@ -25,23 +23,23 @@
  You should have received a copy of the GNU General Public License
  along with ideabox. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+ #}
 
-use Glpi\Application\View\TemplateRenderer;
-use Glpi\Exception\Http\AccessDeniedHttpException;
+<div id="searchidea"></div>
 
-global $CFG_GLPI;
-
-if (Plugin::isPluginActive("ideabox")) {
-    if (Session::haveRight("plugin_ideabox", UPDATE)) {
-        Html::redirect(PLUGIN_IDEABOX_WEBDIR . "/front/config.form.php");
-    } else {
-        throw new AccessDeniedHttpException();
-    }
-} else {
-    Html::header(__s('Setup'), '', "config", "plugin");
-    TemplateRenderer::getInstance()->display('@ideabox/plugin_inactive.html.twig', [
-        'message' => __('Please activate the plugin', 'ideabox'),
-    ]);
-    Html::footer();
-}
+<div tabindex="-1" id="fuzzysearch" style="margin-right: auto; margin-top: 20px;">
+    <div class="modal-content" style="background-color: transparent !important;">
+        <div class="modal-body" style="padding: unset; background-color: transparent !important; width: 100%;">
+            <div class="input-group">
+                <input type="text" class="{{ trigger_class }} form-control" placeholder="{{ placeholder }}">
+                <input type="hidden" name="fuzzy-strict" id="fuzzy-strict" value="1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text input-group-text-search" style="padding: 10px;">
+                        <i class="ti ti-search"></i>
+                    </span>
+                </div>
+            </div>
+            <ul class="results list-group mb-2" style="background-color: transparent;"></ul>
+        </div>
+    </div>
+</div>

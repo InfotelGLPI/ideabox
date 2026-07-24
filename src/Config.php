@@ -32,8 +32,8 @@ namespace GlpiPlugin\Ideabox;
 use CommonDBTM;
 use CommonGLPI;
 use DBConnection;
+use Glpi\Application\View\TemplateRenderer;
 use Glpi\RichText\RichText;
-use Html;
 use Migration;
 
 /**
@@ -158,50 +158,21 @@ class Config extends CommonDBTM
      */
     public function showConfigForm()
     {
-        if (!$this->canView()) {
-            return false;
-        }
-        if (!$this->canCreate()) {
+        if (!$this->canView() || !$this->canCreate()) {
             return false;
         }
 
-        $canedit = true;
+        $ID = 1;
+        $this->getFromDB($ID);
 
-        if ($canedit) {
-            $ID = 1;
-            $this->getFromDB($ID);
-            echo "<form name='form' method='post' action='" . $this->getFormURL() . "'>";
+        TemplateRenderer::getInstance()->display('@ideabox/config_form.html.twig', [
+            'target'        => $this->getFormURL(),
+            'id'            => $ID,
+            'value_title'   => $this->fields['title'],
+            'value_comment' => $this->fields['comment'],
+        ]);
 
-            echo Html::hidden('id', ['value' => $ID]);
-
-            echo "<div class='center'><table class='tab_cadre_fixe'>";
-            echo "<tr><th colspan='4'>".self::getTypeName()."</th></tr>";
-
-            echo "<tr class='tab_bg_1'>";
-            echo "<td>";
-            echo __s('Title');
-            echo "</td>";
-            echo "<td>";
-            echo Html::input('title', ['value' => $this->fields['title'], 'size' => 40]);
-            echo "</td>";
-
-            echo "<td>";
-            echo __s('Comments');
-            echo "</td>";
-            echo "<td>";
-            echo Html::input('comment', ['value' => $this->fields['comment'], 'size' => 40]);
-            echo "</td>";
-            echo "</tr>";
-
-
-            echo "<tr>";
-            echo "<td class='tab_bg_2 center' colspan='4'>";
-            echo Html::submit(_sx('button', 'Update'), ['name' => 'update_setup', 'class' => 'btn btn-primary']);
-            echo "</td>";
-            echo "</tr>";
-            echo "</table></div>";
-            Html::closeForm();
-        }
+        return true;
     }
 
     /**

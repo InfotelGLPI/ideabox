@@ -1,0 +1,265 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^You should not use the `exit` function\. It prevents the execution of post\-request/post\-command routines\.$#'
+			identifier: glpi.forbidExit
+			count: 1
+			path: ajax/fuzzysearch.php
+
+		-
+			message: '#^You should not use the `http_response_code` function to change the response code\. Due to a PHP bug, it may not provide the expected result \(see https\://bugs\.php\.net/bug\.php\?id\=81451\)\.$#'
+			identifier: glpi.forbidHttpResponseCode
+			count: 1
+			path: ajax/fuzzysearch.php
+
+		-
+			message: '#^You should not use the `exit` function\. It prevents the execution of post\-request/post\-command routines\.$#'
+			identifier: glpi.forbidExit
+			count: 1
+			path: ajax/viewsubitem.php
+
+		-
+			message: '#^You should not use the `http_response_code` function to change the response code\. Due to a PHP bug, it may not provide the expected result \(see https\://bugs\.php\.net/bug\.php\?id\=81451\)\.$#'
+			identifier: glpi.forbidHttpResponseCode
+			count: 1
+			path: ajax/viewsubitem.php
+
+		-
+			message: '#^Call to static method showDefaultHeaderHelpdesk\(\) on an unknown class GlpiPlugin\\Servicecatalog\\Main\.$#'
+			identifier: class.notFound
+			count: 1
+			path: front/comment.form.php
+
+		-
+			message: '#^Call to static method showNavBarFooter\(\) on an unknown class GlpiPlugin\\Servicecatalog\\Main\.$#'
+			identifier: class.notFound
+			count: 1
+			path: front/comment.form.php
+
+		-
+			message: '#^Parameter \#2 \$force of method CommonDBTM\:\:delete\(\) expects bool, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: front/comment.form.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: front/comment.php
+
+		-
+			message: '#^Parameter \#2 \$force of method CommonDBTM\:\:delete\(\) expects bool, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: front/configtranslation.form.php
+
+		-
+			message: '#^Call to static method showDefaultHeaderHelpdesk\(\) on an unknown class GlpiPlugin\\Servicecatalog\\Main\.$#'
+			identifier: class.notFound
+			count: 1
+			path: front/ideabox.form.php
+
+		-
+			message: '#^Call to static method showNavBarFooter\(\) on an unknown class GlpiPlugin\\Servicecatalog\\Main\.$#'
+			identifier: class.notFound
+			count: 1
+			path: front/ideabox.form.php
+
+		-
+			message: '#^Parameter \#2 \$force of method CommonDBTM\:\:delete\(\) expects bool, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: front/ideabox.form.php
+
+		-
+			message: '#^Call to static method showDefaultHeaderHelpdesk\(\) on an unknown class GlpiPlugin\\Servicecatalog\\Main\.$#'
+			identifier: class.notFound
+			count: 1
+			path: front/ideabox.php
+
+		-
+			message: '#^Call to static method showNavBarFooter\(\) on an unknown class GlpiPlugin\\Servicecatalog\\Main\.$#'
+			identifier: class.notFound
+			count: 1
+			path: front/ideabox.php
+
+		-
+			message: '#^Missing PHPDoc tag @var for global variable \$INJECTABLE_TYPES$#'
+			identifier: glpi.missingGlobalVarType
+			count: 1
+			path: hook.php
+
+		-
+			message: '#^Parameter \#2 \$right of static method Session\:\:haveRight\(\) expects int, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: hook.php
+
+		-
+			message: '#^Call to an undefined method CommonGLPI\:\:getField\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Comment.php
+
+		-
+			message: '#^Parameter \#1 \$criteria of method DBmysql\:\:request\(\) expects array\|Glpi\\DBAL\\QueryUnion, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Comment.php
+
+		-
+			message: '#^Parameter \#1 \$ideabox of method GlpiPlugin\\Ideabox\\Comment\:\:showComments\(\) expects GlpiPlugin\\Ideabox\\Ideabox, CommonGLPI given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Comment.php
+
+		-
+			message: '#^Parameter \#1 \$item of static method GlpiPlugin\\Ideabox\\Comment\:\:countForIdea\(\) expects GlpiPlugin\\Ideabox\\Ideabox, CommonGLPI given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Comment.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: src/Comment.php
+
+		-
+			message: '#^Call to an undefined method CommonGLPI\:\:showConfigForm\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Config.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: src/Config.php
+
+		-
+			message: '#^Method GlpiPlugin\\Ideabox\\Config\:\:displayField\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Config.php
+
+		-
+			message: '#^Method GlpiPlugin\\Ideabox\\Config\:\:getTabNameForItem\(\) should return string but returns array\<int, string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Config.php
+
+		-
+			message: '#^Method GlpiPlugin\\Ideabox\\Config\:\:showConfigForm\(\) should return bool but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Config.php
+
+		-
+			message: '#^Method GlpiPlugin\\Ideabox\\ConfigTranslation\:\:canBeTranslated\(\) should return true but returns bool\.$#'
+			identifier: return.type
+			count: 1
+			path: src/ConfigTranslation.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(Config item\)\: Unexpected token "item", expected variable at offset 85 on line 4$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/ConfigTranslation.php
+
+		-
+			message: '#^Parameter \#1 \$item of static method GlpiPlugin\\Ideabox\\ConfigTranslation\:\:getNumberOfTranslationsForItem\(\) expects GlpiPlugin\\Ideabox\\Config, CommonGLPI given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/ConfigTranslation.php
+
+		-
+			message: '#^Parameter \#1 \$item of static method GlpiPlugin\\Ideabox\\ConfigTranslation\:\:showTranslations\(\) expects GlpiPlugin\\Ideabox\\Config, CommonGLPI given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/ConfigTranslation.php
+
+		-
+			message: '#^Default value of the parameter \#1 \$history \(int\) of method GlpiPlugin\\Ideabox\\Ideabox\:\:post_updateItem\(\) is incompatible with type bool\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: src/Ideabox.php
+
+		-
+			message: '#^PHPDoc tag @return with type bool\|int is not subtype of native type bool\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/Ideabox.php
+
+		-
+			message: '#^Parameter \#1 \$itemtype of method CommonGLPI\:\:addStandardTab\(\) expects class\-string\<CommonGLPI\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Ideabox.php
+
+		-
+			message: '#^Parameter \#2 \$length of static method Html\:\:resume_text\(\) expects int, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Ideabox.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 2
+			path: src/Ideabox.php
+
+		-
+			message: '#^Method GlpiPlugin\\Ideabox\\IdeaboxInjection\:\:addOrUpdateObject\(\) has invalid return type GlpiPlugin\\Ideabox\\an\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/IdeaboxInjection.php
+
+		-
+			message: '#^Method GlpiPlugin\\Ideabox\\IdeaboxInjection\:\:addOrUpdateObject\(\) should return GlpiPlugin\\Ideabox\\an but returns array\.$#'
+			identifier: return.type
+			count: 1
+			path: src/IdeaboxInjection.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(options options used during creation\)\: Unexpected token "options", expected variable at offset 176 on line 6$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/IdeaboxInjection.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(values fields to add into glpi\)\: Unexpected token "fields", expected variable at offset 130 on line 5$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/IdeaboxInjection.php
+
+		-
+			message: '#^Return type \(GlpiPlugin\\Ideabox\\an\) of method GlpiPlugin\\Ideabox\\IdeaboxInjection\:\:addOrUpdateObject\(\) should be compatible with return type \(array\) of method PluginDatainjectionInjectionInterface\:\:addOrUpdateObject\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: src/IdeaboxInjection.php
+
+		-
+			message: '#^Access to an undefined property CommonGLPI\:\:\$fields\.$#'
+			identifier: property.notFound
+			count: 9
+			path: src/NotificationTargetIdeabox.php
+
+		-
+			message: '#^Cannot access property \$oldvalues on array\<CommonGLPI\>\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/NotificationTargetIdeabox.php
+
+		-
+			message: '#^Method GlpiPlugin\\Ideabox\\Profile\:\:migrateOneProfile\(\) should return bool but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Profile.php
+
+		-
+			message: '#^PHPDoc tag @throws with type GlpitestSQLError is not subtype of Throwable$#'
+			identifier: throws.notThrowable
+			count: 1
+			path: src/Servicecatalog.php

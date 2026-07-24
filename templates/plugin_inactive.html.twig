@@ -1,6 +1,4 @@
-<?php
-
-/*
+{#
  -------------------------------------------------------------------------
  ideabox plugin for GLPI
  Copyright (C) 2025-2026 by the ideabox Development Team.
@@ -25,23 +23,8 @@
  You should have received a copy of the GNU General Public License
  along with ideabox. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+ #}
 
-use Glpi\Application\View\TemplateRenderer;
-use Glpi\Exception\Http\AccessDeniedHttpException;
-
-global $CFG_GLPI;
-
-if (Plugin::isPluginActive("ideabox")) {
-    if (Session::haveRight("plugin_ideabox", UPDATE)) {
-        Html::redirect(PLUGIN_IDEABOX_WEBDIR . "/front/config.form.php");
-    } else {
-        throw new AccessDeniedHttpException();
-    }
-} else {
-    Html::header(__s('Setup'), '', "config", "plugin");
-    TemplateRenderer::getInstance()->display('@ideabox/plugin_inactive.html.twig', [
-        'message' => __('Please activate the plugin', 'ideabox'),
-    ]);
-    Html::footer();
-}
+<div class="alert alert-important alert-warning d-flex">
+    <b>{{ message }}</b>
+</div>

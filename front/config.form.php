@@ -27,6 +27,7 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
 use GlpiPlugin\Ideabox\Config;
 
 if (Plugin::isPluginActive("ideabox")) {
@@ -47,7 +48,8 @@ if (Plugin::isPluginActive("ideabox")) {
     }
 } else {
     Html::header(__s('Setup'), '', "config", "plugins");
-    echo "<div class='alert alert-important alert-warning d-flex'>";
-    echo "<b>".__s('Please activate the plugin', 'ideabox')."</b></div>";
+    TemplateRenderer::getInstance()->display('@ideabox/plugin_inactive.html.twig', [
+        'message' => __('Please activate the plugin', 'ideabox'),
+    ]);
     Html::footer();
 }
