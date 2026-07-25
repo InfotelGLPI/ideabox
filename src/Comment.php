@@ -34,6 +34,7 @@ use CommonGLPI;
 use DBConnection;
 use DbUtils;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Exception\Http\AccessDeniedHttpException;
 use Glpi\RichText\RichText;
 use Html;
 use Migration;
@@ -226,8 +227,7 @@ class Comment extends CommonDBChild
 
         $parent = new Ideabox();
         if (!$parent->getFromDB($ID) || !$parent->can($ID, READ)) {
-            echo __s('Access denied');
-            return;
+            throw new AccessDeniedHttpException();
         }
 
         $raw_comments = [];
