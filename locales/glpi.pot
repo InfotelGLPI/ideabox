@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-24 16:32+0000\n"
+"POT-Creation-Date: 2026-07-25 14:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,7 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
-#: src/Comment.php:57
+#: src/Comment.php:58
 msgid "Comment"
 msgid_plural "Comments"
 msgstr[0] ""
@@ -203,7 +203,7 @@ msgstr ""
 msgid "No comments"
 msgstr ""
 
-#: src/Ideabox.php:273 src/Comment.php:150 src/Comment.php:191
+#: src/Ideabox.php:273 src/Comment.php:151 src/Comment.php:192
 msgid "Only original author can modify it"
 msgstr ""
 
@@ -246,11 +246,11 @@ msgctxt "button"
 msgid "Suscribe"
 msgstr ""
 
-#: src/Ideabox.php:262 src/Comment.php:139
+#: src/Ideabox.php:262 src/Comment.php:140
 msgid "The description is mandatory"
 msgstr ""
 
-#: src/Ideabox.php:257 src/Comment.php:134
+#: src/Ideabox.php:257 src/Comment.php:135
 msgid "The name is mandatory"
 msgstr ""
 
