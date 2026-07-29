@@ -50,7 +50,7 @@ class Vote extends CommonDBChild
      */
     public static function getIcon()
     {
-        return "ti ti-thump-up";
+        return "ti ti-thumb-up";
     }
 
     public function prepareInputForAdd($input)

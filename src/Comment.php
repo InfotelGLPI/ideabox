@@ -128,6 +128,15 @@ class Comment extends CommonDBChild
             return false;
         }
 
+        // Comment carries no entities_id, so check(CREATE) only validated the
+        // global right, never the targeted idea. Load the parent idea and enforce
+        // READ (right + entity scope) to prevent cross-entity comment injection.
+        $parent = new Ideabox();
+        if (!$parent->getFromDB($input['plugin_ideabox_ideaboxes_id'])
+            || !$parent->can($parent->getID(), READ)) {
+            throw new AccessDeniedHttpException();
+        }
+
         $input['users_id']     = Session::getLoginUserID();
         $input['date_comment'] = $_SESSION["glpi_currenttime"];
 
@@ -210,6 +219,23 @@ class Comment extends CommonDBChild
             $options['users_id']     = Session::getLoginUserID();
             $options['date_comment'] = $_SESSION["glpi_currenttime"];
         } else {
+            // Entity scope is enforced on the parent idea by the caller, but the
+            // (parent, comment id) pair is not correlated: a validated parent does
+            // not prove the loaded comment belongs to it. Reject any comment whose
+            // parent idea does not match the one supplied by the caller, to block
+            // cross-entity comment disclosure through id enumeration.
+            $expected_parent = null;
+            if (isset($options['parent']) && $options['parent'] instanceof Ideabox) {
+                $expected_parent = (int) $options['parent']->getID();
+            } elseif (isset($options['plugin_ideabox_ideaboxes_id'])
+                && (int) $options['plugin_ideabox_ideaboxes_id'] > 0) {
+                $expected_parent = (int) $options['plugin_ideabox_ideaboxes_id'];
+            }
+            if ($expected_parent !== null
+                && (int) $this->fields['plugin_ideabox_ideaboxes_id'] !== $expected_parent) {
+                throw new AccessDeniedHttpException();
+            }
+
             $options['users_id']     = $this->fields['users_id'];
             $options['date_comment'] = $this->fields['date_comment'];
         }
