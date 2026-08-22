@@ -31,12 +31,6 @@ parameters:
 			path: front/comment.form.php
 
 		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 1
-			path: front/comment.php
-
-		-
 			message: '#^Parameter \#2 \$force of method CommonDBTM\:\:delete\(\) expects bool, int given\.$#'
 			identifier: argument.type
 			count: 1
