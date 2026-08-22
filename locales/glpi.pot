@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-01 07:59+0000\n"
+"POT-Creation-Date: 2026-08-22 08:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,11 +70,11 @@ msgid_plural "Associated comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/ideabox_form.html.twig:70 templates/comment_form.html.twig:72
+#: templates/comment_form.html.twig:72 templates/ideabox_form.html.twig:70
 msgid "Author"
 msgstr ""
 
-#: src/Ideabox.php:420
+#: src/Ideabox.php:429
 msgctxt "button"
 msgid "Cancel"
 msgstr ""
@@ -83,7 +83,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/Ideabox.php:340 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:349 templates/ideabox_form.html.twig:90
 msgid "Closed"
 msgstr ""
 
@@ -98,7 +98,7 @@ msgstr[1] ""
 msgid "Comment author"
 msgstr ""
 
-#: src/Ideabox.php:495
+#: src/Ideabox.php:504
 msgid "Commented by"
 msgstr ""
 
@@ -110,7 +110,7 @@ msgstr ""
 msgid "Confirm the final deletion?"
 msgstr ""
 
-#: src/Comment.php:360 templates/comment_form.html.twig:84
+#: src/Comment.php:369 templates/comment_form.html.twig:84
 msgid "Date of comment"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Date of submission"
 msgstr ""
 
-#: src/Comment.php:285
+#: src/Comment.php:294
 msgctxt "button"
 msgid "Delete"
 msgstr ""
@@ -128,8 +128,8 @@ msgctxt "button"
 msgid "Delete permanently"
 msgstr ""
 
-#: src/Ideabox.php:207 src/Comment.php:378 templates/ideabox_form.html.twig:112
-#: templates/comments.html.twig:64 templates/comment_form.html.twig:94
+#: src/Comment.php:387 src/Ideabox.php:207 templates/comments.html.twig:64
+#: templates/comment_form.html.twig:94 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr ""
 
@@ -165,11 +165,11 @@ msgid_plural "Ideas box"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Ideabox.php:338 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:347 templates/ideabox_form.html.twig:90
 msgid "In progress"
 msgstr ""
 
-#: src/Ideabox.php:336 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:345 templates/ideabox_form.html.twig:90
 msgid "In study"
 msgstr ""
 
@@ -186,12 +186,12 @@ msgstr ""
 msgid "Modified fields"
 msgstr ""
 
-#: templates/ideabox_form.html.twig:56 templates/comments.html.twig:58
-#: templates/comment_form.html.twig:58
+#: templates/comments.html.twig:58 templates/comment_form.html.twig:58
+#: templates/ideabox_form.html.twig:56
 msgid "Name"
 msgstr ""
 
-#: src/Ideabox.php:342 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:351 templates/ideabox_form.html.twig:90
 msgid "New"
 msgstr ""
 
@@ -203,20 +203,20 @@ msgstr ""
 msgid "No comments"
 msgstr ""
 
-#: src/Ideabox.php:273 src/Comment.php:160 src/Comment.php:201
+#: src/Comment.php:160 src/Comment.php:210 src/Ideabox.php:273
 msgid "Only original author can modify it"
 msgstr ""
 
-#: front/config.php:44 front/config.form.php:52
+#: front/config.form.php:52 front/config.php:44
 msgid "Please activate the plugin"
 msgstr ""
 
-#: src/Comment.php:317
+#: src/Comment.php:326
 msgctxt "button"
 msgid "Post a comment"
 msgstr ""
 
-#: src/Ideabox.php:494
+#: src/Ideabox.php:503
 msgid "Read description"
 msgstr ""
 
@@ -225,32 +225,32 @@ msgctxt "button"
 msgid "Save"
 msgstr ""
 
-#: src/Ideabox.php:444
+#: src/Ideabox.php:453
 msgid "See comments"
 msgstr ""
 
-#: src/Ideabox.php:509 src/Ideabox.php:526
+#: src/Ideabox.php:518 src/Ideabox.php:535
 msgid "Start typing to find a idea"
 msgstr ""
 
-#: front/ideabox.php:57
+#: front/ideabox.php:63
 msgid "Submit an idea"
 msgstr ""
 
-#: templates/ideabox_form.html.twig:56 templates/comment_form.html.twig:58
+#: templates/comment_form.html.twig:58 templates/ideabox_form.html.twig:56
 msgid "Surname"
 msgstr ""
 
-#: src/Ideabox.php:431
+#: src/Ideabox.php:440
 msgctxt "button"
 msgid "Suscribe"
 msgstr ""
 
-#: src/Ideabox.php:262 src/Comment.php:149
+#: src/Comment.php:149 src/Ideabox.php:262
 msgid "The description is mandatory"
 msgstr ""
 
-#: src/Ideabox.php:257 src/Comment.php:144
+#: src/Comment.php:144 src/Ideabox.php:257
 msgid "The name is mandatory"
 msgstr ""
 
@@ -275,7 +275,7 @@ msgid_plural "Votes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Comment.php:328
+#: src/Comment.php:337
 msgid "comment"
 msgid_plural "comments"
 msgstr[0] ""
