@@ -31,14 +31,12 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(dirname "$SCRIPT_DIR")"
-HEADER_PHP="$SCRIPT_DIR/HEADER"
-HEADER_TWIG="$SCRIPT_DIR/HEADER.twig"
+HEADER_FILE="$SCRIPT_DIR/HEADER"
 
-for f in "$HEADER_PHP" "$HEADER_TWIG"; do
-    if [[ ! -f "$f" ]]; then
-        echo "Error: header file not found: $f"
-        exit 1
-    fi
-done
+if [[ ! -f "$HEADER_FILE" ]]; then
+    echo "Error: header file not found: $HEADER_FILE"
+    exit 1
+fi
 
-php "$SCRIPT_DIR/regenerate_headers.php" "$PLUGIN_DIR" "$HEADER_PHP" "$HEADER_TWIG" "$@"
+# Single raw header file for every language (PHP + Twig), mirroring glpi/tools.
+php "$SCRIPT_DIR/regenerate_headers.php" "$PLUGIN_DIR" "$HEADER_FILE" "$@"
