@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 09:50+0000\n"
+"POT-Creation-Date: 2026-08-22 10:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,7 +64,7 @@ msgstr ""
 msgid "An idea has been modified"
 msgstr ""
 
-#: templates/ideabox_form.html.twig:103
+#: templates/ideabox_form.html.twig:130
 msgid "Associable to a ticket"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgid_plural "Associated comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/comment_form.html.twig:72 templates/ideabox_form.html.twig:70
+#: templates/comment_form.html.twig:72 templates/ideabox_form.html.twig:97
 msgid "Author"
 msgstr ""
 
@@ -87,7 +87,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/Ideabox.php:361 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:361 templates/ideabox_form.html.twig:117
 msgid "Closed"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Date of comment"
 msgstr ""
 
-#: src/Ideabox.php:189 templates/ideabox_form.html.twig:82
+#: src/Ideabox.php:189 templates/ideabox_form.html.twig:109
 msgid "Date of submission"
 msgstr ""
 
@@ -133,7 +133,7 @@ msgid "Delete permanently"
 msgstr ""
 
 #: src/Comment.php:405 src/Ideabox.php:207 templates/comments.html.twig:64
-#: templates/comment_form.html.twig:94 templates/ideabox_form.html.twig:112
+#: templates/comment_form.html.twig:94 templates/ideabox_form.html.twig:139
 msgid "Description"
 msgstr ""
 
@@ -169,15 +169,15 @@ msgid_plural "Ideas box"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Ideabox.php:359 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:359 templates/ideabox_form.html.twig:117
 msgid "In progress"
 msgstr ""
 
-#: src/Ideabox.php:357 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:357 templates/ideabox_form.html.twig:117
 msgid "In study"
 msgstr ""
 
-#: templates/ideabox_form.html.twig:91
+#: templates/ideabox_form.html.twig:118
 msgid "Internal state"
 msgstr ""
 
@@ -191,11 +191,11 @@ msgid "Modified fields"
 msgstr ""
 
 #: templates/comments.html.twig:58 templates/comment_form.html.twig:58
-#: templates/ideabox_form.html.twig:56
+#: templates/ideabox_form.html.twig:83
 msgid "Name"
 msgstr ""
 
-#: src/Ideabox.php:363 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:363 templates/ideabox_form.html.twig:117
 msgid "New"
 msgstr ""
 
@@ -237,7 +237,7 @@ msgstr ""
 msgid "Submit an idea"
 msgstr ""
 
-#: templates/comment_form.html.twig:58 templates/ideabox_form.html.twig:56
+#: templates/comment_form.html.twig:58 templates/ideabox_form.html.twig:83
 msgid "Surname"
 msgstr ""
 
