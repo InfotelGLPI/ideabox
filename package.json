@@ -8,7 +8,7 @@
     "fuse.js": "7.0.0"
   },
   "scripts": {
-    "build:fuse": "node -e \"require('fs').copyFileSync('node_modules/fuse.js/dist/fuse.min.js', 'public/lib/fuse.min.js')\"",
+    "build:fuse": "node -e \"const fs=require('fs'),s='node_modules/fuse.js/dist/fuse.min.js',d='public/lib/fuse.min.js',n=p=>fs.readFileSync(p,'utf8').split('\\r').join('');if(!fs.existsSync(d)||n(s)!==n(d)){fs.copyFileSync(s,d);console.log('fuse.min.js: synced from fuse.js dist')}else{console.log('fuse.min.js: already in sync, skipping copy')}\"",
     "postinstall": "npm run build:fuse"
   }
 }
