@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-29 12:11+0000\n"
+"POT-Creation-Date: 2026-08-01 07:59+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2026\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/infotelGLPI/teams/12362/tr_TR/)\n"
@@ -36,6 +36,16 @@ msgstr "Bir yorum değiştirildi"
 #: src/NotificationTargetIdeabox.php:43
 msgid "A new idea has been submitted"
 msgstr "Yeni bir öneri gönderildi"
+
+#: templates/comments.html.twig:76
+msgctxt "button"
+msgid "Add"
+msgstr "Ekle"
+
+#: templates/comments.html.twig:90 templates/comments.html.twig:92
+msgctxt "button"
+msgid "Add a comment"
+msgstr "Bir yorum yapın"
 
 #: src/NotificationTargetIdeabox.php:227
 msgid "An addition/modification/deletion of comments"
@@ -72,11 +82,15 @@ msgctxt "button"
 msgid "Cancel"
 msgstr "İptal"
 
+#: templates/comments.html.twig:51
+msgid "Close"
+msgstr "Kapat"
+
 #: src/Ideabox.php:340 templates/ideabox_form.html.twig:90
 msgid "Closed"
 msgstr "Kapatılmış"
 
-#: src/Comment.php:57
+#: src/Comment.php:58
 msgid "Comment"
 msgid_plural "Comments"
 msgstr[0] "Yorum"
@@ -91,7 +105,15 @@ msgstr "Yorum yazarı"
 msgid "Commented by"
 msgstr "Yorumu yazan"
 
-#: src/Comment.php:333 templates/comment_form.html.twig:84
+#: templates/config_form.html.twig:37
+msgid "Comments"
+msgstr "Yorumlar"
+
+#: templates/comments.html.twig:128
+msgid "Confirm the final deletion?"
+msgstr "Son silmeyi onaylıyor musunuz?"
+
+#: src/Comment.php:360 templates/comment_form.html.twig:84
 msgid "Date of comment"
 msgstr "Yorum tarihi"
 
@@ -99,15 +121,30 @@ msgstr "Yorum tarihi"
 msgid "Date of submission"
 msgstr "Gönderim tarihi"
 
-#: src/Comment.php:258
+#: src/Comment.php:285
 msgctxt "button"
 msgid "Delete"
 msgstr "Sil"
 
-#: src/Comment.php:351 src/Comment.php:441 src/Ideabox.php:207
-#: templates/ideabox_form.html.twig:112 templates/comment_form.html.twig:94
+#: templates/comments.html.twig:134 templates/comments.html.twig:135
+msgctxt "button"
+msgid "Delete permanently"
+msgstr "Kalıcı olarak sil"
+
+#: src/Ideabox.php:207 src/Comment.php:378
+#: templates/ideabox_form.html.twig:112 templates/comments.html.twig:64
+#: templates/comment_form.html.twig:94
 msgid "Description"
 msgstr "Açıklama"
+
+#: templates/comments.html.twig:123
+msgctxt "button"
+msgid "Edit"
+msgstr "Düzenle"
+
+#: templates/comments.html.twig:151
+msgid "Edit comment"
+msgstr "Yorumu düzenle"
 
 #: templates/ideabox_translation.html.twig:43
 #: templates/ideabox_translation.html.twig:97
@@ -153,7 +190,8 @@ msgstr "Dil"
 msgid "Modified fields"
 msgstr "Değiştirilmiş alanlar"
 
-#: templates/ideabox_form.html.twig:56 templates/comment_form.html.twig:58
+#: templates/ideabox_form.html.twig:56 templates/comments.html.twig:58
+#: templates/comment_form.html.twig:58
 msgid "Name"
 msgstr "Ad"
 
@@ -161,15 +199,23 @@ msgstr "Ad"
 msgid "New"
 msgstr "Yeni"
 
-#: src/Comment.php:149 src/Comment.php:190 src/Ideabox.php:273
+#: templates/comments.html.twig:96
+msgid "New comment"
+msgstr "Yeni yorum"
+
+#: templates/comments.html.twig:100
+msgid "No comments"
+msgstr "Herhangi bir yorum yok"
+
+#: src/Ideabox.php:273 src/Comment.php:160 src/Comment.php:201
 msgid "Only original author can modify it"
 msgstr "Yalnızca özgün yazar değişiklik yapabilir"
 
-#: front/config.form.php:51 front/config.php:43
+#: front/config.php:44 front/config.form.php:52
 msgid "Please activate the plugin"
 msgstr "Lütfen eklentiyi etkinleştirin"
 
-#: src/Comment.php:290
+#: src/Comment.php:317
 msgctxt "button"
 msgid "Post a comment"
 msgstr "Bir yorum yapın"
@@ -178,7 +224,7 @@ msgstr "Bir yorum yapın"
 msgid "Read description"
 msgstr "Açıklamayı okuyun"
 
-#: templates/profile.html.twig:34
+#: templates/comments.html.twig:76 templates/profile.html.twig:34
 msgctxt "button"
 msgid "Save"
 msgstr "Kaydet"
@@ -187,11 +233,11 @@ msgstr "Kaydet"
 msgid "See comments"
 msgstr "Yorumlara bakın"
 
-#: src/Ideabox.php:524 src/Ideabox.php:565
+#: src/Ideabox.php:509 src/Ideabox.php:526
 msgid "Start typing to find a idea"
 msgstr "Bir öneri bulmak için yazmaya başlayın"
 
-#: front/ideabox.php:65
+#: front/ideabox.php:57
 msgid "Submit an idea"
 msgstr "Bir öneri gönderin"
 
@@ -204,13 +250,22 @@ msgctxt "button"
 msgid "Suscribe"
 msgstr "Abone ol"
 
-#: src/Comment.php:138 src/Ideabox.php:262
+#: src/Ideabox.php:262 src/Comment.php:149
 msgid "The description is mandatory"
 msgstr "Açıklamanın yazılması zorunludur"
 
-#: src/Comment.php:133 src/Ideabox.php:257
+#: src/Ideabox.php:257 src/Comment.php:144
 msgid "The name is mandatory"
 msgstr "Adın yazılması zorunludur"
+
+#: templates/config_form.html.twig:36
+msgid "Title"
+msgstr "Başlık"
+
+#: templates/config_form.html.twig:42
+msgctxt "button"
+msgid "Update"
+msgstr "Güncelle"
 
 #: templates/ideabox_translation.html.twig:46
 #: templates/ideabox_translation.html.twig:52
@@ -224,7 +279,7 @@ msgid_plural "Votes"
 msgstr[0] "Oy"
 msgstr[1] "Oylar"
 
-#: src/Comment.php:301
+#: src/Comment.php:328
 msgid "comment"
 msgid_plural "comments"
 msgstr[0] "yorum"
