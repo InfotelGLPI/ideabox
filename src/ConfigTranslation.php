@@ -188,7 +188,7 @@ TWIG, $twig_params);
                 $entry['subject'] = sprintf(
                     '<a href="%s">%s</a>',
                     htmlescape(self::getFormURLWithID($data['id'])),
-                    htmlescape($data['field'])
+                    htmlescape($data['field']),
                 );
             } else {
                 $entry['subject'] = htmlescape($data['field']);
@@ -283,7 +283,7 @@ TWIG, $twig_params);
         $dbu = new DbUtils();
         return $dbu->countElementsInTable(
             $dbu->getTableForItemType(__CLASS__),
-            ["items_id" => $item->getID()]
+            ["items_id" => $item->getID()],
         );
     }
 

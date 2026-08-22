@@ -54,7 +54,7 @@ function plugin_init_ideabox()
     $PLUGIN_HOOKS[Hooks::ADD_CSS]['ideabox'] = "css/ideabox.css";
     if (isset($_SESSION['glpiactiveprofile']['interface'])
         && $_SESSION['glpiactiveprofile']['interface'] != 'central') {
-        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuse.js';
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuse.min.js';
         $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuzzysearch.js.php';
     }
     if (Session::getLoginUserID()) {
@@ -72,7 +72,7 @@ function plugin_init_ideabox()
 
         Plugin::registerClass(
             Profile::class,
-            ['addtabon' => 'Profile']
+            ['addtabon' => 'Profile'],
         );
 
         if (Session::haveRight("config", UPDATE)) {

@@ -39,4 +39,4 @@ if (!Session::haveRight('plugin_ideabox', READ)) {
     exit;
 }
 
-echo Ideabox::fuzzySearch($_REQUEST['action']);
+echo Ideabox::fuzzySearch($_REQUEST['action'] ?? '');

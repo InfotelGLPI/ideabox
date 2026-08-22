@@ -33,14 +33,14 @@ use GlpiPlugin\Ideabox\Ideabox;
 
 if (!Session::haveRight('plugin_ideabox', READ)) {
     throw new AccessDeniedHttpException();
-    exit;
 }
 
-if (!isset($_GET["plugin_ideabox_ideaboxes_id"])) $_GET["plugin_ideabox_ideaboxes_id"] = "";
+if (!isset($_GET["plugin_ideabox_ideaboxes_id"])) {
+    $_GET["plugin_ideabox_ideaboxes_id"] = "";
+}
 
 $comment = new Comment();
 
 Html::popHeader(Ideabox::getTypeName(2));
 
 $comment->seeComments($_GET["plugin_ideabox_ideaboxes_id"], false);
-

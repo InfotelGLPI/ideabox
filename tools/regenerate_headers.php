@@ -51,7 +51,7 @@ foreach (['php' => $header_php, 'twig' => $header_twig] as $type => $path) {
 }
 
 $headers = [
-    'php'  => rtrim(file_get_contents($header_php),  "\r\n"),
+    'php'  => rtrim(file_get_contents($header_php), "\r\n"),
     'twig' => rtrim(file_get_contents($header_twig), "\r\n"),
 ];
 
@@ -68,7 +68,7 @@ $types = [
 // Collect files (recursive, skip vendor/)
 // ---------------------------------------------------------------------------
 $iterator = new RecursiveIteratorIterator(
-    new RecursiveDirectoryIterator($plugin_dir, RecursiveDirectoryIterator::SKIP_DOTS)
+    new RecursiveDirectoryIterator($plugin_dir, RecursiveDirectoryIterator::SKIP_DOTS),
 );
 
 $files = [];

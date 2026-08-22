@@ -66,14 +66,14 @@ if (isset($_POST["add"])) {
     $idea->check($_POST['id'], UPDATE);
     $vote = new Vote();
     $vote->add(['users_id' => Session::getLoginUserID(),
-       'date_vote' =>$_SESSION["glpi_currenttime"],
-       'plugin_ideabox_ideaboxes_id' => $_POST['id']]);
+        'date_vote' => $_SESSION["glpi_currenttime"],
+        'plugin_ideabox_ideaboxes_id' => $_POST['id']]);
     Html::back();
 } elseif (isset($_POST["cancelvote"])) {
     $idea->check($_POST['id'], UPDATE);
     $vote = new Vote();
     $vote->deleteByCriteria(['users_id' => Session::getLoginUserID(),
-       'plugin_ideabox_ideaboxes_id' => $_POST['id']]);
+        'plugin_ideabox_ideaboxes_id' => $_POST['id']]);
     Html::back();
 } else {
     $idea->checkGlobal(READ);

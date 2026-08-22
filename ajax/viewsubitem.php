@@ -27,26 +27,30 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
+use GlpiPlugin\Ideabox\Comment;
+use GlpiPlugin\Ideabox\Config;
+use GlpiPlugin\Ideabox\ConfigTranslation;
+use GlpiPlugin\Ideabox\Ideabox;
+
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
 $allowed_types = [
-    \GlpiPlugin\Ideabox\Comment::class,
-    \GlpiPlugin\Ideabox\ConfigTranslation::class,
+    Comment::class,
+    ConfigTranslation::class,
 ];
 $allowed_parent_types = [
-    \GlpiPlugin\Ideabox\Ideabox::class,
-    \GlpiPlugin\Ideabox\Config::class,
+    Ideabox::class,
+    Config::class,
 ];
 
 if (
     isset($_POST['type'])
-    && $_POST['type'] === \GlpiPlugin\Ideabox\ConfigTranslation::class
+    && $_POST['type'] === ConfigTranslation::class
     && !Session::haveRight('config', UPDATE)
 ) {
-    http_response_code(403);
-    echo __s('Access denied');
-    exit;
+    throw new AccessDeniedHttpException();
 }
 
 if (!isset($_POST['type']) || !in_array($_POST['type'], $allowed_types, true)) {
@@ -61,9 +65,7 @@ if (
     && ($parent = getItemForItemtype($_POST['parenttype']))
 ) {
     if (!$parent->getFromDB($_POST["items_id"])) {
-        http_response_code(403);
-        echo __s('Access denied');
-        return;
+        throw new AccessDeniedHttpException();
     }
 
     // The Comment sub-form discloses comment content: require the plugin READ
@@ -71,15 +73,13 @@ if (
     // like Comment::seeComments() does. The parent table carries the entity
     // scope, so $parent->can() enforces the cross-entity boundary.
     if (
-        $_POST['type'] === \GlpiPlugin\Ideabox\Comment::class
+        $_POST['type'] === Comment::class
         && (
             !Session::haveRight('plugin_ideabox', READ)
             || !$parent->can($parent->getID(), READ)
         )
     ) {
-        http_response_code(403);
-        echo __s('Access denied');
-        return;
+        throw new AccessDeniedHttpException();
     }
 
     $item->showForm($_POST["id"], ['parent' => $parent]);

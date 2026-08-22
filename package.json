@@ -1,0 +1,14 @@
+{
+  "name": "ideabox",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Dev-time dependency pinning for the front-end libraries bundled by the ideabox GLPI plugin.",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "fuse.js": "7.0.0"
+  },
+  "scripts": {
+    "build:fuse": "node -e \"require('fs').copyFileSync('node_modules/fuse.js/dist/fuse.min.js', 'public/lib/fuse.min.js')\"",
+    "postinstall": "npm run build:fuse"
+  }
+}

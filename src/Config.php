@@ -84,7 +84,8 @@ class Config extends CommonDBTM
      *
      * @return string
      */
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    {
         if (!$withtemplate) {
             $ong[1] =  self::createTabEntry(__s('Setup'));
             return $ong;
@@ -92,7 +93,8 @@ class Config extends CommonDBTM
         return '';
     }
 
-    static function getIcon() {
+    public static function getIcon()
+    {
         return "ti ti-settings";
     }
 
@@ -124,13 +126,14 @@ class Config extends CommonDBTM
      *
      * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
      **/
-    function rawSearchOptions() {
+    public function rawSearchOptions()
+    {
 
         $tab = [];
 
         $tab[] = [
             'id'   => 'common',
-            'name' => self::getTypeName(2)
+            'name' => self::getTypeName(2),
         ];
 
         $tab[] = [
@@ -139,7 +142,7 @@ class Config extends CommonDBTM
             'field'      => 'title',
             'name'       => __s('Title'),
             'searchtype' => 'equals',
-            'datatype'   => 'text'
+            'datatype'   => 'text',
         ];
 
         $tab[] = [
@@ -148,7 +151,7 @@ class Config extends CommonDBTM
             'field'      => 'comment',
             'name'       => __s('Comments'),
             'searchtype' => 'equals',
-            'datatype'   => 'text'
+            'datatype'   => 'text',
         ];
         return $tab;
     }
@@ -188,13 +191,13 @@ class Config extends CommonDBTM
 
         // Make new database object and fill variables
         $iterator = $DB->request([
-                                     'FROM'  => 'glpi_plugin_ideabox_configtranslations',
-                                     'WHERE' => [
-                                         'itemtype' => Config::class,
-                                         'items_id' => '1',
-                                         'field'    => $field,
-                                         'language' => $_SESSION['glpilanguage']
-                                     ]]);
+            'FROM'  => 'glpi_plugin_ideabox_configtranslations',
+            'WHERE' => [
+                'itemtype' => Config::class,
+                'items_id' => '1',
+                'field'    => $field,
+                'language' => $_SESSION['glpilanguage'],
+            ]]);
 
         if (count($iterator)) {
             foreach ($iterator as $data) {
@@ -235,7 +238,7 @@ class Config extends CommonDBTM
                 $table,
                 ['id' => 1,
                     'title' => '',
-                    'comment' => '']
+                    'comment' => ''],
             );
         }
     }

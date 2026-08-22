@@ -36,27 +36,30 @@ use UserEmail;
 
 class NotificationTargetIdeabox extends NotificationTarget
 {
-    const IDEABOX_USER         = 4900;
-    const IDEABOX_COMMENT_USER = 4901;
+    public const IDEABOX_USER         = 4900;
+    public const IDEABOX_COMMENT_USER = 4901;
 
-    public function getEvents() {
+    public function getEvents()
+    {
         return ['new'           => __s('A new idea has been submitted', 'ideabox'),
-                'update'        => __s('An idea has been modified', 'ideabox'),
-                'delete'        => __s('An idea has been deleted', 'ideabox'),
-                'newcomment'    => __s('A comment has been added', 'ideabox'),
-                'updatecomment' => __s('A comment has been modified', 'ideabox'),
-                'deletecomment' => __s('A comment has been deleted', 'ideabox')];
+            'update'        => __s('An idea has been modified', 'ideabox'),
+            'delete'        => __s('An idea has been deleted', 'ideabox'),
+            'newcomment'    => __s('A comment has been added', 'ideabox'),
+            'updatecomment' => __s('A comment has been modified', 'ideabox'),
+            'deletecomment' => __s('A comment has been deleted', 'ideabox')];
     }
 
     /**
      * Get additionnals targets for Tickets
      */
-    public function addAdditionalTargets($event = '') {
+    public function addAdditionalTargets($event = '')
+    {
         $this->addTarget(NotificationTargetIdeabox::IDEABOX_USER, __s('Author'));
         $this->addTarget(NotificationTargetIdeabox::IDEABOX_COMMENT_USER, __s('Comment author', 'ideabox'));
     }
 
-    public function addSpecificTargets($data, $options) {
+    public function addSpecificTargets($data, $options)
+    {
         //Look for all targets whose type is Notification::ITEM_USER
         switch ($data['items_id']) {
             case NotificationTargetIdeabox::IDEABOX_USER:
@@ -69,7 +72,8 @@ class NotificationTargetIdeabox extends NotificationTarget
     }
 
     //Get recipient
-    public function getUserAddress() {
+    public function getUserAddress()
+    {
         global $DB;
 
         $criteria = [
@@ -80,13 +84,13 @@ class NotificationTargetIdeabox extends NotificationTarget
                 'glpi_users' => [
                     'ON' => [
                         'glpi_users' => 'id',
-                        'glpi_plugin_ideabox_ideaboxes'          => 'users_id'
-                    ]
-                ]
+                        'glpi_plugin_ideabox_ideaboxes'          => 'users_id',
+                    ],
+                ],
             ],
             'WHERE' => [
-                'glpi_plugin_ideabox_ideaboxes.id' => $this->obj->fields["id"]
-            ]
+                'glpi_plugin_ideabox_ideaboxes.id' => $this->obj->fields["id"],
+            ],
         ];
 
         foreach ($DB->request($criteria) as $data) {
@@ -95,7 +99,8 @@ class NotificationTargetIdeabox extends NotificationTarget
         }
     }
 
-    public function getUserCommentAddress() {
+    public function getUserCommentAddress()
+    {
         global $DB;
 
         $criteria = [
@@ -106,13 +111,13 @@ class NotificationTargetIdeabox extends NotificationTarget
                 'glpi_users' => [
                     'ON' => [
                         'glpi_users' => 'id',
-                        'glpi_plugin_ideabox_comments'          => 'users_id'
-                    ]
-                ]
+                        'glpi_plugin_ideabox_comments'          => 'users_id',
+                    ],
+                ],
             ],
             'WHERE' => [
-                'glpi_plugin_ideabox_comments.plugin_ideabox_ideaboxes_id' => $this->obj->fields["id"]
-            ]
+                'glpi_plugin_ideabox_comments.plugin_ideabox_ideaboxes_id' => $this->obj->fields["id"],
+            ],
         ];
 
         foreach ($DB->request($criteria) as $data) {
@@ -121,7 +126,8 @@ class NotificationTargetIdeabox extends NotificationTarget
         }
     }
 
-    public function addDataForTemplate($event, $options = []) {
+    public function addDataForTemplate($event, $options = [])
+    {
         global $CFG_GLPI, $DB;
 
         $events = $this->getAllEvents();
@@ -140,7 +146,7 @@ class NotificationTargetIdeabox extends NotificationTarget
         $this->data['##ideabox.entity##']      =
             Dropdown::getDropdownName(
                 'glpi_entities',
-                $ideabox->fields['entities_id']
+                $ideabox->fields['entities_id'],
             );
         $this->data['##ideabox.id##']          = sprintf("%07d", $ideabox->fields['id']);
 
@@ -206,28 +212,29 @@ class NotificationTargetIdeabox extends NotificationTarget
         }
     }
 
-    public function getTags() {
+    public function getTags()
+    {
         $tags = ['ideabox.name'        => __s('Title'),
-                 'ideabox.comment'     => __s('Description'),
-                 'comment.name'        => __s('Name'),
-                 'comment.author'      => __s('Comment author', 'ideabox'),
-                 'comment.datecomment' => __s('Date'),
-                 'comment.comment'     => __s('Content')];
+            'ideabox.comment'     => __s('Description'),
+            'comment.name'        => __s('Name'),
+            'comment.author'      => __s('Comment author', 'ideabox'),
+            'comment.datecomment' => __s('Date'),
+            'comment.comment'     => __s('Content')];
         foreach ($tags as $tag => $label) {
             $this->addTagToList(['tag'   => $tag, 'label' => $label,
-                                 'value' => true]);
+                'value' => true]);
         }
 
         $this->addTagToList(['tag'     => 'ideabox',
-                             'label'   => __s('An addition/modification/deletion of ideas', 'ideabox'),
-                             'value'   => false,
-                             'foreach' => true,
-                             'events'  => ['new', 'update', 'delete']]);
+            'label'   => __s('An addition/modification/deletion of ideas', 'ideabox'),
+            'value'   => false,
+            'foreach' => true,
+            'events'  => ['new', 'update', 'delete']]);
         $this->addTagToList(['tag'     => 'comments',
-                             'label'   => __s('An addition/modification/deletion of comments', 'ideabox'),
-                             'value'   => false,
-                             'foreach' => true,
-                             'events'  => ['newcomment', 'updatecomment', 'deletecomment']]);
+            'label'   => __s('An addition/modification/deletion of comments', 'ideabox'),
+            'value'   => false,
+            'foreach' => true,
+            'events'  => ['newcomment', 'updatecomment', 'deletecomment']]);
 
         asort($this->tag_descriptions);
     }

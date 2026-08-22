@@ -28,6 +28,7 @@
  */
 
 namespace GlpiPlugin\Ideabox;
+
 use CommonDBChild;
 use DBConnection;
 use Migration;

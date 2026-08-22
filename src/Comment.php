@@ -85,7 +85,7 @@ class Comment extends CommonDBChild
         $restrict = ['plugin_ideabox_ideaboxes_id' => $item->getID()];
         return $dbu->countElementsInTable(
             'glpi_plugin_ideabox_comments',
-            $restrict
+            $restrict,
         );
     }
 
@@ -221,6 +221,24 @@ class Comment extends CommonDBChild
         return true;
     }
 
+    /**
+     * A comment carries no entity of its own (no `entities_id` column): its
+     * visibility must follow the parent idea's entity scope. Overriding
+     * canViewItem() — which CommonDBTM::can($id, READ) invokes on every display
+     * path, including CommonGLPI::display() used by the non-modal
+     * comment.form.php route — closes the cross-entity comment disclosure that
+     * the default entity-less check let through.
+     */
+    public function canViewItem(): bool
+    {
+        $parent = new Ideabox();
+        if (!$parent->getFromDB($this->fields['plugin_ideabox_ideaboxes_id'] ?? 0)) {
+            return false;
+        }
+
+        return (bool) $parent->can($parent->getID(), READ);
+    }
+
     public function showForm($ID, $options = [])
     {
         $this->initForm($ID, $options);
@@ -275,10 +293,10 @@ class Comment extends CommonDBChild
             $raw_comments[] = $row;
         }
 
-        if (empty($raw_comments)) {
-            return;
-        }
-
+        // No early return on an empty set: the modal must still render so the
+        // "Post a comment" form below is reachable. This lets the simplified
+        // (helpdesk) list open a modal to add the first comment instead of
+        // navigating away to the central Comment tab.
         $comments = [];
         foreach ($raw_comments as $row) {
             $user = new User();
@@ -294,7 +312,7 @@ class Comment extends CommonDBChild
                     _sx('button', 'Delete', 'ideabox'),
                     ['id' => $row['id']],
                     'ti-trash',
-                    "class='btn btn-sm btn-ghost-danger'"
+                    "class='btn btn-sm btn-ghost-danger'",
                 );
                 $delete_form = ob_get_clean();
             }
@@ -307,7 +325,7 @@ class Comment extends CommonDBChild
                 'has_thumbnail' => !empty($thumbnail_url),
                 'user_name'     => htmlspecialchars(
                     formatUserName($user->getID(), $user->fields['name'], $user->fields['realname'], $user->fields['firstname']),
-                    ENT_QUOTES
+                    ENT_QUOTES,
                 ),
                 'user_name_link' => getUserName($row['users_id'], 0, true),
                 'date_relative'  => Html::timestampToRelativeStr($row['date_comment']),
@@ -326,7 +344,7 @@ class Comment extends CommonDBChild
                 _sx('button', 'Post a comment', 'ideabox'),
                 ['plugin_ideabox_ideaboxes_id' => $ID],
                 'ti-send',
-                "class='btn btn-primary btn-sm'"
+                "class='btn btn-primary btn-sm'",
             );
             $add_comment_form = ob_get_clean();
         }
@@ -426,7 +444,7 @@ class Comment extends CommonDBChild
 
         Session::initNavigateListItems(
             $this->getType(),
-            Ideabox::getTypeName(2) . " = " . $ideabox->fields["name"]
+            Ideabox::getTypeName(2) . " = " . $ideabox->fields["name"],
         );
 
         $comments = [];
@@ -489,7 +507,7 @@ class Comment extends CommonDBChild
                     'num' => 1,
                     'rank' => 1,
                     'users_id' => 0,
-                    'interface' => 'central']
+                    'interface' => 'central'],
             );
 
             $DB->insert(
@@ -498,7 +516,7 @@ class Comment extends CommonDBChild
                     'num' => 7,
                     'rank' => 2,
                     'users_id' => 0,
-                    'interface' => 'central']
+                    'interface' => 'central'],
             );
 
             $DB->insert(
@@ -507,7 +525,7 @@ class Comment extends CommonDBChild
                     'num' => 10,
                     'rank' => 3,
                     'users_id' => 0,
-                    'interface' => 'central']
+                    'interface' => 'central'],
             );
         }
 
@@ -517,7 +535,7 @@ class Comment extends CommonDBChild
         foreach ($classes as $old => $new) {
             $displayusers = $DB->request([
                 'SELECT' => [
-                    'users_id'
+                    'users_id',
                 ],
                 'DISTINCT' => true,
                 'FROM' => 'glpi_displaypreferences',
@@ -531,13 +549,13 @@ class Comment extends CommonDBChild
                     $iterator = $DB->request([
                         'SELECT' => [
                             'num',
-                            'id'
+                            'id',
                         ],
                         'FROM' => 'glpi_displaypreferences',
                         'WHERE' => [
                             'itemtype' => $old,
                             'users_id' => $displayuser['users_id'],
-                            'interface' => 'central'
+                            'interface' => 'central',
                         ],
                     ]);
 
@@ -545,14 +563,14 @@ class Comment extends CommonDBChild
                         foreach ($iterator as $data) {
                             $iterator2 = $DB->request([
                                 'SELECT' => [
-                                    'id'
+                                    'id',
                                 ],
                                 'FROM' => 'glpi_displaypreferences',
                                 'WHERE' => [
                                     'itemtype' => $new,
                                     'users_id' => $displayuser['users_id'],
                                     'num' => $data['num'],
-                                    'interface' => 'central'
+                                    'interface' => 'central',
                                 ],
                             ]);
                             if (count($iterator2) > 0) {
@@ -561,7 +579,7 @@ class Comment extends CommonDBChild
                                         'glpi_displaypreferences',
                                         [
                                             'id' => $dataid['id'],
-                                        ]
+                                        ],
                                     );
                                     $DB->doQuery($query);
                                 }
@@ -573,7 +591,7 @@ class Comment extends CommonDBChild
                                     ],
                                     [
                                         'id' => $data['id'],
-                                    ]
+                                    ],
                                 );
                                 $DB->doQuery($query);
                             }

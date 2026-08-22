@@ -93,7 +93,7 @@ function plugin_ideabox_getDatabaseRelations()
             "glpi_entities" => ["glpi_plugin_ideabox_ideaboxes" => "entities_id"],
             "glpi_users" => [
                 "glpi_plugin_ideabox_ideaboxes" => "users_id",
-                "glpi_plugin_ideabox_comments" => "users_id"
+                "glpi_plugin_ideabox_comments" => "users_id",
             ],
         ];
     } else {

@@ -35,56 +35,59 @@ use PluginDatainjectionInjectionInterface;
 use Search;
 
 #[AllowDynamicProperties]
-class IdeaboxInjection extends Ideabox
-   implements PluginDatainjectionInjectionInterface {
-
-    static function getTable($classname = null)
+class IdeaboxInjection extends Ideabox implements PluginDatainjectionInjectionInterface
+{
+    public static function getTable($classname = null)
     {
         return Ideabox::getTable();
     }
 
-   function isPrimaryType() {
-      return true;
-   }
+    public function isPrimaryType()
+    {
+        return true;
+    }
 
-   function connectedTo() {
-      return [];
-   }
+    public function connectedTo()
+    {
+        return [];
+    }
 
-   function getOptions($primary_type = '') {
+    public function getOptions($primary_type = '')
+    {
 
-      $tab = Search::getOptions(get_parent_class($this));
+        $tab = Search::getOptions(get_parent_class($this));
 
-      //Specific to location
-      $tab[4]['checktype'] = 'date';
+        //Specific to location
+        $tab[4]['checktype'] = 'date';
 
-      //$blacklist = PluginDatainjectionCommonInjectionLib::getBlacklistedOptions();
-      //Remove some options because some fields cannot be imported
-      $notimportable            = [30, 80];
-      $options['ignore_fields'] = $notimportable;
-      $options['displaytype']   = ["user"           => [2],
-                                        "multiline_text" => [3],
-                                        "date"           => [4]];
+        //$blacklist = PluginDatainjectionCommonInjectionLib::getBlacklistedOptions();
+        //Remove some options because some fields cannot be imported
+        $notimportable            = [30, 80];
+        $options['ignore_fields'] = $notimportable;
+        $options['displaytype']   = ["user"           => [2],
+            "multiline_text" => [3],
+            "date"           => [4]];
 
-      $tab = PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
+        $tab = PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
 
-      return $tab;
-   }
+        return $tab;
+    }
 
 
-   /**
-    * Standard method to add an object into glpi
-    * WILL BE INTEGRATED INTO THE CORE IN 0.80
-    *
-    * @param values fields to add into glpi
-    * @param options options used during creation
-    *
-    * @return an array of IDs of newly created objects : for example array(Computer=>1, Networkport=>10)
-    */
-   function addOrUpdateObject($values = [], $options = []) {
-      $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
-      $lib->processAddOrUpdate();
-      return $lib->getInjectionResults();
-   }
+    /**
+     * Standard method to add an object into glpi
+     * WILL BE INTEGRATED INTO THE CORE IN 0.80
+     *
+     * @param values fields to add into glpi
+     * @param options options used during creation
+     *
+     * @return an array of IDs of newly created objects : for example array(Computer=>1, Networkport=>10)
+     */
+    public function addOrUpdateObject($values = [], $options = [])
+    {
+        $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
+        $lib->processAddOrUpdate();
+        return $lib->getInjectionResults();
+    }
 
 }

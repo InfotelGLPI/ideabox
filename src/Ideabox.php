@@ -250,6 +250,18 @@ class Ideabox extends CommonDBTM
 
     public function prepareInputForAdd($input)
     {
+        // Mass-assignment guard, symmetric with prepareInputForUpdate(): outside
+        // the central interface a requester may only submit the idea content and
+        // its entity scope. Lifecycle columns (state especially) must NOT be
+        // settable from a forged POST — stripping them lets the table default
+        // apply (state => self::NEW) instead of letting the author create an
+        // idea already marked "In progress"/"Closed". entities_id is kept because
+        // it has already been validated by check(-1, CREATE, $_POST).
+        if (Session::getCurrentInterface() != 'central') {
+            $allowed = ['name', 'comment', 'entities_id'];
+            $input   = array_intersect_key($input, array_flip($allowed));
+        }
+
         $input['users_id'] = Session::getLoginUserID();
         $input['date_idea'] = $_SESSION["glpi_currenttime"];
 
@@ -428,8 +440,8 @@ class Ideabox extends CommonDBTM
                 $already_voted ? 'cancelvote' : 'vote',
                 $already_voted ? _x('button', 'Cancel', 'ideabox') : $votes_count,
                 ['id' => $id],
-                $already_voted ? 'ti-circle-x' : 'ti-thumb-up',
-                "class='btn btn-sm " . ($already_voted ? 'btn-ghost-danger' : 'btn-ghost-success') . "'"
+                $already_voted ? 'ti-thumb-down' : 'ti-thumb-up',
+                "class='btn btn-sm " . ($already_voted ? 'btn-ghost-danger' : 'btn-ghost-success') . "'",
             );
             $vote_form = ob_get_clean();
 
@@ -440,30 +452,20 @@ class Ideabox extends CommonDBTM
                 _x('button', 'Suscribe', 'ideabox'),
                 ['id' => $id],
                 'ti-mail',
-                "class='btn btn-sm btn-ghost-secondary'"
+                "class='btn btn-sm btn-ghost-secondary'",
             );
             $subscribe_form = ob_get_clean();
 
-            $comments_modal   = '';
-            $add_comment_form = '';
-            if (count($comments_raw) > 0) {
-                $comments_modal = Ajax::createIframeModalWindow(
-                    'seecomments' . $id,
-                    PLUGIN_IDEABOX_WEBDIR . '/front/comment.php?plugin_ideabox_ideaboxes_id=' . $id,
-                    ['title' => __s('See comments', 'ideabox'), 'display' => false, 'reloadonclose' => true]
-                );
-            } else {
-                ob_start();
-                Html::showSimpleForm(
-                    $idea->getFormURL() . '?forcetab=GlpiPlugin\Ideabox\Comment$1&id=' . $id,
-                    'addcomment',
-                    '',
-                    ['plugin_ideabox_ideaboxes_id' => $id],
-                    'ti-message-plus',
-                    "class='btn btn-sm btn-ghost-secondary'"
-                );
-                $add_comment_form = ob_get_clean();
-            }
+            // Always expose the comments through the iframe modal, even with no
+            // comment yet: Comment::seeComments() now renders the "Post a comment"
+            // form in the empty state too, so the simplified (helpdesk) interface
+            // stays on a modal instead of navigating away to the central Comment
+            // tab (which the requester cannot use).
+            $comments_modal = Ajax::createIframeModalWindow(
+                'seecomments' . $id,
+                PLUGIN_IDEABOX_WEBDIR . '/front/comment.php?plugin_ideabox_ideaboxes_id=' . $id,
+                ['title' => __s('Comments', 'ideabox'), 'display' => false, 'reloadonclose' => true],
+            );
 
             $last_comment = null;
             if (count($comments_raw) > 0) {
@@ -482,7 +484,7 @@ class Ideabox extends CommonDBTM
                 'link'             => $idea->getLink(),
                 'user_name'        => htmlspecialchars(
                     formatUserName($user->getID(), $user->fields['name'], $user->fields['realname'], $user->fields['firstname']),
-                    ENT_QUOTES
+                    ENT_QUOTES,
                 ),
                 'avatar_style'     => $avatar_style,
                 'user_initials'    => htmlspecialchars($user->getUserInitials(), ENT_QUOTES),
@@ -499,14 +501,14 @@ class Ideabox extends CommonDBTM
                 'vote_form'        => $vote_form,
                 'subscribe_form'   => $subscribe_form,
                 'comments_modal'   => $comments_modal,
-                'add_comment_form' => $add_comment_form,
                 'label_read_desc'  => __s('Read description', 'ideabox'),
                 'label_commented_by' => __s('Commented by', 'ideabox'),
             ];
         }
 
         TemplateRenderer::getInstance()->display('@ideabox/ideabox_list.html.twig', [
-            'ideas' => $ideas,
+            'ideas'             => $ideas,
+            'label_add_comment' => __s('Add a comment', 'ideabox'),
         ]);
     }
 
@@ -575,7 +577,7 @@ HTML;
                     'ORDERBY' => 'date_idea DESC',
                 ];
                 $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
-                    'glpi_plugin_ideabox_ideaboxes'
+                    'glpi_plugin_ideabox_ideaboxes',
                 );
 
                 $iterator = $DB->request($criteria);
@@ -588,10 +590,17 @@ HTML;
                             // The client inserts these values as HTML (jQuery .append), so
                             // escape them here to prevent stored XSS through the idea name.
                             'title' => htmlescape($idea['name']),
-                            'comment' => ($idea['comment'] != null) ? htmlescape(Html::resume_text(
-                                RichText::getTextFromHtml($idea['comment']),
-                                "200"
-                            )) : "",
+                            // Html::resume_text() already HTML-escapes its output, so it is
+                            // safe for the client-side jQuery .append() (HTML context) and must
+                            // NOT be wrapped in a second htmlescape(): doing so double-encodes
+                            // entities (e.g. an apostrophe renders as the literal "&#039;").
+                            // getTextFromHtml(..., false, true) strips tags and decodes entities
+                            // to real plain text first, so previews are correct whether the
+                            // stored comment used literal characters or HTML entities.
+                            'comment' => ($idea['comment'] != null) ? Html::resume_text(
+                                RichText::getTextFromHtml($idea['comment'], false, true),
+                                200,
+                            ) : "",
                             'icon' => 'ti ti-bulb',
                             'background' => '',
                             'order' => "2",
@@ -643,7 +652,7 @@ HTML;
                     'num' => 1,
                     'rank' => 1,
                     'users_id' => 0,
-                    'interface' => 'central']
+                    'interface' => 'central'],
             );
 
             $DB->insert(
@@ -652,7 +661,7 @@ HTML;
                     'num' => 7,
                     'rank' => 2,
                     'users_id' => 0,
-                    'interface' => 'central']
+                    'interface' => 'central'],
             );
 
             $DB->insert(
@@ -661,7 +670,7 @@ HTML;
                     'num' => 10,
                     'rank' => 3,
                     'users_id' => 0,
-                    'interface' => 'central']
+                    'interface' => 'central'],
             );
 
             // Notifications
@@ -669,7 +678,7 @@ HTML;
                 'name' => 'Idea'];
             $DB->insert(
                 "glpi_notificationtemplates",
-                $options_notif
+                $options_notif,
             );
 
             foreach ($DB->request([
@@ -709,7 +718,7 @@ HTML;
                        -------
                        ##ENDFOREACHcomments##',
                             'content_html' => '&lt;p&gt;&lt;strong&gt;##lang.ideabox.url##&lt;/strong&gt; : &lt;a href=\"##ideabox.url##\"&gt;##ideabox.url##&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;##lang.ideabox.entity##&lt;/strong&gt; : ##ideabox.entity##&lt;br /&gt; ##IFideabox.name##&lt;strong&gt;##lang.ideabox.name##&lt;/strong&gt; : ##ideabox.name####ENDIFideabox.name##&lt;br /&gt;&lt;br /&gt; ##IFideabox.comment##&lt;strong&gt;##lang.ideabox.comment##&lt;/strong&gt; : ##ideabox.comment####ENDIFideabox.comment##&lt;br /&gt;&lt;br /&gt;##FOREACHupdates##----------&lt;br /&gt;&lt;strong&gt;##lang.update.title## :&lt;/strong&gt;&lt;br /&gt;##IFupdate.name##&lt;strong&gt;##lang.ideabox.name##&lt;/strong&gt; : ##update.name####ENDIFupdate.name##&lt;br /&gt;##IFupdate.comment##&lt;br /&gt;&lt;strong&gt;##lang.ideabox.comment##&lt;/strong&gt; : ##update.comment##&lt;br /&gt;##ENDIFupdate.comment##&lt;br /&gt;----------##ENDFOREACHupdates##&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;##lang.comment.title## :&lt;/strong&gt;&lt;br /&gt;----------&lt;br /&gt;##FOREACHcomments####IFcomment.name##&lt;strong&gt;##lang.comment.name##&lt;/strong&gt; : ##comment.name####ENDIFcomment.name##&lt;br /&gt;##IFcomment.author##&lt;strong&gt;##lang.comment.author##&lt;/strong&gt; : ##comment.author####ENDIFcomment.author##&lt;br /&gt;##IFcomment.datecomment##&lt;strong&gt;##lang.comment.datecomment##&lt;/strong&gt; : ##comment.datecomment####ENDIFcomment.datecomment##&lt;br /&gt;##IFcomment.comment##&lt;strong&gt;##lang.comment.comment##&lt;/strong&gt; : ##comment.comment####ENDIFcomment.comment##&lt;br /&gt;----------&lt;br /&gt;##ENDFOREACHcomments##&lt;/p&gt;',
-                        ]
+                        ],
                     );
 
                     $DB->insert(
@@ -720,7 +729,7 @@ HTML;
                             'itemtype' => self::class,
                             'event' => 'new',
                             'is_recursive' => 1,
-                        ]
+                        ],
                     );
                     $options_notif        = ['itemtype' => self::class,
                         'name' => 'New Idea',
@@ -737,7 +746,7 @@ HTML;
                                     'notifications_id' => $notification,
                                     'mode' => 'mailing',
                                     'notificationtemplates_id' => $templates_id,
-                                ]
+                                ],
                             );
                         }
                     }
@@ -750,7 +759,7 @@ HTML;
                             'itemtype' => self::class,
                             'event' => 'update',
                             'is_recursive' => 1,
-                        ]
+                        ],
                     );
                     $options_notif        = ['itemtype' => self::class,
                         'name' => 'Update Idea',
@@ -767,7 +776,7 @@ HTML;
                                     'notifications_id' => $notification,
                                     'mode' => 'mailing',
                                     'notificationtemplates_id' => $templates_id,
-                                ]
+                                ],
                             );
                         }
                     }
@@ -780,7 +789,7 @@ HTML;
                             'itemtype' => self::class,
                             'event' => 'delete',
                             'is_recursive' => 1,
-                        ]
+                        ],
                     );
                     $options_notif        = ['itemtype' => self::class,
                         'name' => 'Delete Idea',
@@ -797,7 +806,7 @@ HTML;
                                     'notifications_id' => $notification,
                                     'mode' => 'mailing',
                                     'notificationtemplates_id' => $templates_id,
-                                ]
+                                ],
                             );
                         }
                     }
@@ -810,7 +819,7 @@ HTML;
                             'itemtype' => Comment::class,
                             'event' => 'newcomment',
                             'is_recursive' => 1,
-                        ]
+                        ],
                     );
                     $options_notif        = ['itemtype' => Comment::class,
                         'name' => 'New comment of Idea',
@@ -827,7 +836,7 @@ HTML;
                                     'notifications_id' => $notification,
                                     'mode' => 'mailing',
                                     'notificationtemplates_id' => $templates_id,
-                                ]
+                                ],
                             );
                         }
                     }
@@ -840,7 +849,7 @@ HTML;
                             'itemtype' => Comment::class,
                             'event' => 'updatecomment',
                             'is_recursive' => 1,
-                        ]
+                        ],
                     );
                     $options_notif        = ['itemtype' => Comment::class,
                         'name' => 'Update comment of idea',
@@ -857,7 +866,7 @@ HTML;
                                     'notifications_id' => $notification,
                                     'mode' => 'mailing',
                                     'notificationtemplates_id' => $templates_id,
-                                ]
+                                ],
                             );
                         }
                     }
@@ -870,7 +879,7 @@ HTML;
                             'itemtype' => Comment::class,
                             'event' => 'deletecomment',
                             'is_recursive' => 1,
-                        ]
+                        ],
                     );
                     $options_notif        = ['itemtype' => Comment::class,
                         'name' => 'Delete comment of idea',
@@ -887,7 +896,7 @@ HTML;
                                     'notifications_id' => $notification,
                                     'mode' => 'mailing',
                                     'notificationtemplates_id' => $templates_id,
-                                ]
+                                ],
                             );
                         }
                     }
@@ -900,7 +909,7 @@ HTML;
             foreach ($classes as $old => $new) {
                 $displayusers = $DB->request([
                     'SELECT' => [
-                        'users_id'
+                        'users_id',
                     ],
                     'DISTINCT' => true,
                     'FROM' => 'glpi_displaypreferences',
@@ -914,13 +923,13 @@ HTML;
                         $iterator = $DB->request([
                             'SELECT' => [
                                 'num',
-                                'id'
+                                'id',
                             ],
                             'FROM' => 'glpi_displaypreferences',
                             'WHERE' => [
                                 'itemtype' => $old,
                                 'users_id' => $displayuser['users_id'],
-                                'interface' => 'central'
+                                'interface' => 'central',
                             ],
                         ]);
 
@@ -928,14 +937,14 @@ HTML;
                             foreach ($iterator as $data) {
                                 $iterator2 = $DB->request([
                                     'SELECT' => [
-                                        'id'
+                                        'id',
                                     ],
                                     'FROM' => 'glpi_displaypreferences',
                                     'WHERE' => [
                                         'itemtype' => $new,
                                         'users_id' => $displayuser['users_id'],
                                         'num' => $data['num'],
-                                        'interface' => 'central'
+                                        'interface' => 'central',
                                     ],
                                 ]);
                                 if (count($iterator2) > 0) {
@@ -944,7 +953,7 @@ HTML;
                                             'glpi_displaypreferences',
                                             [
                                                 'id' => $dataid['id'],
-                                            ]
+                                            ],
                                         );
                                         $DB->doQuery($query);
                                     }
@@ -956,7 +965,7 @@ HTML;
                                         ],
                                         [
                                             'id' => $data['id'],
-                                        ]
+                                        ],
                                     );
                                     $DB->doQuery($query);
                                 }

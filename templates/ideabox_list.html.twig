@@ -75,16 +75,22 @@
             <div class="card-footer d-flex align-items-center gap-2 py-2">
                 {{ idea.vote_form|raw }}
                 {% if idea.comments_count > 0 %}
-                    <button class="btn btn-sm btn-ghost-secondary d-flex align-items-center gap-1"
+                    <button type="button" class="btn btn-sm btn-ghost-secondary d-flex align-items-center gap-1"
                             data-bs-toggle="modal"
                             data-bs-target="#seecomments{{ idea.id }}">
                         <i class="ti ti-message"></i>
                         <span class="badge badge-outline-secondary rounded-pill">{{ idea.comments_count }}</span>
                     </button>
-                    {{ idea.comments_modal|raw }}
                 {% else %}
-                    {{ idea.add_comment_form|raw }}
+                    <button type="button" class="btn btn-sm btn-ghost-secondary d-flex align-items-center"
+                            data-bs-toggle="modal"
+                            data-bs-target="#seecomments{{ idea.id }}"
+                            title="{{ label_add_comment }}">
+                        <i class="ti ti-message-plus"></i>
+                        <span class="sr-only">{{ label_add_comment }}</span>
+                    </button>
                 {% endif %}
+                {{ idea.comments_modal|raw }}
 {#                <div class="ms-auto">{{ idea.subscribe_form|raw }}</div>#}
             </div>
 

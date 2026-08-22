@@ -36,8 +36,8 @@ if (Plugin::isPluginActive("ideabox")) {
     $config = new Config();
 
     if (isset($_POST["update_setup"])) {
-         $_POST['id'] = 1;
-         $config->update($_POST);
+        $_POST['id'] = 1;
+        $config->update($_POST);
 
         Html::back();
     } else {

@@ -27,11 +27,19 @@
  --------------------------------------------------------------------------
  */
 
-use Glpi\Event;
 include('../../../../inc/includes.php');
+
+// This PHP file is served directly from public/ (registered as a script via
+// Hooks::ADD_JAVASCRIPT), so it boots the GLPI kernel outside the session
+// middleware. Refuse an anonymous full-kernel boot: only a logged-in user may
+// reach it. We do NOT gate on the plugin READ right here — the script is
+// injected on every central page, and the actual data endpoint
+// (ajax/fuzzysearch.php) already enforces that right.
+Session::checkLoginUser();
+
 header('Content-Type: text/javascript');
 
-include ('diacritics.js');
+include('diacritics.js');
 
 ?>
 

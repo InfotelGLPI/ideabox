@@ -34,70 +34,69 @@ use Session;
 
 class Servicecatalog extends CommonGLPI
 {
+    public static $rightname = 'plugin_ideabox';
 
-    static $rightname = 'plugin_ideabox';
+    public $dohistory = false;
 
-    var $dohistory = false;
-
-    static function canUse()
+    public static function canUse()
     {
         return Session::haveRight(self::$rightname, READ);
     }
 
-   /**
-    * @return string
-    */
-    static function getMenuLink()
+    /**
+     * @return string
+     */
+    public static function getMenuLink()
     {
 
         return PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php";
     }
 
-   /**
-    * @return string
-    */
-    static function getNavBarLink()
+    /**
+     * @return string
+     */
+    public static function getNavBarLink()
     {
 
         return PLUGIN_IDEABOX_WEBDIR . "/front/ideabox.php";
     }
 
-    static function getMenuLogo()
+    public static function getMenuLogo()
     {
 
         return Ideabox::getIcon();
     }
 
-   /**
-    * @return string
-    * @throws \GlpitestSQLError
-    */
-    static function getMenuLogoCss()
+    /**
+     * @return string
+     * @throws \GlpitestSQLError
+     */
+    public static function getMenuLogoCss()
     {
 
         $addstyle = "font-size: 4.5em;";
         return $addstyle;
     }
 
-    static function getMenuTitle()
+    public static function getMenuTitle()
     {
 
         return __s('I have an idea', 'ideabox');
     }
 
 
-    static function getMenuComment()
+    public static function getMenuComment()
     {
 
         return __s('I have an idea', 'ideabox');
     }
 
-    static function getLinkList()
+    public static function getLinkList()
     {
         return "";
     }
 
-    static function getList()
+    public static function getList()
     {
         return "";
     }
