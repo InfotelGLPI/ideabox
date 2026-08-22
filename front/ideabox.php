@@ -33,6 +33,15 @@ use Glpi\Application\View\TemplateRenderer;
 use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Servicecatalog\Main;
 
+$idea = new Ideabox();
+
+// Evaluate the access right BEFORE emitting any HTML header, so a denied user
+// gets a clean 403 instead of the full interface chrome (which would leak the
+// module's existence and degrade the error page).
+if (!($idea->canView() || Session::haveRight("config", UPDATE))) {
+    throw new AccessDeniedHttpException();
+}
+
 if (Session::getCurrentInterface() == 'central') {
     Html::header(Ideabox::getTypeName(2), '', "tools", Ideabox::class);
 } else {
@@ -43,29 +52,23 @@ if (Session::getCurrentInterface() == 'central') {
     }
 }
 
-$idea = new Ideabox();
-
-if ($idea->canView() || Session::haveRight("config", UPDATE)) {
-    if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
-        if ($idea->canCreate()) {
-            $config = new Config();
-            $config->getFromDB(1);
-            TemplateRenderer::getInstance()->display('@ideabox/home_intro.html.twig', [
-                'title'        => Config::displayField($config, 'title'),
-                'comment'      => Config::displayField($config, 'comment'),
-                'icon'         => Ideabox::getIcon(),
-                'submit_label' => __('Submit an idea', 'ideabox'),
-            ]);
-        }
-
-        Ideabox::showSearchForm();
-
-        Ideabox::showList($_GET);
-    } else {
-        Search::show(Ideabox::class);
+if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
+    if ($idea->canCreate()) {
+        $config = new Config();
+        $config->getFromDB(1);
+        TemplateRenderer::getInstance()->display('@ideabox/home_intro.html.twig', [
+            'title'        => Config::displayField($config, 'title'),
+            'comment'      => Config::displayField($config, 'comment'),
+            'icon'         => Ideabox::getIcon(),
+            'submit_label' => __('Submit an idea', 'ideabox'),
+        ]);
     }
+
+    Ideabox::showSearchForm();
+
+    Ideabox::showList($_GET);
 } else {
-    throw new AccessDeniedHttpException();
+    Search::show(Ideabox::class);
 }
 
 

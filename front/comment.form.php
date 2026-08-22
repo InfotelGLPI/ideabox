@@ -27,6 +27,7 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Ideabox\Ideabox;
 use GlpiPlugin\Ideabox\Comment;
 use GlpiPlugin\Servicecatalog\Main;
@@ -60,6 +61,18 @@ if (isset($_POST["add"])) {
     Html::redirect(Toolbox::getItemTypeFormURL(Ideabox::class) . "?id=" . $_POST["plugin_ideabox_ideaboxes_id"]);
 } else {
     $comment->checkGlobal(READ);
+
+    // showForm() (modal path) discloses comment content but only correlates the
+    // parent idea, it never checks access to it. Replay the entity guard here, as
+    // ajax/viewsubitem.php does, so a comment attached to an unreachable entity's
+    // idea cannot be disclosed via the modal.
+    if ($_GET["in_modal"] != 0) {
+        $parent = new Ideabox();
+        if (!$parent->getFromDB($_GET["plugin_ideabox_ideaboxes_id"])
+            || !$parent->can($parent->getID(), READ)) {
+            throw new AccessDeniedHttpException();
+        }
+    }
 
     if ($_GET["in_modal"] == 0) {
         if (Session::getCurrentInterface() == 'central') {

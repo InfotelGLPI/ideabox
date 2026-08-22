@@ -268,10 +268,19 @@ class Ideabox extends CommonDBTM
 
     public function prepareInputForUpdate($input)
     {
-        if (Session::getCurrentInterface() != 'central'
-            && $this->fields['users_id'] != Session::getLoginUserID()) {
-            Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
-            return false;
+        if (Session::getCurrentInterface() != 'central') {
+            if ($this->fields['users_id'] != Session::getLoginUserID()) {
+                Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
+                return false;
+            }
+
+            // Mass-assignment guard: outside the central interface the author may
+            // only edit the idea content. Lifecycle/ownership/scoping columns
+            // (state, entities_id, users_id, date_idea) must never be settable
+            // from a forged POST, otherwise a helpdesk user could close his own
+            // idea or move it to an entity he does not administer.
+            $allowed = ['id', 'name', 'comment'];
+            $input   = array_intersect_key($input, array_flip($allowed));
         }
 
         return $input;

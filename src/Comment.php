@@ -155,10 +155,19 @@ class Comment extends CommonDBChild
 
     public function prepareInputForUpdate($input)
     {
-        if (Session::getCurrentInterface() != 'central'
-            && $this->fields['users_id'] != Session::getLoginUserID()) {
-            Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
-            return false;
+        if (Session::getCurrentInterface() != 'central') {
+            if ($this->fields['users_id'] != Session::getLoginUserID()) {
+                Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
+                return false;
+            }
+
+            // Mass-assignment guard: outside the central interface the author may
+            // only edit the comment content. Freezing the parent key prevents
+            // re-parenting the comment onto an idea in another entity (the
+            // check(UPDATE) entity scope applies to the original parent, not the
+            // forged one); users_id/date_comment are likewise not owner-settable.
+            $allowed = ['id', 'name', 'comment'];
+            $input   = array_intersect_key($input, array_flip($allowed));
         }
 
         return $input;
