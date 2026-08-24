@@ -93,10 +93,13 @@ class Ideabox extends CommonDBTM
         return Session::haveRight(self::$rightname, UPDATE);
     }
 
-    public function canUpdateItem(): bool
-    {
-        return Session::haveRight(self::$rightname, UPDATE);
-    }
+    // Do NOT override canUpdateItem() here. CommonDBTM::can($id, UPDATE) evaluates
+    // static::canUpdate() && $this->canUpdateItem(): the global right is already checked by
+    // canUpdate() above, so re-checking it in canUpdateItem() adds nothing and only drops the
+    // parent's checkEntity() call — the only entity boundary on the UPDATE path. Dropping it
+    // let a user holding UPDATE in one entity edit any idea of another entity, and (through
+    // CommonDBChild's delegation to the parent's canUpdateItem) update, delete or purge any
+    // of its comments. The inherited default enforces the entity check, including recursion.
 
     //clean if ideabox are deleted
     public function cleanDBonPurge()
