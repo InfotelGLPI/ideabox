@@ -68,6 +68,36 @@ class ConfigTranslation extends CommonDBChild
 
 
     /**
+     * Mass-assignment guard, symmetric with prepareInputForUpdate(): restrict the
+     * accepted columns to the translation schema so a forged POST cannot write
+     * arbitrary columns. Mirrors the whitelist pattern used by Ideabox/Comment.
+     *
+     * @param array $input
+     *
+     * @return array|false
+     */
+    public function prepareInputForAdd($input)
+    {
+        $allowed = ['id', 'itemtype', 'items_id', 'language', 'field', 'value'];
+        return array_intersect_key($input, array_flip($allowed));
+    }
+
+
+    /**
+     * Mass-assignment guard, symmetric with prepareInputForAdd().
+     *
+     * @param array $input
+     *
+     * @return array|false
+     */
+    public function prepareInputForUpdate($input)
+    {
+        $allowed = ['id', 'itemtype', 'items_id', 'language', 'field', 'value'];
+        return array_intersect_key($input, array_flip($allowed));
+    }
+
+
+    /**
      * Get the standard massive actions which are forbidden
      *
      * @return array an array of massive actions

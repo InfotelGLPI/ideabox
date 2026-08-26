@@ -53,6 +53,21 @@ class Config extends CommonDBTM
         return __s('Setup');
     }
 
+    /**
+     * Mass-assignment guard: the setup row only carries title/comment, so restrict
+     * the accepted columns and prevent a forged POST from writing arbitrary ones.
+     * Mirrors the whitelist pattern used by Ideabox/Comment.
+     *
+     * @param array $input
+     *
+     * @return array|false
+     */
+    public function prepareInputForUpdate($input)
+    {
+        $allowed = ['id', 'title', 'comment'];
+        return array_intersect_key($input, array_flip($allowed));
+    }
+
     public function __construct()
     {
         global $DB;
