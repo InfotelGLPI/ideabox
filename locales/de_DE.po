@@ -1,107 +1,290 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Ideabox Development Team
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # The tsmr <tsmr@thetsmr.fr>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Project - ideabox plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-19 11:54+0100\n"
+"POT-Creation-Date: 2026-08-31 14:51+0000\n"
 "PO-Revision-Date: 2012-12-19 11:32+0000\n"
 "Last-Translator: The tsmr <tsmr@thetsmr.fr>\n"
-"Language-Team: German (Germany) (http://www.transifex.com/projects/p/GLPI_ideabox/language/de_DE/)\n"
+"Language-Team: German (Germany) (http://www.transifex.com/projects/p/"
+"GLPI_ideabox/language/de_DE/)\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: setup.php:81 inc/ideabox.class.php:38
-msgid "Idea box"
-msgid_plural "Ideas box"
-msgstr[0] ""
-msgstr[1] ""
+#: src/NotificationTargetIdeabox.php:47
+msgid "A comment has been added"
+msgstr "Ein Kommentar wurde hinzugefügt"
 
-#: setup.php:94
-msgid "This plugin requires GLPI >= 0.84"
+#: src/NotificationTargetIdeabox.php:49
+msgid "A comment has been deleted"
+msgstr "Ein Kommentar wurde gelöscht"
+
+#: src/NotificationTargetIdeabox.php:48
+msgid "A comment has been modified"
+msgstr "Ein Kommentar wurde bearbritet"
+
+#: src/NotificationTargetIdeabox.php:44
+msgid "A new idea has been submitted"
+msgstr "Eine neue Idee wurde eingereicht"
+
+#: templates/comments.html.twig:76
+msgctxt "button"
+msgid "Add"
 msgstr ""
 
-#: front/ideabox.php:45
-msgid "Menu"
+#: src/Ideabox.php:514
+msgid "Add a comment"
 msgstr ""
 
-#: front/ideabox.php:49
-msgid "Submit an idea"
-msgstr "Idee hinzufügen"
+#: templates/comments.html.twig:90 templates/comments.html.twig:92
+msgctxt "button"
+msgid "Add a comment"
+msgstr ""
 
-#: inc/comment.class.php:41
-msgid "Comment"
-msgid_plural "Comments"
-msgstr[0] ""
-msgstr[1] ""
+#: src/NotificationTargetIdeabox.php:234
+msgid "An addition/modification/deletion of comments"
+msgstr ""
 
-#: inc/comment.class.php:227
-msgid "Idea"
-msgstr "Ideen"
+#: src/NotificationTargetIdeabox.php:229
+msgid "An addition/modification/deletion of ideas"
+msgstr ""
 
-#: inc/comment.class.php:247 inc/notificationtargetideabox.class.php:142
+#: src/NotificationTargetIdeabox.php:46
+msgid "An idea has been deleted"
+msgstr "Eine Idee wurde gelöscht"
+
+#: src/NotificationTargetIdeabox.php:45
+msgid "An idea has been modified"
+msgstr "Eine Idee wurde bearbeitet"
+
+#: templates/ideabox_form.html.twig:103
+msgid "Associable to a ticket"
+msgstr ""
+
+#: src/NotificationTargetIdeabox.php:196
 msgid "Associated comment"
 msgid_plural "Associated comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/ideabox.class.php:93 inc/ideabox.class.php:189
-msgid "Date of submission"
-msgstr "Erstellungsdatum"
+#: templates/comment_form.html.twig:72 templates/ideabox_form.html.twig:70
+msgid "Author"
+msgstr ""
 
-#: inc/notificationtargetideabox.class.php:41
-msgid "A new idea has been submitted"
-msgstr "Eine neue Idee wurde eingereicht"
+#: src/Ideabox.php:444
+msgctxt "button"
+msgid "Cancel"
+msgstr ""
 
-#: inc/notificationtargetideabox.class.php:42
-msgid "An idea has been modified"
-msgstr "Eine Idee wurde bearbeitet"
+#: templates/comments.html.twig:51
+msgid "Close"
+msgstr ""
 
-#: inc/notificationtargetideabox.class.php:43
-msgid "An idea has been deleted"
-msgstr "Eine Idee wurde gelöscht"
+#: src/Ideabox.php:364 templates/ideabox_form.html.twig:90
+msgid "Closed"
+msgstr ""
 
-#: inc/notificationtargetideabox.class.php:44
-msgid "A comment has been added"
-msgstr "Ein Kommentar wurde hinzugefügt"
+#: src/Comment.php:58
+msgid "Comment"
+msgid_plural "Comments"
+msgstr[0] ""
+msgstr[1] ""
 
-#: inc/notificationtargetideabox.class.php:45
-msgid "A comment has been modified"
-msgstr "Ein Kommentar wurde bearbritet"
-
-#: inc/notificationtargetideabox.class.php:46
-msgid "A comment has been deleted"
-msgstr "Ein Kommentar wurde gelöscht"
-
-#: inc/notificationtargetideabox.class.php:54
-#: inc/notificationtargetideabox.class.php:145
-#: inc/notificationtargetideabox.class.php:166
+#: src/NotificationTargetIdeabox.php:58 src/NotificationTargetIdeabox.php:199
+#: src/NotificationTargetIdeabox.php:220
 msgid "Comment author"
 msgstr ""
 
-#: inc/notificationtargetideabox.class.php:117
+#: src/Ideabox.php:508
+msgid "Commented by"
+msgstr ""
+
+#: src/Ideabox.php:470 templates/config_form.html.twig:37
+msgid "Comments"
+msgstr ""
+
+#: templates/comments.html.twig:128
+msgid "Confirm the final deletion?"
+msgstr ""
+
+#: src/Comment.php:387 templates/comment_form.html.twig:84
+msgid "Date of comment"
+msgstr ""
+
+#: src/Ideabox.php:192 templates/ideabox_form.html.twig:82
+msgid "Date of submission"
+msgstr "Erstellungsdatum"
+
+#: src/Comment.php:312
+msgctxt "button"
+msgid "Delete"
+msgstr ""
+
+#: templates/comments.html.twig:134 templates/comments.html.twig:135
+msgctxt "button"
+msgid "Delete permanently"
+msgstr ""
+
+#: src/Comment.php:405 src/Ideabox.php:210 templates/comments.html.twig:64
+#: templates/comment_form.html.twig:94 templates/ideabox_form.html.twig:112
+msgid "Description"
+msgstr ""
+
+#: templates/comments.html.twig:123
+msgctxt "button"
+msgid "Edit"
+msgstr ""
+
+#: templates/comments.html.twig:151
+msgid "Edit comment"
+msgstr ""
+
+#: templates/ideabox_translation.html.twig:43
+#: templates/ideabox_translation.html.twig:97
+msgid "Field"
+msgid_plural "Fields"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Servicecatalog.php:84 src/Servicecatalog.php:91
+msgid "I have an idea"
+msgstr ""
+
+#: src/Ideabox.php:61
+#, fuzzy
+msgid "Idea"
+msgid_plural "Ideas"
+msgstr[0] "Ideen"
+msgstr[1] "Ideen"
+
+#: src/Profile.php:148 setup.php:115
+msgid "Idea box"
+msgid_plural "Ideas box"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Ideabox.php:362 templates/ideabox_form.html.twig:90
+msgid "In progress"
+msgstr ""
+
+#: src/Ideabox.php:360 templates/ideabox_form.html.twig:90
+msgid "In study"
+msgstr ""
+
+#: templates/ideabox_form.html.twig:91
+msgid "Internal state"
+msgstr ""
+
+#: templates/ideabox_translation.html.twig:39
+#: templates/ideabox_translation.html.twig:62
+msgid "Language"
+msgstr ""
+
+#: src/NotificationTargetIdeabox.php:167
 msgid "Modified fields"
 msgstr ""
 
-#: inc/notificationtargetideabox.class.php:175
-msgid "An addition/modification/deletion of comments"
+#: templates/comments.html.twig:58 templates/comment_form.html.twig:58
+#: templates/ideabox_form.html.twig:56
+msgid "Name"
 msgstr ""
 
-#: inc/notificationtargetideabox.class.php:180
-msgid "An addition/modification/deletion of ideas"
+#: src/Ideabox.php:366 templates/ideabox_form.html.twig:90
+msgid "New"
 msgstr ""
 
-#: inc/profile.class.php:37 inc/profile.class.php:144
-msgid "Rights management"
-msgstr "Rechteverwaltung: "
+#: templates/comments.html.twig:96
+msgid "New comment"
+msgstr ""
 
-#: inc/profile.class.php:149
-msgid "Read - add ideas"
-msgstr "Neue Ideen"
+#: templates/comments.html.twig:100
+msgid "No comments"
+msgstr ""
+
+#: src/Comment.php:160 src/Comment.php:210 src/Ideabox.php:288
+msgid "Only original author can modify it"
+msgstr ""
+
+#: front/config.form.php:52 front/config.php:44
+msgid "Please activate the plugin"
+msgstr ""
+
+#: src/Comment.php:344
+msgctxt "button"
+msgid "Post a comment"
+msgstr ""
+
+#: src/Ideabox.php:507
+msgid "Read description"
+msgstr ""
+
+#: templates/comments.html.twig:76 templates/profile.html.twig:34
+msgctxt "button"
+msgid "Save"
+msgstr ""
+
+#: src/Ideabox.php:523 src/Ideabox.php:540
+msgid "Start typing to find a idea"
+msgstr ""
+
+#: front/ideabox.php:63
+msgid "Submit an idea"
+msgstr "Idee hinzufügen"
+
+#: templates/comment_form.html.twig:58 templates/ideabox_form.html.twig:56
+msgid "Surname"
+msgstr ""
+
+#: src/Ideabox.php:455
+msgctxt "button"
+msgid "Suscribe"
+msgstr ""
+
+#: src/Comment.php:149 src/Ideabox.php:277
+msgid "The description is mandatory"
+msgstr ""
+
+#: src/Comment.php:144 src/Ideabox.php:272
+msgid "The name is mandatory"
+msgstr ""
+
+#: templates/config_form.html.twig:36
+msgid "Title"
+msgstr ""
+
+#: templates/config_form.html.twig:42
+msgctxt "button"
+msgid "Update"
+msgstr ""
+
+#: templates/ideabox_translation.html.twig:46
+#: templates/ideabox_translation.html.twig:52
+#: templates/ideabox_translation.html.twig:102
+msgid "Value"
+msgstr ""
+
+#: src/Vote.php:46
+msgid "Vote"
+msgid_plural "Votes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Comment.php:355
+msgid "comment"
+msgid_plural "comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#~ msgid "Rights management"
+#~ msgstr "Rechteverwaltung: "
+
+#~ msgid "Read - add ideas"
+#~ msgstr "Neue Ideen"
