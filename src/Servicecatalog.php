@@ -81,14 +81,14 @@ class Servicecatalog extends CommonGLPI
     public static function getMenuTitle()
     {
 
-        return __s('I have an idea', 'ideabox');
+        return __('I have an idea', 'ideabox');
     }
 
 
     public static function getMenuComment()
     {
 
-        return __s('I have an idea', 'ideabox');
+        return __('I have an idea', 'ideabox');
     }
 
     public static function getLinkList()
