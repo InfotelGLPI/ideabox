@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Project - ideabox plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-31 14:51+0000\n"
+"POT-Creation-Date: 2026-09-07 07:41+0000\n"
 "PO-Revision-Date: 2012-12-19 11:32+0000\n"
 "Last-Translator: The tsmr <tsmr@thetsmr.fr>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/"
@@ -133,8 +133,8 @@ msgctxt "button"
 msgid "Delete permanently"
 msgstr ""
 
-#: src/Comment.php:405 src/Ideabox.php:210 templates/comments.html.twig:64
-#: templates/comment_form.html.twig:94 templates/ideabox_form.html.twig:112
+#: src/Comment.php:405 src/Ideabox.php:210 templates/comment_form.html.twig:94
+#: templates/comments.html.twig:64 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr ""
 
@@ -165,7 +165,7 @@ msgid_plural "Ideas"
 msgstr[0] "Ideen"
 msgstr[1] "Ideen"
 
-#: src/Profile.php:148 setup.php:115
+#: setup.php:115 src/Profile.php:148
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] ""
@@ -192,7 +192,7 @@ msgstr ""
 msgid "Modified fields"
 msgstr ""
 
-#: templates/comments.html.twig:58 templates/comment_form.html.twig:58
+#: templates/comment_form.html.twig:58 templates/comments.html.twig:58
 #: templates/ideabox_form.html.twig:56
 msgid "Name"
 msgstr ""
