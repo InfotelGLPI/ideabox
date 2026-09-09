@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-07 07:41+0000\n"
+"POT-Creation-Date: 2026-09-09 08:56+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2026\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/infotelGLPI/"
@@ -167,7 +167,7 @@ msgid_plural "Ideas"
 msgstr[0] "Öneri"
 msgstr[1] "Öneriler"
 
-#: setup.php:115 src/Profile.php:148
+#: setup.php:116 src/Profile.php:148
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] "Öneri kutusu"
