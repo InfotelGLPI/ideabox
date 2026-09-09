@@ -1,5 +1,3 @@
-<?php
-
 /*
  -------------------------------------------------------------------------
  ideabox plugin for GLPI
@@ -27,23 +25,11 @@
  --------------------------------------------------------------------------
  */
 
-include('../../../../inc/includes.php');
-
-// This PHP file is served directly from public/ (registered as a script via
-// Hooks::ADD_JAVASCRIPT), so it boots the GLPI kernel outside the session
-// middleware. Refuse an anonymous full-kernel boot: only a logged-in user may
-// reach it. We do NOT gate on the plugin READ right here — the script is
-// injected on every central page, and the actual data endpoint
-// (ajax/fuzzysearch.php) already enforces that right.
-Session::checkLoginUser();
-
-header('Content-Type: text/javascript');
-
-include('diacritics.js');
-
-?>
-
-var root_id_doc = "<?php echo PLUGIN_IDEABOX_WEBDIR; ?>";
+// Racine web du plugin, miroir de PLUGIN_IDEABOX_WEBDIR (setup.php). GLPI expose
+// les deux variables dans le <head> (config_js) avant tout script de plugin :
+// aucune interpolation cote serveur n'est necessaire ici.
+var root_id_doc = ((window.CFG_GLPI && CFG_GLPI.root_doc) || '')
+   + ((window.GLPI_PLUGINS_PATH && GLPI_PLUGINS_PATH.ideabox) || '/plugins/ideabox');
 
 $(function() {
    var list = [];
