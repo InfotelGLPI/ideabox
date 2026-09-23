@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Project - ideabox plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-07 07:41+0000\n"
+"POT-Creation-Date: 2026-09-09 08:56+0000\n"
 "PO-Revision-Date: 2012-12-19 11:32+0000\n"
 "Last-Translator: The tsmr <tsmr@thetsmr.fr>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/"
@@ -165,7 +165,7 @@ msgid_plural "Ideas"
 msgstr[0] "Ideen"
 msgstr[1] "Ideen"
 
-#: setup.php:115 src/Profile.php:148
+#: setup.php:116 src/Profile.php:148
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] ""
