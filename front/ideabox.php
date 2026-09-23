@@ -38,7 +38,7 @@ $idea = new Ideabox();
 // Evaluate the access right BEFORE emitting any HTML header, so a denied user
 // gets a clean 403 instead of the full interface chrome (which would leak the
 // module's existence and degrade the error page).
-if (!($idea->canView() || Session::haveRight("config", UPDATE))) {
+if (!$idea->canView()) {
     throw new AccessDeniedHttpException();
 }
 

@@ -57,11 +57,12 @@ class Vote extends CommonDBChild
     public function prepareInputForAdd($input)
     {
         if ($this->getFromDBByCrit(['users_id' => Session::getLoginUserID(),
-            'plugin_ideabox_ideaboxes_id' =>  $input['plugin_ideabox_ideaboxes_id']])) {
+            'plugin_ideabox_ideaboxes_id' =>  $input['plugin_ideabox_ideaboxes_id'] ?? 0])) {
             return false;
         }
 
-        return $input;
+        // CommonDBChild checks that the voted idea exists
+        return parent::prepareInputForAdd($input);
     }
 
     public static function install(Migration $migration)

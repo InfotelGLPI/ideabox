@@ -35,6 +35,7 @@ use DBConnection;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\RichText\RichText;
 use Migration;
+use Session;
 
 /**
  * Class Config
@@ -43,6 +44,34 @@ class Config extends CommonDBTM
 {
     public static $rightname = 'plugin_ideabox';
     public $can_be_translated = true;
+
+    // The setup is an administration screen: front/config.form.php requires the
+    // "config" UPDATE right, and the core generic endpoints (tabs, massive actions)
+    // only evaluate these static checks, so they must enforce the same right.
+    public static function canView(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
+    public static function canCreate(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
+    public static function canUpdate(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
+    public static function canDelete(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
+    public static function canPurge(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
 
     /**
      * functions mandatory

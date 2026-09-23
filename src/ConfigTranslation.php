@@ -52,6 +52,34 @@ class ConfigTranslation extends CommonDBChild
 
     public static $rightname = 'plugin_ideabox';
 
+    // The setup is an administration screen: front/config.form.php requires the
+    // "config" UPDATE right, and the core generic endpoints (tabs, massive actions)
+    // only evaluate these static checks, so they must enforce the same right.
+    public static function canView(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
+    public static function canCreate(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
+    public static function canUpdate(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
+    public static function canDelete(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
+    public static function canPurge(): bool
+    {
+        return Session::haveRight('config', UPDATE);
+    }
+
 
     /**
      * Return the localized name of the current Type
@@ -79,7 +107,13 @@ class ConfigTranslation extends CommonDBChild
     public function prepareInputForAdd($input)
     {
         $allowed = ['id', 'itemtype', 'items_id', 'language', 'field', 'value'];
-        return array_intersect_key($input, array_flip($allowed));
+        $input   = array_intersect_key($input, array_flip($allowed));
+        // Only the plugin setup is translated
+        if (($input['itemtype'] ?? null) !== Config::class) {
+            return false;
+        }
+
+        return parent::prepareInputForAdd($input);
     }
 
 
@@ -93,7 +127,12 @@ class ConfigTranslation extends CommonDBChild
     public function prepareInputForUpdate($input)
     {
         $allowed = ['id', 'itemtype', 'items_id', 'language', 'field', 'value'];
-        return array_intersect_key($input, array_flip($allowed));
+        $input   = array_intersect_key($input, array_flip($allowed));
+        if (isset($input['itemtype']) && $input['itemtype'] !== Config::class) {
+            return false;
+        }
+
+        return parent::prepareInputForUpdate($input);
     }
 
 

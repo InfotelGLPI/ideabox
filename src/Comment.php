@@ -170,7 +170,11 @@ class Comment extends CommonDBChild
             $input   = array_intersect_key($input, array_flip($allowed));
         }
 
-        return $input;
+        // A comment is never moved to another idea, whatever the interface: the
+        // UPDATE check only covers its original parent.
+        unset($input['plugin_ideabox_ideaboxes_id']);
+
+        return parent::prepareInputForUpdate($input);
     }
 
     public function post_addItem()
@@ -265,6 +269,8 @@ class Comment extends CommonDBChild
 
             $options['users_id']     = $this->fields['users_id'];
             $options['date_comment'] = $this->fields['date_comment'];
+            // Never emit an empty parent key in the edit form
+            $options['plugin_ideabox_ideaboxes_id'] = $this->fields['plugin_ideabox_ideaboxes_id'];
         }
         TemplateRenderer::getInstance()->display('@ideabox/comment_form.html.twig', [
             'item'   => $this,

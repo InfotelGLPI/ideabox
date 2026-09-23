@@ -121,9 +121,10 @@ class Ideabox extends CommonDBTM
         $menu['title']           = self::getMenuName();
         $menu['page']            = self::getSearchURL(false);
         $menu['links']['search'] = self::getSearchURL(false);
-        if (Session::haveRight(static::$rightname, UPDATE)
-            || Session::haveRight("config", UPDATE)) {
+        if (Session::haveRight(static::$rightname, UPDATE)) {
             $menu['links']['add'] = self::getFormURL(false);
+        }
+        if (Session::haveRight("config", UPDATE)) {
             $menu['links']['config'] = Config::getFormURL(false);
         }
 
