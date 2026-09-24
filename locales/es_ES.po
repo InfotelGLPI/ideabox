@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Project - ideabox plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 08:00+0000\n"
+"POT-Creation-Date: 2026-09-24 08:01+0000\n"
 "PO-Revision-Date: 2022-10-18 13:18+0200\n"
 "Last-Translator: The tsmr <tsmr@thetsmr.fr>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/"
@@ -134,7 +134,7 @@ msgctxt "button"
 msgid "Delete permanently"
 msgstr ""
 
-#: src/Ideabox.php:211 src/Comment.php:405 templates/comment_form.html.twig:94
+#: src/Comment.php:405 src/Ideabox.php:211 templates/comment_form.html.twig:94
 #: templates/comments.html.twig:64 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr "Descripción"
@@ -210,11 +210,11 @@ msgstr ""
 msgid "No comments"
 msgstr ""
 
-#: src/Ideabox.php:289 src/Comment.php:159 src/Comment.php:213
+#: src/Comment.php:159 src/Comment.php:213 src/Ideabox.php:289
 msgid "Only original author can modify it"
 msgstr ""
 
-#: front/config.php:44 front/config.form.php:52
+#: front/config.form.php:52 front/config.php:44
 msgid "Please activate the plugin"
 msgstr ""
 
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Read description"
 msgstr ""
 
-#: templates/profile.html.twig:34 templates/comments.html.twig:76
+#: templates/comments.html.twig:76 templates/profile.html.twig:34
 msgctxt "button"
 msgid "Save"
 msgstr ""
@@ -249,11 +249,11 @@ msgctxt "button"
 msgid "Suscribe"
 msgstr ""
 
-#: src/Ideabox.php:278 src/Comment.php:148
+#: src/Comment.php:148 src/Ideabox.php:278
 msgid "The description is mandatory"
 msgstr ""
 
-#: src/Ideabox.php:273 src/Comment.php:143
+#: src/Comment.php:143 src/Ideabox.php:273
 msgid "The name is mandatory"
 msgstr ""
 
