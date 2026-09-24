@@ -44,7 +44,6 @@ use NotificationEvent;
 use NotificationTemplate;
 use NotificationTemplateTranslation;
 use Session;
-use User;
 
 class Comment extends CommonDBChild
 {
@@ -305,9 +304,7 @@ class Comment extends CommonDBChild
         // navigating away to the central Comment tab.
         $comments = [];
         foreach ($raw_comments as $row) {
-            $user = new User();
-            $user->getFromDB($row['users_id']);
-            $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
+            $author = Ideabox::getAuthorDisplay((int) $row['users_id']);
 
             $delete_form = '';
             if ($row['users_id'] == Session::getLoginUserID()) {
@@ -324,16 +321,13 @@ class Comment extends CommonDBChild
             }
 
             $comments[] = [
-                'avatar_style'  => !empty($thumbnail_url)
-                    ? "background-image:url('" . htmlspecialchars($thumbnail_url, ENT_QUOTES) . "')"
-                    : 'background-color:' . htmlspecialchars($user->getUserInitialsBgColor(), ENT_QUOTES),
-                'user_initials' => htmlspecialchars($user->getUserInitials(), ENT_QUOTES),
-                'has_thumbnail' => !empty($thumbnail_url),
-                'user_name'     => htmlspecialchars(
-                    formatUserName($user->getID(), $user->fields['name'], $user->fields['realname'], $user->fields['firstname']),
-                    ENT_QUOTES,
-                ),
-                'user_name_link' => getUserName($row['users_id'], 0, true),
+                'avatar_style'  => $author['avatar_style'],
+                'user_initials' => $author['user_initials'],
+                'has_thumbnail' => $author['has_thumbnail'],
+                // Raw name, escaped by the template ({{ }}): getUserName() returned
+                // unescaped user fields that were printed with |raw (stored XSS),
+                // and its $disable_anon flag bypassed helpdesk anonymization.
+                'user_name'     => $author['user_name'],
                 'date_relative'  => Html::timestampToRelativeStr($row['date_comment']),
                 'text'           => RichText::getEnhancedHtml($row['comment']),
                 'can_delete'     => $row['users_id'] == Session::getLoginUserID(),

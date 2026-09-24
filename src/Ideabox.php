@@ -368,6 +368,63 @@ class Ideabox extends CommonDBTM
         }
     }
 
+    /**
+     * Author block (name, avatar) shown on ideas and comments.
+     *
+     * The name is returned raw: the templates escape it with {{ }}. In the
+     * simplified interface, when the entity anonymizes helpdesk users, the real
+     * name, picture and initials of other users are replaced, like the core does
+     * in getUserName(), so that requesters cannot identify the authors.
+     *
+     * @return array{user_name: string, avatar_style: string, user_initials: string, has_thumbnail: bool}
+     */
+    public static function getAuthorDisplay(int $users_id): array
+    {
+        $anon_name = null;
+        if (
+            $users_id !== (int) Session::getLoginUserID()
+            && Session::getCurrentInterface() === 'helpdesk'
+        ) {
+            $anon_name = User::getAnonymizedNameForUser($users_id);
+        }
+
+        if ($anon_name !== null) {
+            return [
+                'user_name'     => $anon_name,
+                'avatar_style'  => 'background-color:var(--tblr-secondary)',
+                'user_initials' => mb_strtoupper(mb_substr($anon_name, 0, 1)),
+                'has_thumbnail' => false,
+            ];
+        }
+
+        $user = new User();
+        if (!$user->getFromDB($users_id)) {
+            return [
+                'user_name'     => '',
+                'avatar_style'  => 'background-color:var(--tblr-secondary)',
+                'user_initials' => '',
+                'has_thumbnail' => false,
+            ];
+        }
+
+        $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
+
+        return [
+            'user_name'     => formatUserName(
+                $user->getID(),
+                $user->fields['name'],
+                $user->fields['realname'],
+                $user->fields['firstname'],
+            ),
+            // Rendered with |raw inside a style attribute: escape here.
+            'avatar_style'  => !empty($thumbnail_url)
+                ? "background-image:url('" . htmlspecialchars($thumbnail_url, ENT_QUOTES) . "')"
+                : 'background-color:' . htmlspecialchars($user->getUserInitialsBgColor(), ENT_QUOTES),
+            'user_initials' => $user->getUserInitials(),
+            'has_thumbnail' => !empty($thumbnail_url),
+        ];
+    }
+
     public static function getStateColor($state)
     {
         switch ($state) {
@@ -426,12 +483,7 @@ class Ideabox extends CommonDBTM
                 'WHERE'  => ['plugin_ideabox_ideaboxes_id' => $id],
             ]));
 
-            $user = new User();
-            $user->getFromDB($idea->fields['users_id']);
-            $thumbnail_url = User::getThumbnailURLForPicture($user->fields['picture']);
-            $avatar_style = !empty($thumbnail_url)
-                ? "background-image:url('" . htmlspecialchars($thumbnail_url, ENT_QUOTES) . "')"
-                : 'background-color:' . htmlspecialchars($user->getUserInitialsBgColor(), ENT_QUOTES);
+            $author = self::getAuthorDisplay((int) $idea->fields['users_id']);
 
             $already_voted = (new Vote())->getFromDBByCrit([
                 'users_id'                    => Session::getLoginUserID(),
@@ -475,7 +527,7 @@ class Ideabox extends CommonDBTM
             if (count($comments_raw) > 0) {
                 $lc = end($comments_raw);
                 $last_comment = [
-                    'user_name'     => getUserName($lc['users_id'], 0),
+                    'user_name'     => self::getAuthorDisplay((int) $lc['users_id'])['user_name'],
                     'date_relative' => Html::timestampToRelativeStr($lc['date_comment']),
                 ];
             }
@@ -486,13 +538,10 @@ class Ideabox extends CommonDBTM
             $ideas[] = [
                 'id'               => $id,
                 'link'             => $idea->getLink(),
-                'user_name'        => htmlspecialchars(
-                    formatUserName($user->getID(), $user->fields['name'], $user->fields['realname'], $user->fields['firstname']),
-                    ENT_QUOTES,
-                ),
-                'avatar_style'     => $avatar_style,
-                'user_initials'    => htmlspecialchars($user->getUserInitials(), ENT_QUOTES),
-                'has_thumbnail'    => !empty($thumbnail_url),
+                'user_name'        => $author['user_name'],
+                'avatar_style'     => $author['avatar_style'],
+                'user_initials'    => $author['user_initials'],
+                'has_thumbnail'    => $author['has_thumbnail'],
                 'date_relative'    => Html::timestampToRelativeStr($idea->fields['date_idea']),
                 'state_color'      => self::getStateColor($idea->fields['state']),
                 'state_name'       => self::getStateName($idea->fields['state']),

@@ -27,6 +27,7 @@
  * --------------------------------------------------------------------------
  */
 
+use Glpi\DBAL\QuerySubQuery;
 use GlpiPlugin\Ideabox\Comment;
 use GlpiPlugin\Ideabox\Config;
 use GlpiPlugin\Ideabox\ConfigTranslation;
@@ -83,6 +84,30 @@ function plugin_ideabox_AssignToTicket($types)
     }
 
     return $types;
+}
+
+/**
+ * Comments and votes carry no entities_id: the search engine adds no entity
+ * restriction for them and would list the rows of every entity to anyone
+ * holding the global plugin right. Restrict them to the ideas visible in the
+ * active entities, the same scope as the parent idea list.
+ */
+function plugin_ideabox_addDefaultWhere($itemtype)
+{
+    switch ($itemtype) {
+        case Comment::class:
+        case Vote::class:
+            $table = $itemtype::getTable();
+            return [
+                "$table.plugin_ideabox_ideaboxes_id" => new QuerySubQuery([
+                    'SELECT' => 'id',
+                    'FROM'   => Ideabox::getTable(),
+                    'WHERE'  => getEntitiesRestrictCriteria(Ideabox::getTable(), '', '', true),
+                ]),
+            ];
+    }
+
+    return [];
 }
 
 // Define dropdown relations

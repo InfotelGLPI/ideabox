@@ -41,7 +41,7 @@
             </span>
             <div class="flex-grow-1 min-w-0">
                 <div class="d-flex align-items-baseline gap-2 mb-1 flex-wrap">
-                    <span class="fw-semibold" style="font-size:.875rem">{{ comment.user_name_link|raw }}</span>
+                    <span class="fw-semibold" style="font-size:.875rem">{{ comment.user_name }}</span>
                     <span class="text-muted" style="font-size:.8rem">{{ comment.date_relative }}</span>
                     {% if comment.can_delete %}
                     <div class="ms-auto">{{ comment.delete_form|raw }}</div>
