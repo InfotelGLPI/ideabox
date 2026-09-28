@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 08:00+0000\n"
+"POT-Creation-Date: 2026-09-24 08:01+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2026\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/infotelGLPI/"
@@ -136,7 +136,7 @@ msgctxt "button"
 msgid "Delete permanently"
 msgstr "Kalıcı olarak sil"
 
-#: src/Ideabox.php:211 src/Comment.php:405 templates/comment_form.html.twig:94
+#: src/Comment.php:405 src/Ideabox.php:211 templates/comment_form.html.twig:94
 #: templates/comments.html.twig:64 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr "Açıklama"
@@ -211,11 +211,11 @@ msgstr "Yeni yorum"
 msgid "No comments"
 msgstr "Herhangi bir yorum yok"
 
-#: src/Ideabox.php:289 src/Comment.php:159 src/Comment.php:213
+#: src/Comment.php:159 src/Comment.php:213 src/Ideabox.php:289
 msgid "Only original author can modify it"
 msgstr "Yalnızca özgün yazar değişiklik yapabilir"
 
-#: front/config.php:44 front/config.form.php:52
+#: front/config.form.php:52 front/config.php:44
 msgid "Please activate the plugin"
 msgstr "Lütfen eklentiyi etkinleştirin"
 
@@ -228,7 +228,7 @@ msgstr "Bir yorum yapın"
 msgid "Read description"
 msgstr "Açıklamayı okuyun"
 
-#: templates/profile.html.twig:34 templates/comments.html.twig:76
+#: templates/comments.html.twig:76 templates/profile.html.twig:34
 msgctxt "button"
 msgid "Save"
 msgstr "Kaydet"
@@ -250,11 +250,11 @@ msgctxt "button"
 msgid "Suscribe"
 msgstr "Abone ol"
 
-#: src/Ideabox.php:278 src/Comment.php:148
+#: src/Comment.php:148 src/Ideabox.php:278
 msgid "The description is mandatory"
 msgstr "Açıklamanın yazılması zorunludur"
 
-#: src/Ideabox.php:273 src/Comment.php:143
+#: src/Comment.php:143 src/Ideabox.php:273
 msgid "The name is mandatory"
 msgstr "Adın yazılması zorunludur"
 
