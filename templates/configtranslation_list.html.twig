@@ -1,0 +1,70 @@
+{#
+ # -------------------------------------------------------------------------
+ # ideabox plugin for GLPI
+ # Copyright (C) 2025-2026 by the ideabox Development Team.
+ #
+ # https://github.com/InfotelGLPI/ideabox
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of ideabox.
+ #
+ # ideabox is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # ideabox is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with ideabox. If not, see <http://www.gnu.org/licenses/>.
+ # --------------------------------------------------------------------------
+ #}
+
+{#
+ # Clicking the button or a row loads the translation form in the container: handled by
+ # public/scripts/config-translation.js from the data-* attributes.
+ #}
+{% set datatable_id = 'translationlist' ~ rand %}
+
+{% if canedit %}
+    <div class="text-center">
+        <button type="button" class="btn btn-primary" data-ideabox-translation-add="viewtranslation{{ rand }}">
+            {{- __('Add a new translation') -}}
+        </button>
+    </div>
+    <div id="viewtranslation{{ rand }}" class="mb-3"
+         data-ideabox-translation-view="{{ view_url }}"
+         data-ideabox-translation-datatable="{{ datatable_id }}"
+         data-type="{{ type }}"
+         data-parenttype="{{ parenttype }}"
+         data-items-id="{{ items_id }}"></div>
+    <script type="module" src="{{ script_url }}"></script>
+{% endif %}
+
+{{ include('components/datatable.html.twig', {
+    'datatable_id': datatable_id,
+    'is_tab': true,
+    'nofilter': true,
+    'columns': {
+        'language': __('Language'),
+        'field': _n('Field', 'Fields', 1),
+        'value': __('Value'),
+    },
+    'formatters': {
+        'value': 'raw_html',
+    },
+    'entries': entries,
+    'total_number': entries|length,
+    'filtered_number': entries|length,
+    'showmassiveactions': canedit,
+    'massiveactionparams': {
+        'num_displayed': min(session('glpilist_limit'), entries|length),
+        'container': container,
+        'specific_actions': {'purge': _x('button', 'Delete permanently')},
+    },
+}, with_context = false) }}

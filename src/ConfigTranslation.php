@@ -36,7 +36,6 @@ use DbUtils;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\RichText\RichText;
-use Html;
 use Migration;
 use Session;
 
@@ -202,92 +201,35 @@ class ConfigTranslation extends CommonDBChild
     {
         $canedit = $item->can($item->getID(), UPDATE);
         $rand    = mt_rand();
-        if ($canedit) {
-            $twig_params = [
-                'item' => $item,
-                'rand' => $rand,
-                'button_msg' => __('Add a new translation'),
-            ];
-            // language=Twig
-            echo TemplateRenderer::getInstance()->renderFromStringTemplate(<<<TWIG
-                <div class="text-center">
-                    <button class="btn btn-primary" onclick="showTranslation{{ item.getID() ~ rand }}(-1)">{{ button_msg }}</button>
-                </div>
-                <div id="viewtranslation{{ item.getID() ~ rand }}" class="mb-3"></div>
-                <script>
-                    function showTranslation{{ item.getID() ~ rand }}(translations_id) {
-                        $.ajax({
-                            url: CFG_GLPI.root_doc + '/plugins/ideabox/ajax/viewsubitem.php',
-                            method: 'POST',
-                            data: {
-                                type: 'GlpiPlugin\\\\Ideabox\\\\ConfigTranslation',
-                                parenttype: '{{ item.getType()|e('js') }}',
-                                items_id: {{ item.getID() }},
-                                id: translations_id
-                            },
-                            success: (data) => {
-                                $('#viewtranslation{{ item.getID() ~ rand }}').html(data);
-                            }
-                        });
-                    }
-                    $(() => {
-                        $('#translationlist{{ rand }} tbody tr').on('click', function() {
-                            showTranslation{{ item.getID() ~ rand }}($(this).attr('data-id'));
-                        });
-                    });
-                </script>
-TWIG, $twig_params);
-        }
 
         $obj   = new self();
         $found = $obj->find(['items_id' => $item->getID()], "language ASC");
 
         $entries = [];
         foreach ($found as $data) {
-            $entry = [
+            $search_option = $item->getSearchOptionByField('field', $data['field']);
+            $entries[] = [
                 'itemtype' => self::class,
                 'id' => $data['id'],
+                // Clicking a row opens its edition form (public/scripts/config-translation.js)
+                'row_class' => $canedit ? 'cursor-pointer' : '',
+                'language' => Dropdown::getLanguageName($data['language']),
+                'field' => $search_option['name'] ?? $data['field'],
+                // Rich text sanitized by the core, rendered as a raw_html cell like DropdownTranslation does
+                'value' => '<div class="rich_text_container">' . RichText::getSafeHtml($data['value'] ?? '') . '</div>',
             ];
-            if ($canedit) {
-                $entry['row_class'] = 'cursor-pointer';
-            }
-            $entry['language'] = Dropdown::getLanguageName($data['language']);
-
-            if ($canedit) {
-                $entry['subject'] = sprintf(
-                    '<a href="%s">%s</a>',
-                    htmlescape(self::getFormURLWithID($data['id'])),
-                    htmlescape($data['field']),
-                );
-            } else {
-                $entry['subject'] = htmlescape($data['field']);
-            }
-            if (!empty($data['value'])) {
-                $entry['subject'] .= Html::showToolTip(RichText::getEnhancedHtml($data['value']), ['display' => false]);
-            }
-            $entries[] = $entry;
         }
 
-        TemplateRenderer::getInstance()->display('components/datatable.html.twig', [
-            'datatable_id' => 'translationlist' . $rand,
-            'is_tab' => true,
-            'nofilter' => true,
-            'columns' => [
-                'language' => __('Language'),
-                'subject' => __('Subject'),
-            ],
-            'formatters' => [
-                'subject' => 'raw_html',
-            ],
+        TemplateRenderer::getInstance()->display('@ideabox/configtranslation_list.html.twig', [
+            'canedit' => $canedit,
+            'rand' => $rand,
+            'type' => self::class,
+            'view_url' => PLUGIN_IDEABOX_WEBDIR . '/ajax/viewsubitem.php',
+            'parenttype' => $item::class,
+            'items_id' => $item->getID(),
             'entries' => $entries,
-            'total_number' => count($entries),
-            'filtered_number' => count($entries),
-            'showmassiveactions' => $canedit,
-            'massiveactionparams' => [
-                'num_displayed' => min($_SESSION['glpilist_limit'], count($entries)),
-                'container'     => 'mass' . static::class . $rand,
-                'specific_actions' => ['purge' => _x('button', 'Delete permanently')],
-            ],
+            'container' => 'mass' . static::class . $rand,
+            'script_url' => PLUGIN_IDEABOX_WEBDIR . '/scripts/config-translation.js',
         ]);
 
         return true;
