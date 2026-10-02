@@ -36,13 +36,12 @@ use GlpiPlugin\Ideabox\Ideabox;
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
-$allowed_types = [
-    Comment::class,
-    ConfigTranslation::class,
-];
-$allowed_parent_types = [
-    Ideabox::class,
-    Config::class,
+// Each sub-item type with the one parent type it belongs to. Checking the two lists apart let
+// a Comment be paired with a Config parent: the access check then ran on the configuration,
+// and Comment::showForm() had no idea to correlate the loaded comment with.
+$allowed_pairs = [
+    Comment::class           => Ideabox::class,
+    ConfigTranslation::class => Config::class,
 ];
 
 if (
@@ -53,10 +52,11 @@ if (
     throw new AccessDeniedHttpException();
 }
 
-if (!isset($_POST['type']) || !in_array($_POST['type'], $allowed_types, true)) {
-    return;
-}
-if (!isset($_POST['parenttype']) || !in_array($_POST['parenttype'], $allowed_parent_types, true)) {
+if (
+    !isset($_POST['type'], $_POST['parenttype'])
+    || !isset($allowed_pairs[$_POST['type']])
+    || $allowed_pairs[$_POST['type']] !== $_POST['parenttype']
+) {
     return;
 }
 

@@ -245,6 +245,10 @@ class Comment extends CommonDBChild
             $options['users_id']     = Session::getLoginUserID();
             $options['date_comment'] = $_SESSION["glpi_currenttime"];
         } else {
+            // Do not rely on the caller alone: canViewItem() replays the access to the
+            // parent idea of the loaded comment (right + entity).
+            $this->check($ID, READ);
+
             // Entity scope is enforced on the parent idea by the caller, but the
             // (parent, comment id) pair is not correlated: a validated parent does
             // not prove the loaded comment belongs to it. Reject any comment whose
