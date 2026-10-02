@@ -154,24 +154,20 @@ class Comment extends CommonDBChild
 
     public function prepareInputForUpdate($input)
     {
-        if (Session::getCurrentInterface() != 'central') {
-            if ($this->fields['users_id'] != Session::getLoginUserID()) {
-                Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
-                return false;
-            }
-
-            // Mass-assignment guard: outside the central interface the author may
-            // only edit the comment content. Freezing the parent key prevents
-            // re-parenting the comment onto an idea in another entity (the
-            // check(UPDATE) entity scope applies to the original parent, not the
-            // forged one); users_id/date_comment are likewise not owner-settable.
-            $allowed = ['id', 'name', 'comment'];
-            $input   = array_intersect_key($input, array_flip($allowed));
+        // Only the author edits a comment, in every interface: the comment lists offer the
+        // edit button to the author alone, and the UPDATE right on the idea, which voting
+        // requires, would otherwise let any voter rewrite a comment under someone else's name.
+        if ($this->fields['users_id'] != Session::getLoginUserID()) {
+            Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
+            return false;
         }
 
-        // A comment is never moved to another idea, whatever the interface: the
-        // UPDATE check only covers its original parent.
-        unset($input['plugin_ideabox_ideaboxes_id']);
+        // Mass-assignment guard: the author may only edit the comment content. Freezing
+        // the parent key prevents re-parenting the comment onto an idea in another entity
+        // (the check(UPDATE) entity scope applies to the original parent, not the forged
+        // one); users_id/date_comment are likewise not owner-settable.
+        $allowed = ['id', 'name', 'comment'];
+        $input   = array_intersect_key($input, array_flip($allowed));
 
         return parent::prepareInputForUpdate($input);
     }
@@ -208,8 +204,8 @@ class Comment extends CommonDBChild
     {
         global $CFG_GLPI;
 
-        if (Session::getCurrentInterface() != 'central'
-            && $this->fields['users_id'] != Session::getLoginUserID()) {
+        // Same rule as prepareInputForUpdate(): the author alone, whatever the interface
+        if ($this->fields['users_id'] != Session::getLoginUserID()) {
             Session::addMessageAfterRedirect(__s("Only original author can modify it", "ideabox"), false, ERROR);
             return false;
         }

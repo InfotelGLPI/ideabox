@@ -104,8 +104,12 @@ class Ideabox extends CommonDBTM
     //clean if ideabox are deleted
     public function cleanDBonPurge()
     {
-        $temp = new Comment();
-        $temp->deleteByCriteria(['plugin_ideabox_ideaboxes_id' => $this->fields['id']]);
+        global $DB;
+
+        // Removed directly, not through Comment::delete(): its pre_deleteItem() lets only the
+        // author of a comment delete it, which would leave the comments of the other users
+        // behind as orphans once the idea itself is gone.
+        $DB->delete(Comment::getTable(), ['plugin_ideabox_ideaboxes_id' => $this->fields['id']]);
 
         $temp = new Vote();
         $temp->deleteByCriteria(['plugin_ideabox_ideaboxes_id' => $this->fields['id']]);
