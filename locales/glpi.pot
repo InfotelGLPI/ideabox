@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 08:01+0000\n"
+"POT-Creation-Date: 2026-09-28 09:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,10 @@ msgstr ""
 #: templates/comments.html.twig:90 templates/comments.html.twig:92
 msgctxt "button"
 msgid "Add a comment"
+msgstr ""
+
+#: templates/configtranslation_list.html.twig:37
+msgid "Add a new translation"
 msgstr ""
 
 #: src/NotificationTargetIdeabox.php:234
@@ -127,12 +131,13 @@ msgctxt "button"
 msgid "Delete"
 msgstr ""
 
+#: templates/configtranslation_list.html.twig:68
 #: templates/comments.html.twig:134 templates/comments.html.twig:135
 msgctxt "button"
 msgid "Delete permanently"
 msgstr ""
 
-#: src/Comment.php:405 src/Ideabox.php:211 templates/comment_form.html.twig:94
+#: src/Ideabox.php:211 src/Comment.php:405 templates/comment_form.html.twig:94
 #: templates/comments.html.twig:64 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr ""
@@ -146,6 +151,7 @@ msgstr ""
 msgid "Edit comment"
 msgstr ""
 
+#: templates/configtranslation_list.html.twig:55
 #: templates/ideabox_translation.html.twig:43
 #: templates/ideabox_translation.html.twig:97
 msgid "Field"
@@ -181,6 +187,7 @@ msgstr ""
 msgid "Internal state"
 msgstr ""
 
+#: templates/configtranslation_list.html.twig:54
 #: templates/ideabox_translation.html.twig:39
 #: templates/ideabox_translation.html.twig:62
 msgid "Language"
@@ -207,11 +214,11 @@ msgstr ""
 msgid "No comments"
 msgstr ""
 
-#: src/Comment.php:159 src/Comment.php:213 src/Ideabox.php:289
+#: src/Ideabox.php:289 src/Comment.php:159 src/Comment.php:213
 msgid "Only original author can modify it"
 msgstr ""
 
-#: front/config.form.php:52 front/config.php:44
+#: front/config.php:44 front/config.form.php:52
 msgid "Please activate the plugin"
 msgstr ""
 
@@ -224,7 +231,7 @@ msgstr ""
 msgid "Read description"
 msgstr ""
 
-#: templates/comments.html.twig:76 templates/profile.html.twig:34
+#: templates/profile.html.twig:34 templates/comments.html.twig:76
 msgctxt "button"
 msgid "Save"
 msgstr ""
@@ -246,11 +253,11 @@ msgctxt "button"
 msgid "Suscribe"
 msgstr ""
 
-#: src/Comment.php:148 src/Ideabox.php:278
+#: src/Ideabox.php:278 src/Comment.php:148
 msgid "The description is mandatory"
 msgstr ""
 
-#: src/Comment.php:143 src/Ideabox.php:273
+#: src/Ideabox.php:273 src/Comment.php:143
 msgid "The name is mandatory"
 msgstr ""
 
@@ -263,6 +270,7 @@ msgctxt "button"
 msgid "Update"
 msgstr ""
 
+#: templates/configtranslation_list.html.twig:56
 #: templates/ideabox_translation.html.twig:46
 #: templates/ideabox_translation.html.twig:52
 #: templates/ideabox_translation.html.twig:102

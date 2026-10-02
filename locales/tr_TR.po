@@ -2,24 +2,23 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
 # Kaya Zeren <kayazeren@gmail.com>, 2026
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 08:01+0000\n"
+"POT-Creation-Date: 2026-09-28 09:51+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2026\n"
-"Language-Team: Turkish (Turkey) (https://app.transifex.com/infotelGLPI/"
-"teams/12362/tr_TR/)\n"
-"Language: tr_TR\n"
+"Language-Team: Turkish (Turkey) (https://app.transifex.com/infotelGLPI/teams/12362/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: src/NotificationTargetIdeabox.php:47
@@ -51,6 +50,10 @@ msgstr "Bir yorum yapın"
 msgctxt "button"
 msgid "Add a comment"
 msgstr "Bir yorum yapın"
+
+#: templates/configtranslation_list.html.twig:37
+msgid "Add a new translation"
+msgstr "Yeni bir çeviri ekle"
 
 #: src/NotificationTargetIdeabox.php:234
 msgid "An addition/modification/deletion of comments"
@@ -131,12 +134,13 @@ msgctxt "button"
 msgid "Delete"
 msgstr "Sil"
 
+#: templates/configtranslation_list.html.twig:68
 #: templates/comments.html.twig:134 templates/comments.html.twig:135
 msgctxt "button"
 msgid "Delete permanently"
 msgstr "Kalıcı olarak sil"
 
-#: src/Comment.php:405 src/Ideabox.php:211 templates/comment_form.html.twig:94
+#: src/Ideabox.php:211 src/Comment.php:405 templates/comment_form.html.twig:94
 #: templates/comments.html.twig:64 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr "Açıklama"
@@ -150,6 +154,7 @@ msgstr "Düzenle"
 msgid "Edit comment"
 msgstr "Yorumu düzenle"
 
+#: templates/configtranslation_list.html.twig:55
 #: templates/ideabox_translation.html.twig:43
 #: templates/ideabox_translation.html.twig:97
 msgid "Field"
@@ -185,6 +190,7 @@ msgstr "Değerlendiriliyor"
 msgid "Internal state"
 msgstr "İç durum"
 
+#: templates/configtranslation_list.html.twig:54
 #: templates/ideabox_translation.html.twig:39
 #: templates/ideabox_translation.html.twig:62
 msgid "Language"
@@ -211,11 +217,11 @@ msgstr "Yeni yorum"
 msgid "No comments"
 msgstr "Herhangi bir yorum yok"
 
-#: src/Comment.php:159 src/Comment.php:213 src/Ideabox.php:289
+#: src/Ideabox.php:289 src/Comment.php:159 src/Comment.php:213
 msgid "Only original author can modify it"
 msgstr "Yalnızca özgün yazar değişiklik yapabilir"
 
-#: front/config.form.php:52 front/config.php:44
+#: front/config.php:44 front/config.form.php:52
 msgid "Please activate the plugin"
 msgstr "Lütfen eklentiyi etkinleştirin"
 
@@ -228,7 +234,7 @@ msgstr "Bir yorum yapın"
 msgid "Read description"
 msgstr "Açıklamayı okuyun"
 
-#: templates/comments.html.twig:76 templates/profile.html.twig:34
+#: templates/profile.html.twig:34 templates/comments.html.twig:76
 msgctxt "button"
 msgid "Save"
 msgstr "Kaydet"
@@ -250,11 +256,11 @@ msgctxt "button"
 msgid "Suscribe"
 msgstr "Abone ol"
 
-#: src/Comment.php:148 src/Ideabox.php:278
+#: src/Ideabox.php:278 src/Comment.php:148
 msgid "The description is mandatory"
 msgstr "Açıklamanın yazılması zorunludur"
 
-#: src/Comment.php:143 src/Ideabox.php:273
+#: src/Ideabox.php:273 src/Comment.php:143
 msgid "The name is mandatory"
 msgstr "Adın yazılması zorunludur"
 
@@ -267,6 +273,7 @@ msgctxt "button"
 msgid "Update"
 msgstr "Güncelle"
 
+#: templates/configtranslation_list.html.twig:56
 #: templates/ideabox_translation.html.twig:46
 #: templates/ideabox_translation.html.twig:52
 #: templates/ideabox_translation.html.twig:102
