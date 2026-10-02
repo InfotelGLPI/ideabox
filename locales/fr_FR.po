@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 08:31+0000\n"
+"POT-Creation-Date: 2026-10-02 10:12+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
 "Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2026\n"
 "Language-Team: French (France) (https://app.transifex.com/infotelGLPI/"
@@ -125,7 +125,7 @@ msgstr "Commentaires"
 msgid "Confirm the final deletion?"
 msgstr "Confirmez-vous la suppression définitive ?"
 
-#: src/Comment.php:383 templates/comment_form.html.twig:84
+#: src/Comment.php:387 templates/comment_form.html.twig:84
 msgid "Date of comment"
 msgstr "Date du commentaire"
 
@@ -133,7 +133,7 @@ msgstr "Date du commentaire"
 msgid "Date of submission"
 msgstr "Date de soumission"
 
-#: src/Comment.php:311
+#: src/Comment.php:315
 msgctxt "button"
 msgid "Delete"
 msgstr "Supprimer"
@@ -144,7 +144,7 @@ msgctxt "button"
 msgid "Delete permanently"
 msgstr "Supprimer définitivement"
 
-#: src/Ideabox.php:215 src/Comment.php:401 templates/comment_form.html.twig:94
+#: src/Ideabox.php:215 src/Comment.php:405 templates/comment_form.html.twig:94
 #: templates/comments.html.twig:64 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr "Description"
@@ -232,7 +232,7 @@ msgstr "Seul l'auteur peut le modifier"
 msgid "Please activate the plugin"
 msgstr "Merci d'activer le plugin"
 
-#: src/Comment.php:340
+#: src/Comment.php:344
 msgctxt "button"
 msgid "Post a comment"
 msgstr "Poster un commentaire"
@@ -294,7 +294,7 @@ msgstr[0] "Vote"
 msgstr[1] "Votes"
 msgstr[2] "Votes"
 
-#: src/Comment.php:351
+#: src/Comment.php:355
 msgid "comment"
 msgid_plural "comments"
 msgstr[0] "Commentaire"
