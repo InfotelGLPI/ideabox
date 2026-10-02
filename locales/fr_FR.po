@@ -2,24 +2,26 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Xavier CAILLAUD <thetsmr@gmail.com>, 2026
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 09:51+0000\n"
+"POT-Creation-Date: 2026-10-02 08:31+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
 "Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2026\n"
-"Language-Team: French (France) (https://app.transifex.com/infotelGLPI/teams/12362/fr_FR/)\n"
+"Language-Team: French (France) (https://app.transifex.com/infotelGLPI/"
+"teams/12362/fr_FR/)\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr_FR\n"
-"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % "
+"1000000 == 0 ? 1 : 2;\n"
 
 #: src/NotificationTargetIdeabox.php:47
 msgid "A comment has been added"
@@ -42,7 +44,7 @@ msgctxt "button"
 msgid "Add"
 msgstr "Ajouter"
 
-#: src/Ideabox.php:564
+#: src/Ideabox.php:568
 msgid "Add a comment"
 msgstr "Ajouter un commentaire"
 
@@ -86,7 +88,7 @@ msgstr[2] "Commentaires associés"
 msgid "Author"
 msgstr "Auteur"
 
-#: src/Ideabox.php:497
+#: src/Ideabox.php:501
 msgctxt "button"
 msgid "Cancel"
 msgstr "Annuler"
@@ -95,7 +97,7 @@ msgstr "Annuler"
 msgid "Close"
 msgstr "Fermer"
 
-#: src/Ideabox.php:365 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:369 templates/ideabox_form.html.twig:90
 msgid "Closed"
 msgstr "Terminé"
 
@@ -111,11 +113,11 @@ msgstr[2] "Commentaires"
 msgid "Comment author"
 msgstr "Auteur du commentaire"
 
-#: src/Ideabox.php:558
+#: src/Ideabox.php:562
 msgid "Commented by"
 msgstr "Commenté par"
 
-#: src/Ideabox.php:523 templates/config_form.html.twig:37
+#: src/Ideabox.php:527 templates/config_form.html.twig:37
 msgid "Comments"
 msgstr "Commentaires"
 
@@ -123,15 +125,15 @@ msgstr "Commentaires"
 msgid "Confirm the final deletion?"
 msgstr "Confirmez-vous la suppression définitive ?"
 
-#: src/Comment.php:387 templates/comment_form.html.twig:84
+#: src/Comment.php:383 templates/comment_form.html.twig:84
 msgid "Date of comment"
 msgstr "Date du commentaire"
 
-#: src/Ideabox.php:193 templates/ideabox_form.html.twig:82
+#: src/Ideabox.php:197 templates/ideabox_form.html.twig:82
 msgid "Date of submission"
 msgstr "Date de soumission"
 
-#: src/Comment.php:315
+#: src/Comment.php:311
 msgctxt "button"
 msgid "Delete"
 msgstr "Supprimer"
@@ -142,7 +144,7 @@ msgctxt "button"
 msgid "Delete permanently"
 msgstr "Supprimer définitivement"
 
-#: src/Ideabox.php:211 src/Comment.php:405 templates/comment_form.html.twig:94
+#: src/Ideabox.php:215 src/Comment.php:401 templates/comment_form.html.twig:94
 #: templates/comments.html.twig:64 templates/ideabox_form.html.twig:112
 msgid "Description"
 msgstr "Description"
@@ -183,11 +185,11 @@ msgstr[0] "Boite à idée"
 msgstr[1] "Boite à idées"
 msgstr[2] "Boite à idées"
 
-#: src/Ideabox.php:363 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:367 templates/ideabox_form.html.twig:90
 msgid "In progress"
 msgstr "Commencé"
 
-#: src/Ideabox.php:361 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:365 templates/ideabox_form.html.twig:90
 msgid "In study"
 msgstr "A l'étude"
 
@@ -210,7 +212,7 @@ msgstr "Champs modifiés"
 msgid "Name"
 msgstr "Nom"
 
-#: src/Ideabox.php:367 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:371 templates/ideabox_form.html.twig:90
 msgid "New"
 msgstr "Nouveau"
 
@@ -222,7 +224,7 @@ msgstr "Nouveau commentaire"
 msgid "No comments"
 msgstr "Pas de commentaires"
 
-#: src/Ideabox.php:289 src/Comment.php:159 src/Comment.php:213
+#: src/Ideabox.php:293 src/Comment.php:161 src/Comment.php:209
 msgid "Only original author can modify it"
 msgstr "Seul l'auteur peut le modifier"
 
@@ -230,12 +232,12 @@ msgstr "Seul l'auteur peut le modifier"
 msgid "Please activate the plugin"
 msgstr "Merci d'activer le plugin"
 
-#: src/Comment.php:344
+#: src/Comment.php:340
 msgctxt "button"
 msgid "Post a comment"
 msgstr "Poster un commentaire"
 
-#: src/Ideabox.php:557
+#: src/Ideabox.php:561
 msgid "Read description"
 msgstr "Lire la description"
 
@@ -244,7 +246,7 @@ msgctxt "button"
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: src/Ideabox.php:573 src/Ideabox.php:590
+#: src/Ideabox.php:577 src/Ideabox.php:594
 msgid "Start typing to find a idea"
 msgstr "Commencer à écrire pour trouver une idée"
 
@@ -256,16 +258,16 @@ msgstr "Soumettre une idée"
 msgid "Surname"
 msgstr "Surnom"
 
-#: src/Ideabox.php:508
+#: src/Ideabox.php:512
 msgctxt "button"
 msgid "Suscribe"
 msgstr "S'abonner"
 
-#: src/Ideabox.php:278 src/Comment.php:148
+#: src/Ideabox.php:282 src/Comment.php:148
 msgid "The description is mandatory"
 msgstr "La description est obligatoire"
 
-#: src/Ideabox.php:273 src/Comment.php:143
+#: src/Ideabox.php:277 src/Comment.php:143
 msgid "The name is mandatory"
 msgstr "Le nom est obligatoire"
 
@@ -292,7 +294,7 @@ msgstr[0] "Vote"
 msgstr[1] "Votes"
 msgstr[2] "Votes"
 
-#: src/Comment.php:355
+#: src/Comment.php:351
 msgid "comment"
 msgid_plural "comments"
 msgstr[0] "Commentaire"
