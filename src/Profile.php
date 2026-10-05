@@ -37,7 +37,10 @@ use Session;
 
 class Profile extends \Profile
 {
-    public static $rightname = "profile";
+    public static string $rightname = "profile";
+
+    // Secondary plugin right, allowing an idea to be linked to a ticket
+    public const RIGHT_OPEN_TICKET = 'plugin_ideabox_open_ticket';
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {

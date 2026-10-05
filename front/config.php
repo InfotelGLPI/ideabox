@@ -33,7 +33,7 @@ use Glpi\Exception\Http\AccessDeniedHttpException;
 global $CFG_GLPI;
 
 if (Plugin::isPluginActive("ideabox")) {
-    if (Session::haveRight("config", UPDATE)) {
+    if (Session::haveRight(\Config::$rightname, UPDATE)) {
         Html::redirect(PLUGIN_IDEABOX_WEBDIR . "/front/config.form.php");
     } else {
         throw new AccessDeniedHttpException();

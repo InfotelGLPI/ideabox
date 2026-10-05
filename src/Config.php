@@ -42,7 +42,7 @@ use Session;
  */
 class Config extends CommonDBTM
 {
-    public static $rightname = 'plugin_ideabox';
+    public static string $rightname = 'plugin_ideabox';
     public $can_be_translated = true;
 
     // The setup is an administration screen: front/config.form.php requires the
@@ -50,27 +50,27 @@ class Config extends CommonDBTM
     // only evaluate these static checks, so they must enforce the same right.
     public static function canView(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     public static function canCreate(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     public static function canUpdate(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     public static function canDelete(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     public static function canPurge(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     /**

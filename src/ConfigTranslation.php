@@ -45,38 +45,38 @@ use Session;
  **/
 class ConfigTranslation extends CommonDBChild
 {
-    public static $itemtype  = 'itemtype';
-    public static $items_id  = 'items_id';
-    public $dohistory = true;
+    public static string $itemtype  = 'itemtype';
+    public static string $items_id  = 'items_id';
+    public bool $dohistory = true;
 
-    public static $rightname = 'plugin_ideabox';
+    public static string $rightname = 'plugin_ideabox';
 
     // The setup is an administration screen: front/config.form.php requires the
     // "config" UPDATE right, and the core generic endpoints (tabs, massive actions)
     // only evaluate these static checks, so they must enforce the same right.
     public static function canView(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     public static function canCreate(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     public static function canUpdate(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     public static function canDelete(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
     public static function canPurge(): bool
     {
-        return Session::haveRight('config', UPDATE);
+        return Session::haveRight(\Config::$rightname, UPDATE);
     }
 
 

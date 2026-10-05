@@ -79,7 +79,7 @@ function plugin_ideabox_uninstall()
 
 function plugin_ideabox_AssignToTicket($types)
 {
-    if (Session::haveRight("plugin_ideabox_open_ticket", "1")) {
+    if (Session::haveRight(Profile::RIGHT_OPEN_TICKET, 1)) {
         $types[Ideabox::class] = Ideabox::getTypeName(2);
     }
 

@@ -31,7 +31,7 @@ use Glpi\Application\View\TemplateRenderer;
 use GlpiPlugin\Ideabox\Config;
 
 if (Plugin::isPluginActive("ideabox")) {
-    Session::checkRight("config", UPDATE);
+    Session::checkRight(\Config::$rightname, UPDATE);
 
     $config = new Config();
 

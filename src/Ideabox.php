@@ -47,9 +47,9 @@ use User;
 
 class Ideabox extends CommonDBTM
 {
-    public $dohistory  = true;
-    public static $rightname  = "plugin_ideabox";
-    protected $usenotepad = true;
+    public bool $dohistory  = true;
+    public static string $rightname  = "plugin_ideabox";
+    protected bool $usenotepad = true;
 
     public const NEW = 1;
     public const STUDY = 2;
@@ -128,7 +128,7 @@ class Ideabox extends CommonDBTM
         if (Session::haveRight(static::$rightname, UPDATE)) {
             $menu['links']['add'] = self::getFormURL(false);
         }
-        if (Session::haveRight("config", UPDATE)) {
+        if (Session::haveRight(\Config::$rightname, UPDATE)) {
             $menu['links']['config'] = Config::getFormURL(false);
         }
 

@@ -47,10 +47,10 @@ use Session;
 
 class Comment extends CommonDBChild
 {
-    public static $rightname = "plugin_ideabox";
+    public static string $rightname = "plugin_ideabox";
 
-    public static $itemtype = Ideabox::class;
-    public static $items_id = 'plugin_ideabox_ideaboxes_id';
+    public static string $itemtype = Ideabox::class;
+    public static string $items_id = 'plugin_ideabox_ideaboxes_id';
 
     public static function getTypeName($nb = 0)
     {

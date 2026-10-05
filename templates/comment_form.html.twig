@@ -44,7 +44,7 @@
     {% set item_type = item.getType() %}
     <input type="hidden" name="users_id" value="{{ params['users_id'] }}" />
     <input type="hidden" name="date_comment" value="{{ params['date_comment'] }}" />
-    <input type="hidden" name="plugin_ideabox_ideaboxes_id" value="{{ params['plugin_ideabox_ideaboxes_id'] }}" />
+    <input type="hidden" name="plugin_ideabox_ideaboxes_id" value="{{ params['plugin_ideabox_ideaboxes_id'] ?? (params['parent'] is defined ? params['parent'].getID() : item.fields['plugin_ideabox_ideaboxes_id']) }}" />
     <div class="card-body d-flex">
         <div class="col-9 flex-column">
             <div class="d-flex flex-row flex-wrap flex-xl-nowrap">
@@ -121,7 +121,7 @@
     {#    {% include("components/form/inventory_info.html.twig") %} #}
 
 
-    {% if params['formfooter'] == null %}
+    {% if (params['formfooter'] ?? null) == null %}
         <div class="card-footer mx-n2 mb-n2 mt-4">
             {% include("components/form/dates.html.twig") %}
         </div>

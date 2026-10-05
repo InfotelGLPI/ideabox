@@ -47,7 +47,7 @@ $allowed_pairs = [
 if (
     isset($_POST['type'])
     && $_POST['type'] === ConfigTranslation::class
-    && !Session::haveRight('config', UPDATE)
+    && !Session::haveRight(\Config::$rightname, UPDATE)
 ) {
     throw new AccessDeniedHttpException();
 }
@@ -75,7 +75,7 @@ if (
     if (
         $_POST['type'] === Comment::class
         && (
-            !Session::haveRight('plugin_ideabox', READ)
+            !Session::haveRight(Ideabox::$rightname, READ)
             || !$parent->can($parent->getID(), READ)
         )
     ) {

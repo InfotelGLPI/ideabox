@@ -33,7 +33,7 @@ $AJAX_INCLUDE = 1;
 header("Content-Type: application/json; charset=UTF-8");
 Html::header_nocache();
 
-if (!Session::haveRight('plugin_ideabox', READ)) {
+if (!Session::haveRight(Ideabox::$rightname, READ)) {
     http_response_code(403);
     echo json_encode([]);
     exit;

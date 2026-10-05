@@ -76,12 +76,12 @@ function plugin_init_ideabox()
             ['addtabon' => 'Profile'],
         );
 
-        if (Session::haveRight("config", UPDATE)) {
+        if (Session::haveRight(\Config::$rightname, UPDATE)) {
             $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['ideabox'] = 'front/config.form.php';
         }
 
         // Display a menu entry ?
-        if (Session::haveRight("plugin_ideabox", READ)) {
+        if (Session::haveRight(Ideabox::$rightname, READ)) {
             $PLUGIN_HOOKS[Hooks::MENU_TOADD]['ideabox'] = ['tools' => Ideabox::getType()];
 
             if (!Plugin::isPluginActive('servicecatalog')) {
@@ -96,7 +96,7 @@ function plugin_init_ideabox()
             $PLUGIN_HOOKS['redirect_page']['ideabox']           = PLUGIN_IDEABOX_WEBDIR . '/front/ideabox.php';
         }
 
-        if (Session::haveRight("plugin_ideabox", UPDATE)) {
+        if (Session::haveRight(Ideabox::$rightname, UPDATE)) {
             $PLUGIN_HOOKS[Hooks::USE_MASSIVE_ACTION]['ideabox']   = 1;
         }
 
@@ -120,8 +120,8 @@ function plugin_version_ideabox()
         'homepage'     => 'https://github.com/InfotelGLPI/ideabox',
         'requirements' => [
             'glpi' => [
-                'min' => '11.0',
-                'max' => '12.0',
+                'min' => '11.0.99',
+                'max' => '12.0.99',
                 'dev' => false,
             ],
         ],

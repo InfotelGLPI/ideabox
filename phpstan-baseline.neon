@@ -73,12 +73,6 @@ parameters:
 			path: hook.php
 
 		-
-			message: '#^Parameter \#2 \$right of static method Session\:\:haveRight\(\) expects int, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: hook.php
-
-		-
 			message: '#^Call to an undefined method CommonGLPI\:\:getField\(\)\.$#'
 			identifier: method.notFound
 			count: 2

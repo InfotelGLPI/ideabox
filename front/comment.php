@@ -31,7 +31,7 @@ use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Ideabox\Comment;
 use GlpiPlugin\Ideabox\Ideabox;
 
-if (!Session::haveRight('plugin_ideabox', READ)) {
+if (!Session::haveRight(Ideabox::$rightname, READ)) {
     throw new AccessDeniedHttpException();
 }
 

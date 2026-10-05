@@ -34,9 +34,9 @@ use Session;
 
 class Servicecatalog extends CommonGLPI
 {
-    public static $rightname = 'plugin_ideabox';
+    public static string $rightname = 'plugin_ideabox';
 
-    public $dohistory = false;
+    public bool $dohistory = false;
 
     public static function canUse()
     {

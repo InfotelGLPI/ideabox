@@ -29,7 +29,7 @@
 
 use GlpiPlugin\Ideabox\ConfigTranslation;
 
-Session::checkRight("config", UPDATE);
+Session::checkRight(\Config::$rightname, UPDATE);
 
 $translation = new ConfigTranslation();
 if (isset($_POST['add'])) {
