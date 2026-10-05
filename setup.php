@@ -27,7 +27,7 @@
  * --------------------------------------------------------------------------
  */
 
-define('PLUGIN_IDEABOX_VERSION', '4.0.16');
+define('PLUGIN_IDEABOX_VERSION', '4.1.0');
 
 global $CFG_GLPI;
 
