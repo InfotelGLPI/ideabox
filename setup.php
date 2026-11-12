@@ -59,8 +59,10 @@ function plugin_init_ideabox()
         $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['ideabox'][] = 'lib/fuzzysearch.js';
     }
     if (Session::getLoginUserID()) {
+        // Not an assignable type: an idea has no technician nor group (only its author,
+        // users_id). Registered as one since GLPI 11 (replacing linkuser_types), the core
+        // queried users_id_tech / groups_id_tech on it: SQL error on the items tab of a group.
         Plugin::registerClass(Ideabox::class, [
-            'assignable_types'              => true,
             'document_types'              => true,
             'helpdesk_visible_types'      => true,
             'ticket_types'                => true,
