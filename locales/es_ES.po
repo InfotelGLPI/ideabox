@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Project - ideabox plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-05 14:09+0000\n"
+"POT-Creation-Date: 2026-11-12 11:59+0000\n"
 "PO-Revision-Date: 2022-10-18 13:18+0200\n"
 "Last-Translator: The tsmr <tsmr@thetsmr.fr>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/"
@@ -36,7 +36,7 @@ msgstr "Se ha modificado un comentario"
 msgid "A new idea has been submitted"
 msgstr "Una nueva sugerencia se ha presentado"
 
-#: templates/comments.html.twig:75
+#: ⁨standard input⁩:75
 msgctxt "button"
 msgid "Add"
 msgstr ""
@@ -45,12 +45,12 @@ msgstr ""
 msgid "Add a comment"
 msgstr ""
 
-#: templates/comments.html.twig:89 templates/comments.html.twig:91
+#: ⁨standard input⁩:89 ⁨standard input⁩:91
 msgctxt "button"
 msgid "Add a comment"
 msgstr ""
 
-#: templates/configtranslation_list.html.twig:37
+#: ⁨standard input⁩:37
 msgid "Add a new translation"
 msgstr ""
 
@@ -70,7 +70,7 @@ msgstr "Una sugerencia se ha borrado"
 msgid "An idea has been modified"
 msgstr "Una sugerencia se ha modificado"
 
-#: templates/ideabox_form.html.twig:103
+#: ⁨standard input⁩:103
 msgid "Associable to a ticket"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgid_plural "Associated comments"
 msgstr[0] "Comentario asociado"
 msgstr[1] ""
 
-#: templates/comment_form.html.twig:72 templates/ideabox_form.html.twig:70
+#: ⁨standard input⁩:70 ⁨standard input⁩:72
 msgid "Author"
 msgstr ""
 
@@ -89,11 +89,11 @@ msgctxt "button"
 msgid "Cancel"
 msgstr ""
 
-#: templates/comments.html.twig:50
+#: ⁨standard input⁩:50
 msgid "Close"
 msgstr ""
 
-#: src/Ideabox.php:369 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:369 ⁨standard input⁩:90
 msgid "Closed"
 msgstr ""
 
@@ -112,19 +112,19 @@ msgstr "Comentario del autor"
 msgid "Commented by"
 msgstr ""
 
-#: src/Ideabox.php:527 templates/config_form.html.twig:36
+#: src/Ideabox.php:527 ⁨standard input⁩:36
 msgid "Comments"
 msgstr ""
 
-#: templates/comments.html.twig:127
+#: ⁨standard input⁩:127
 msgid "Confirm the final deletion?"
 msgstr ""
 
-#: src/Comment.php:387 templates/comment_form.html.twig:84
+#: src/Comment.php:387 ⁨standard input⁩:84
 msgid "Date of comment"
 msgstr "Fecha del comentario"
 
-#: src/Ideabox.php:197 templates/ideabox_form.html.twig:82
+#: src/Ideabox.php:197 ⁨standard input⁩:82
 msgid "Date of submission"
 msgstr "Fecha de envio"
 
@@ -133,29 +133,26 @@ msgctxt "button"
 msgid "Delete"
 msgstr ""
 
-#: templates/configtranslation_list.html.twig:68
-#: templates/comments.html.twig:132 templates/comments.html.twig:133
+#: ⁨standard input⁩:68 ⁨standard input⁩:132 ⁨standard input⁩:133
 msgctxt "button"
 msgid "Delete permanently"
 msgstr ""
 
-#: src/Ideabox.php:215 src/Comment.php:405 templates/comment_form.html.twig:94
-#: templates/comments.html.twig:63 templates/ideabox_form.html.twig:112
+#: src/Ideabox.php:215 src/Comment.php:405 ⁨standard input⁩:63 ⁨standard input⁩:112
+#: ⁨standard input⁩:94
 msgid "Description"
 msgstr "Descripción"
 
-#: templates/comments.html.twig:122
+#: ⁨standard input⁩:122
 msgctxt "button"
 msgid "Edit"
 msgstr ""
 
-#: templates/comments.html.twig:149
+#: ⁨standard input⁩:149
 msgid "Edit comment"
 msgstr ""
 
-#: templates/configtranslation_list.html.twig:55
-#: templates/ideabox_translation.html.twig:43
-#: templates/ideabox_translation.html.twig:97
+#: ⁨standard input⁩:43 ⁨standard input⁩:97 ⁨standard input⁩:55
 msgid "Field"
 msgid_plural "Fields"
 msgstr[0] ""
@@ -172,27 +169,25 @@ msgid_plural "Ideas"
 msgstr[0] "Sugerencias"
 msgstr[1] "Sugerencias"
 
-#: setup.php:116 src/Profile.php:151
+#: setup.php:118 src/Profile.php:151
 msgid "Idea box"
 msgid_plural "Ideas box"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Ideabox.php:367 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:367 ⁨standard input⁩:90
 msgid "In progress"
 msgstr ""
 
-#: src/Ideabox.php:365 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:365 ⁨standard input⁩:90
 msgid "In study"
 msgstr ""
 
-#: templates/ideabox_form.html.twig:91
+#: ⁨standard input⁩:91
 msgid "Internal state"
 msgstr ""
 
-#: templates/configtranslation_list.html.twig:54
-#: templates/ideabox_translation.html.twig:39
-#: templates/ideabox_translation.html.twig:62
+#: ⁨standard input⁩:39 ⁨standard input⁩:62 ⁨standard input⁩:54
 msgid "Language"
 msgstr ""
 
@@ -200,20 +195,19 @@ msgstr ""
 msgid "Modified fields"
 msgstr "Modificar campos"
 
-#: templates/comment_form.html.twig:58 templates/comments.html.twig:57
-#: templates/ideabox_form.html.twig:56
+#: ⁨standard input⁩:57 ⁨standard input⁩:56 ⁨standard input⁩:58
 msgid "Name"
 msgstr ""
 
-#: src/Ideabox.php:371 templates/ideabox_form.html.twig:90
+#: src/Ideabox.php:371 ⁨standard input⁩:90
 msgid "New"
 msgstr ""
 
-#: templates/comments.html.twig:95
+#: ⁨standard input⁩:95
 msgid "New comment"
 msgstr ""
 
-#: templates/comments.html.twig:99
+#: ⁨standard input⁩:99
 msgid "No comments"
 msgstr ""
 
@@ -234,7 +228,7 @@ msgstr ""
 msgid "Read description"
 msgstr ""
 
-#: templates/profile.html.twig:34 templates/comments.html.twig:75
+#: ⁨standard input⁩:34 ⁨standard input⁩:75
 msgctxt "button"
 msgid "Save"
 msgstr ""
@@ -247,7 +241,7 @@ msgstr ""
 msgid "Submit an idea"
 msgstr "SEnviar sugerencia"
 
-#: templates/comment_form.html.twig:58 templates/ideabox_form.html.twig:56
+#: ⁨standard input⁩:56 ⁨standard input⁩:58
 msgid "Surname"
 msgstr ""
 
@@ -264,19 +258,16 @@ msgstr ""
 msgid "The name is mandatory"
 msgstr ""
 
-#: templates/config_form.html.twig:35
+#: ⁨standard input⁩:35
 msgid "Title"
 msgstr ""
 
-#: templates/config_form.html.twig:41
+#: ⁨standard input⁩:41
 msgctxt "button"
 msgid "Update"
 msgstr ""
 
-#: templates/configtranslation_list.html.twig:56
-#: templates/ideabox_translation.html.twig:46
-#: templates/ideabox_translation.html.twig:52
-#: templates/ideabox_translation.html.twig:102
+#: ⁨standard input⁩:46 ⁨standard input⁩:52 ⁨standard input⁩:102 ⁨standard input⁩:56
 msgid "Value"
 msgstr ""
 
