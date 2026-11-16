@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 11:59+0000\n"
+"POT-Creation-Date: 2026-11-16 11:23+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2026\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/infotelGLPI/teams/"
@@ -118,7 +118,7 @@ msgstr "Yorumu yazan"
 msgid "Comments"
 msgstr "Yorumlar"
 
-#: ⁨standard input⁩:127
+#: ⁨standard input⁩:131
 msgid "Confirm the final deletion?"
 msgstr "Son silmeyi onaylıyor musunuz?"
 
@@ -135,7 +135,7 @@ msgctxt "button"
 msgid "Delete"
 msgstr "Sil"
 
-#: ⁨standard input⁩:68 ⁨standard input⁩:132 ⁨standard input⁩:133
+#: ⁨standard input⁩:68 ⁨standard input⁩:133 ⁨standard input⁩:134
 msgctxt "button"
 msgid "Delete permanently"
 msgstr "Kalıcı olarak sil"
@@ -150,7 +150,7 @@ msgctxt "button"
 msgid "Edit"
 msgstr "Düzenle"
 
-#: ⁨standard input⁩:149
+#: ⁨standard input⁩:158
 msgid "Edit comment"
 msgstr "Yorumu düzenle"
 

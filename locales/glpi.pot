@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 11:59+0000\n"
+"POT-Creation-Date: 2026-11-16 11:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
-#: ⁨standard input⁩:127
+#: ⁨standard input⁩:131
 msgid "Confirm the final deletion?"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgctxt "button"
 msgid "Delete"
 msgstr ""
 
-#: ⁨standard input⁩:68 ⁨standard input⁩:132 ⁨standard input⁩:133
+#: ⁨standard input⁩:68 ⁨standard input⁩:133 ⁨standard input⁩:134
 msgctxt "button"
 msgid "Delete permanently"
 msgstr ""
@@ -146,7 +146,7 @@ msgctxt "button"
 msgid "Edit"
 msgstr ""
 
-#: ⁨standard input⁩:149
+#: ⁨standard input⁩:158
 msgid "Edit comment"
 msgstr ""
 

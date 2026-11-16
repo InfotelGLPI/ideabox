@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 11:59+0000\n"
+"POT-Creation-Date: 2026-11-16 11:23+0000\n"
 "PO-Revision-Date: 2025-10-01 08:28+0000\n"
 "Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2026\n"
 "Language-Team: French (France) (https://app.transifex.com/infotelGLPI/teams/"
@@ -121,7 +121,7 @@ msgstr "Commenté par"
 msgid "Comments"
 msgstr "Commentaires"
 
-#: ⁨standard input⁩:127
+#: ⁨standard input⁩:131
 msgid "Confirm the final deletion?"
 msgstr "Confirmez-vous la suppression définitive ?"
 
@@ -138,7 +138,7 @@ msgctxt "button"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ⁨standard input⁩:68 ⁨standard input⁩:132 ⁨standard input⁩:133
+#: ⁨standard input⁩:68 ⁨standard input⁩:133 ⁨standard input⁩:134
 msgctxt "button"
 msgid "Delete permanently"
 msgstr "Supprimer définitivement"
@@ -153,7 +153,7 @@ msgctxt "button"
 msgid "Edit"
 msgstr "Editer"
 
-#: ⁨standard input⁩:149
+#: ⁨standard input⁩:158
 msgid "Edit comment"
 msgstr "Editer le commentaire"
 
