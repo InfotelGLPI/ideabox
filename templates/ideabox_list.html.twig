@@ -51,13 +51,20 @@
                 <div class="ideabox-title mb-2">{{ idea.link|raw }}</div>
                 {% if idea.description_long %}
                     <a class="text-muted ideabox-expand-link"
-                       href="#anchor{{ idea.id }}"
-                       onclick="this.style.display='none';document.getElementById('desc{{ idea.id }}').style.display='block';return false;">
+                       href="#anchor{{ idea.id }}" id="ideabox_expand{{ idea.id }}">
                         <i class="ti ti-eye me-1"></i>{{ idea.label_read_desc }}
                     </a>
                     <div id="desc{{ idea.id }}" class="ideabox-description mt-1" style="display:none">
                         {{ idea.description|raw }}
                     </div>
+                    {# Bound here rather than through an inline handler (Content Security Policy) #}
+                    <script>
+                        document.getElementById('ideabox_expand{{ idea.id }}').addEventListener('click', function (event) {
+                            event.preventDefault();
+                            this.style.display = 'none';
+                            document.getElementById('desc{{ idea.id }}').style.display = 'block';
+                        });
+                    </script>
                 {% elseif idea.description %}
                     <div class="ideabox-description">{{ idea.description|raw }}</div>
                 {% endif %}
