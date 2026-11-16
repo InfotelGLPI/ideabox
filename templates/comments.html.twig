@@ -123,17 +123,26 @@
                                                 data-bs-toggle="modal" data-bs-target="#{{ edit_modal_id }}">
                                             <i class="ti ti-edit"></i>
                                         </button>
-                                        <form action="{{ url }}" method="post" class="d-inline"
-                                              onsubmit="return confirm('{{ __('Confirm the final deletion?')|e('js') }}');">
+                                        <form action="{{ url }}" method="post" class="d-inline">
                                             <input type="hidden" name="plugin_ideabox_ideaboxes_id" value="{{ idea_id }}" />
                                             <input type="hidden" name="id" value="{{ comment.id }}" />
                                             <button type="submit" name="purge" value="1"
+                                                    id="ideabox_purge_comment{{ comment.id }}"
+                                                    data-ideabox-confirm="{{ __('Confirm the final deletion?') }}"
                                                     class="btn btn-sm btn-ghost-danger"
                                                     title="{{ _x('button', 'Delete permanently') }}"
                                                     aria-label="{{ _x('button', 'Delete permanently') }}">
                                                 <i class="ti ti-trash"></i>
                                             </button>
                                         </form>
+                                        {# Bound here rather than through an inline handler (Content Security Policy) #}
+                                        <script>
+                                            document.getElementById('ideabox_purge_comment{{ comment.id }}').addEventListener('click', (event) => {
+                                                if (!window.confirm(event.currentTarget.dataset.ideaboxConfirm)) {
+                                                    event.preventDefault();
+                                                }
+                                            });
+                                        </script>
                                     </span>
                                 {% endif %}
                             </div>
